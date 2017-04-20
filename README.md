@@ -1,9 +1,8 @@
 # Angular 2 Tutorial
 
-Angular 2 is the next generation of the popular Angular framework.  Learning Angular 2 is easier than Angular 1.x was but getting started can be a little bit daunting.  In this tutorial, we will walk through getting a project setup, integrating the IT Master Look and Feel (MLAF), creating a header/footer component, and adding new pages/services.
+Angular 2 is the next generation of the popular Angular framework.  Learning Angular 2 is easier than Angular 1.x was but getting started can be a little bit daunting.  In this tutorial, we will walk through getting a project setup, integrating bootstrap, creating a header/footer component, and adding new pages/services.
 
-To view this repository online visit [https://github.intel.com/pages/FreelanceNation/angular2-tutorial/](https://github.intel.com/pages/FreelanceNation/angular2-tutorial/).
-
+To view this repository online visit 
 
 ## Running Tutorial Locally
 
