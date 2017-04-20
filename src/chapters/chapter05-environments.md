@@ -1,0 +1,71 @@
+## Environments Configuration
+
+In order to change the configurations for different environments, Angular uses configurations files in the src\environments folder.  
+
+### Default Configuration
+
+The src\environments\environment.ts file is the default configurations if the environment command line argument is not specified when running `ng serve`
+
+In the environment.ts we need to add the environmentName and apiBaseUrl values.  The apiBaseUrl is how to get to your service layer, if you have one.  For now we are going to use localhost:1337/v1.
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Setup Default Configuration
+</h4>
+
+1. Open the src\environments\environment.ts file
+1. Add the environmentName and apiBaseUrl values.  
+
+    ```TypeScript
+    export const environment = {
+        production: false,
+        environmentName: 'Development',
+        apiBaseUrl: 'http://localhost:1337/v1'
+    };
+    ```
+
+1. Go to the terminal that is running the `ng serve` command and do a ctrl+c to stop it.
+1. Run the `ng serve` command again.
+
+    ```bash
+    ng serve
+    ```
+
+1. Everything should still start as normal.  You will not see any changes at this point since nothing is using those settings.  We will use them when we create our footer.
+
+<div class="exercise-end"></div>
+
+### Local Development
+
+The other environment that is typically created is for local development on your machine.  For this tutorial the environment.ts and local.ts have the same values but once you go to development and production they will differ.   
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create Local Configuration
+</h4>
+
+1. Create the file src\environments\environment.local.ts file
+1. Add the following to the environment.local.ts file
+
+    ```TypeScript
+    export const environment = {
+    production: false,
+    environmentName: 'Local',
+    apiBaseUrl: 'http://localhost:1337/v1'
+    };
+    ```
+
+1. Open the .angular-cli.json that is in the root of the project.  
+1. Find the apps\environments section and add the local configuration to the at the top of the list of environments
+
+    ```json
+    "local": "environments/environment.local.ts",
+    ```
+
+1. If you want to run the local configuration we need to pass in the environment command line argument.  The environment argument value is the name of the environment name in the angular-cli.json file.  Note that you can only have 1 ng serve running at a time.    
+
+    ```bash
+    ng serve -e local
+    ```
+
+1. If the webpack compile was successful, you will now be using the local environment configuration. You will not see any changes at this point since nothing is using those settings.  We will use them when we create our footer.
+
+<div class="exercise-end"></div>

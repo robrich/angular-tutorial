@@ -1,0 +1,13 @@
+node_modules/
+.DS_Store
+**/.DS_Store
+**/**/.DS_Store
+**/**/**/.DS_Store
+**/**/**/**/.DS_Store
+.tmp/
+config/
+config/local.js
+app/bower_components
+debug.log
+.npm
+.bash_history
