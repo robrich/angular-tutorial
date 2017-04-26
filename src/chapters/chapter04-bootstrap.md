@@ -36,7 +36,7 @@ Now we need to configure the angular cli to import the bootstrap libraries.
 
 <div class="exercise-end"></div>
 
-### Update App Component Html
+### Add Banner Section to Top
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Updating Html
@@ -65,7 +65,7 @@ Open the src\app\app.compoment.html file and replace the contents with:
     <b>Exercise</b>: Restart ng serve
 </h4>
 
-In order for the Bootstrap integration to work, you need to restart the ng serve command in order for the changes to the .angular-cli.json file to be picked up
+Since we changed the .angular-cli.json file to add in the style configurations, we need to restart the new serve command for the changes to take effect.  
 
 1. Go to the terminal that is running the `ng serve` command and do a ctrl+c to stop it.
 1. Run the `ng serve` command again.
