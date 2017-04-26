@@ -17,6 +17,7 @@ gulp.task( "server", function() {
 		.pipe(webServer({
 			livereload: {
 				enable: true,
+				port: 35729,
 				filter: function(fileName) {
 					return fileName.match(/index.html$/);
 				}

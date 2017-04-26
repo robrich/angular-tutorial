@@ -3,7 +3,7 @@
 
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Angular 2</title>
+	<title>Up and Running with Angular</title>
 
 
 	<meta charset="utf-8">
@@ -19,7 +19,7 @@
 	<div id="container">
 		<div id="header">
 			<a href="#" class="menu header-btn" id="toggle-toc"></a>
-			<h1>Angular 2 Tutorial</h1>
+			<h1>Up and Running with Angular Workshop</h1>
 			<a href="https://github.com/digitaldrummerj/angular-tutorial" class="github header-btn"></a>
 		</div>
 		<div id="content-container">
@@ -30,9 +30,23 @@
 			<div id="book">
 				<div class="chapter">
 					<h2 id="introduction">Introduction</h2>
-<p>Welcome to the Angular 2 tutorial.  Angular2 was released in September 2016.  In this tutorial, you&#39;ll learn how to build an Angular 2 UI. Throughout the tutorial, you&#39;ll be building a todo application.  </p>
+<p>Welcome to the Up and Running with Angular Workshop.  Angular 2 was released in September 2016 and was a full re-write of the framework.  With the re-write a lot has changed.   In this workshop, you will learn how to build an Angular UI from the ground up.  We will cover common UI requirements like navigation, footer, forms, Http API calls, routing, modules, and security.</p>
+<h3 id="new-naming-convention">New Naming Convention</h3>
+<p>The first thing is what to call Angular.  Angular 1 is now referred to as AngularJS.  Angular 2 and above is referred to as just Angular.  From here on out, we will just call it Angular.  The only time to refer to Angular with a version number is when you are talking about a feature that it specific to that version.  For example, in Angular 4, they add the TitleCase Pipe.</p>
+<h3 id="release-schedule">Release Schedule</h3>
+<p>The second thing is that they are now following SemVer for the versioning of Angular and have a release schedule.  For example, here is how version 2.3.1 would break down.</p>
+<p><img src="images/semver.png" alt="SemVer"></p>
+<p>Release Schedule:</p>
+<ul>
+<li>Major: Every 6 months</li>
+<li>Minor: Every month</li>
+<li>Patch: Every week</li>
+</ul>
+<h3 id="coming-from-angular-1">Coming from Angular 1</h3>
+<p>Third, if you are coming from an Angular 1 background, it is best if you do not try to compare the concepts between Angular 1 and Angular 2+.  You will be able to learn Angular Just treat Angular 2 as a whole new framework  </p>
 <h3 id="materials">Materials</h3>
 <p>You can find lab materials and presentation content at the locations below:</p>
+<p>????  NEED TO UPDATE ???</p>
 <ul>
 <li><a href="https://github.com/digitaldrummerj/angular2-tutorial/blob/master/Angular%201%20and%20Sails%20Overview.pptx">Presentation</a></li>
 <li><a href="https://github.com/digitaldrummerj/angular2-tutorial/tree/code">Completed Source Code</a></li>
@@ -42,24 +56,24 @@
 				<hr>
 				<div class="chapter">
 					<h2 id="getting-up-and-running">Getting up and running</h2>
-<p>To get started with Angular, we need to install and configure some software first.</p>
+<p>To get started, we need to install and configure the following software first.</p>
 <ul>
 <li>Windows, Mac, or Linux computer</li>
 <li>Node 6.9+</li>
 <li>Angular CLI 1.0.0+</li>
-<li>Visual Studio Code</li>
+<li>Visual Studio Code (can use any text editor but it is best to use Visual Studio Code to prevent any unexpected issues during the workshop)</li>
 </ul>
-<p>Below are all of the steps to install and configure the software.  </p>
 <h3 id="windows-showing-file-extensions">Windows Showing File Extensions</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Turn On Windows Showing File Extensions
-  </h4>
-
 <div class="alert alert-danger" role="alert">
 <strong>Windows Only</strong>
 </div>
 
-<p>By default Windows is set to not show file extensions for known files which causes files such as .gitconfig and .npmrc to show up as just a period with no file extension.  To fix this we need to turn set Windows Explorer to show file extensions.</p>
+<p>By default Windows is set to not show file extensions for known files which causes files such as .gitconfig and .npmrc to show up as just a period with no file extension which makes it extremely difficult to figure out what the file actually is.  To fix this we need to turn set Windows Explorer to show file extensions.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Turn On Windows Showing File Extensions
+  </h4>
+
+
 <ol>
 <li>Open Windows Explorer</li>
 <li><p>Click on the View Tab and select Options</p>
@@ -77,8 +91,9 @@
 <div class="exercise-end"></div>
 
 <h3 id="node-js">Node.js</h3>
+<p>NodeJS is used to power the Angular CLI as well as install all of our dependencies.  The Angular CLI requires Node version 6.9 or greater.</p>
 <ol>
-<li>Download the latest stable version (LTS) of <a href="http://nodejs.org">NodeJS</a> which as of this writing is 6.10.2.  The latest version of the Angular CLI requires Node version 6.9 or greater.  </li>
+<li>Download the latest stable version (LTS) of <a href="http://nodejs.org">NodeJS</a> which as of this writing is 6.10.2.    </li>
 <li>Run the installer and accept all defaults.</li>
 <li><p>Verify that Node installed.  Start a command prompt or terminal window and run: </p>
 <pre><code class="lang-bash"> node -v
@@ -86,11 +101,13 @@
 </li>
 </ol>
 <h3 id="visual-studio-code">Visual Studio Code</h3>
-<p>You could use any editor that you would like for Angular 2 but I recommend using Visual Studio Code.</p>
-<p>You can download Visual Studio Code at <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></p>
-<p>Once the download finishes, launch the installer except all of the defaults.</p>
+<p>Visual Studio Code is Microsoft lightweight cross platform IDE.  </p>
+<ol>
+<li>Download Visual Studio Code at <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></li>
+<li>Once the download finishes, launch the installer except all of the defaults.</li>
+</ol>
 <h3 id="angular-cli-install">Angular CLI Install</h3>
-<p>Starting with Angular 2 they released the Angular CLI (command line interface) to generate new projects, components, services, pipes, etc.  Using the Angular CLI removes a lot of the tooling worries and just works.  </p>
+<p>To make it easy to get up and running with Angular, the Angular team has release an Angular CLI (Command Line Interface) to help us create new projects, components, modules, services, and routes.  It also is wired up to lint, test and run our code.  All of the code that is generated by the Angular CLI following the Angular Style Guide.  While you do not have to use the Angular CLI, it is highly recommended, will increase your productivity, and will be used for this workshop.  The Angular CLI makes it so that you do not have to worry about the Angular tooling and can focus instead on your code.</p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Install Angular CLI
 </h4>
@@ -102,7 +119,8 @@
 </li>
 <li><p>Verify Angular CLI</p>
 <pre><code> ng --version
-</code></pre></li>
+</code></pre><p> <img src="images/chapter1/ng-version.png" alt="ng version output"></p>
+</li>
 </ol>
 <div class="exercise-end"></div>
 
@@ -126,6 +144,10 @@
 </li>
 <li><p>Generate a project named ngws that uses scss for styling and includes a routing file by running</p>
 <pre><code class="lang-bash"> ng new ngws --style scss --routing
+</code></pre>
+</li>
+<li><p>If you want to see the other ng new options, run</p>
+<pre><code class="lang-bash"> ng new --help
 </code></pre>
 </li>
 </ol>
@@ -200,7 +222,7 @@
 </ol>
 <div class="exercise-end"></div>
 
-<h3 id="update-app-component-html">Update App Component Html</h3>
+<h3 id="add-banner-section-to-top">Add Banner Section to Top</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Updating Html
 </h4>
@@ -223,7 +245,7 @@
     <b>Exercise</b>: Restart ng serve
 </h4>
 
-<p>In order for the Bootstrap integration to work, you need to restart the ng serve command in order for the changes to the .angular-cli.json file to be picked up</p>
+<p>Since we changed the .angular-cli.json file to add in the style configurations, we need to restart the new serve command for the changes to take effect.  </p>
 <ol>
 <li>Go to the terminal that is running the <code>ng serve</code> command and do a ctrl+c to stop it.</li>
 <li><p>Run the <code>ng serve</code> command again.</p>
@@ -240,10 +262,10 @@
 				<hr>
 
 				<div class="chapter">
-					<h2 id="environments-configuration">Environments Configuration</h2>
-<p>In order to change the configurations for different environments, Angular uses configurations files in the src\environments folder.  </p>
+					<h2 id="environment-configuration">Environment Configuration</h2>
+<p>One of the requirements that you commonly have it to be able to change configurations for your application based on the environment it is running in.  A common configuration is to change the API url between development and production.  In order to change the configurations for different environments, Angular uses configurations files that are stored in the src\environments folder.  </p>
 <h3 id="default-configuration">Default Configuration</h3>
-<p>The src\environments\environment.ts file is the default configurations if the environment command line argument is not specified when running <code>ng serve</code></p>
+<p>The src\environments\environment.ts file is the default configurations if no environment is specified when running <code>ng serve</code></p>
 <p>In the environment.ts we need to add the environmentName and apiBaseUrl values.  The apiBaseUrl is how to get to your service layer, if you have one.  For now we are going to use localhost:1337/v1.</p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Setup Default Configuration
