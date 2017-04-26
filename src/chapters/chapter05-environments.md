@@ -1,10 +1,10 @@
-## Environments Configuration
+## Environment Configuration
 
-In order to change the configurations for different environments, Angular uses configurations files in the src\environments folder.  
+One of the requirements that you commonly have it to be able to change configurations for your application based on the environment it is running in.  A common configuration is to change the API url between development and production.  In order to change the configurations for different environments, Angular uses configurations files that are stored in the src\environments folder.  
 
 ### Default Configuration
 
-The src\environments\environment.ts file is the default configurations if the environment command line argument is not specified when running `ng serve`
+The src\environments\environment.ts file is the default configurations if no environment is specified when running `ng serve`
 
 In the environment.ts we need to add the environmentName and apiBaseUrl values.  The apiBaseUrl is how to get to your service layer, if you have one.  For now we are going to use localhost:1337/v1.
 
