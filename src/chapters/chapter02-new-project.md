@@ -21,6 +21,12 @@ The project that the Angular CLI create for you follows all of the suggested sta
     ng new ngws --style scss --routing
     ```
 
+1. If you want to see the other ng new options, run
+
+    ```bash
+    ng new --help
+    ```
+    
 <div class="exercise-end"></div>
 
 
