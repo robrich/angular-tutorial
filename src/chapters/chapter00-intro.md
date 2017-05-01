@@ -28,10 +28,5 @@ Third, if you are coming from an Angular 1 background, it is best if you do not 
 
 ### Materials
 
-You can find lab materials and presentation content at the locations below:
-
-????  NEED TO UPDATE ???
-
-* [Presentation](https://github.com/digitaldrummerj/angular2-tutorial/blob/master/Angular%201%20and%20Sails%20Overview.pptx)
-* [Completed Source Code](https://github.com/digitaldrummerj/angular2-tutorial/tree/code)
+[Completed Source Code](https://github.com/digitaldrummerj/angular2-tutorial/tree/code)
 

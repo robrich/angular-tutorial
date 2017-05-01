@@ -1,22 +1,31 @@
-## Create Component (Page)
+## Reactive Forms
 
-Now that we have our infrastructure setup, lets go ahead and create an actual page.  
-
-### Create Todo Component
+### Create Component
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Create Todo Component 
 </h4>
 
-Open a command prompt and run the generate command below to create the todo component.  This will create the html, scss, component and test file for the todo page. 
+1. Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then "Integrated Terminal"
+1. Run the ng generate command below to create the todo component
 
-```bash
-ng generate component todo
-```
+    ```bash
+    ng generate component todo
+    ```
+
+1. The generate command will create 4 files: 
+
+    ![output of generate](images/todo-generate.png)
+
+    * scss (styles)
+    * html (view)
+    * spec file (test)
+    * component (controller)
+    * add reference to the component in the app.module.ts file.
 
 <div class="exercise-end"></div>
 
-### Add Todo Route
+### Add Route
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Todo Routing 
@@ -32,7 +41,7 @@ Before we can view our todo component, we need to tell Angular how to route to t
     import { TodoComponent } from './todo/todo.component';
     ```
 
-1. Add the component to the routing array to make the home page route use the TodoCompoment that we just created
+1. Add the TodoComponent to the home page route as specified by the `path: ''` 
 
     ```TypeScript
     {
@@ -42,13 +51,17 @@ Before we can view our todo component, we need to tell Angular how to route to t
     }   
     ```
 
+    <div class="alert alert-info" role="alert">**Note:** This will cause the TodoComponent to load into the `<router-outlet></router-outlet>` in the src\app\app.component.html.  The router-outlet tag is how Angular knows where to put the rendered content of the routed componente.</div>
+
+
 1. The todo page should be able to be displayed if you navigate to [http://http://localhost:4200/](http://http://localhost:4200/)
 
     ![todo initial view](images/todo-initial-view.png)
 
 <div class="exercise-end"></div>
 
- ### Create UI 
+
+### Create Form
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Importing the ReactiveFormsModule
@@ -74,6 +87,7 @@ Our component is going to use the ReactiveFormsModule which means that we need t
         AppRoutingModule
     ],
     ```
+    
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
@@ -187,7 +201,7 @@ We are now ready to create our UI.
 
 <div class="exercise-end"></div>
 
-### Make UI Pretty
+### Adding Style
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Making the UI Pretty
@@ -272,6 +286,3 @@ With Angular 2, we can finally have component level css instead of cluttering up
 1. Before we can interact with the data we need to create our service and call the service from the TodoCompoment.
 
 <div class="exercise-end"></div>
-
-
-
