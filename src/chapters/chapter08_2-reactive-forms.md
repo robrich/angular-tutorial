@@ -159,7 +159,6 @@ We are now ready to create our UI.
                     Title is required
                 </div>
                 </div>
-
                 <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
                 There was an error submitting your todo. Please try again.
                 </div>
