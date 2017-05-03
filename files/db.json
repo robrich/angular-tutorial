@@ -1,0 +1,10 @@
+{
+  "user": [
+    { "id": 1, "email": "foo@foo.com", "password": "123456" },
+    { "id": 2, "email": "bar@foo.com", "password": "654321" }
+  ],
+  "todo": [
+    { "id": 1, "item": "baz", "user": 1 },
+    { "id": 2, "item": "qux", "user": 2 }
+  ]
+}

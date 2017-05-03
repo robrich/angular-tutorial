@@ -54,9 +54,10 @@
 <p>To get started, we need to install and configure the following software first.</p>
 <ul>
 <li>Windows, Mac, or Linux computer</li>
+<li>Visual Studio Code (can use any text editor but workshop tested with Visual Studio Code)</li>
 <li>Node 6.9+</li>
 <li>Angular CLI 1.0.0+</li>
-<li>Visual Studio Code (can use any text editor but workshop tested with Visual Studio Code)</li>
+<li>Json Server (used to fake our API calls)</li>
 </ul>
 <h3 id="windows-showing-file-extensions">Windows Showing File Extensions</h3>
 <div class="alert alert-danger" role="alert">
@@ -86,6 +87,12 @@
 </ol>
 <div class="exercise-end"></div>
 
+<h3 id="visual-studio-code">Visual Studio Code</h3>
+<p>Visual Studio Code is Microsoft lightweight cross platform IDE.  </p>
+<ol>
+<li>Download Visual Studio Code at <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></li>
+<li>Once the download finishes, launch the installer except all of the defaults.</li>
+</ol>
 <h3 id="node-js">Node.js</h3>
 <p>NodeJS is used to power the Angular CLI as well as install all of our dependencies.  The Angular CLI requires Node version 6.9 or greater.</p>
 <ol>
@@ -95,12 +102,6 @@
 <pre><code class="lang-bash"> node -v
 </code></pre>
 </li>
-</ol>
-<h3 id="visual-studio-code">Visual Studio Code</h3>
-<p>Visual Studio Code is Microsoft lightweight cross platform IDE.  </p>
-<ol>
-<li>Download Visual Studio Code at <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></li>
-<li>Once the download finishes, launch the installer except all of the defaults.</li>
 </ol>
 <h3 id="angular-cli-install">Angular CLI Install</h3>
 <p>The Angular CLI (Command Line Interface) makes it so that you do not have to worry about the Angular tooling and can focus instead on your code. You can create new projects, components, modules, services, guards, pipes and routes.  As well it has commands for linting, testing and running our code.  </p>
@@ -119,6 +120,23 @@
 <pre><code> ng --version
 </code></pre><p> <img src="images/chapter1/ng-version.png" alt="ng version output"></p>
 </li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="json-server-install">JSON Server Install</h3>
+<p>JSON Server is a lightweight server to make REST api calls.  </p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Install JSON Server
+</h4>
+
+<ol>
+<li><p>Open a command prompt or terminal and run the following command</p>
+<pre><code class="lang-bash"> npm install -g json-server
+</code></pre>
+</li>
+<li><p>Verify JSON Server.  As of this writing version is 0.10.0</p>
+<pre><code> json-server --verion
+</code></pre></li>
 </ol>
 <div class="exercise-end"></div>
 
@@ -623,8 +641,11 @@ footer {
 
 				<div class="chapter">
 					<h2 id="template-based-forms">Template Based Forms</h2>
-<p>NOT DONE!!!</p>
+<p>There are 2 options for creating forms within Angular: Template based and Model based.  This chapter will cover template based forms.</p>
+<p>Template based forms are simple and easy to use.  They are great for simple use cases.  However, there are some limitations with template  based forms: 1.) You end up with a lot of logic in your html code 2.) Cross field validation is more difficult 3.) You can not unit test your form and validation logic.</p>
+<p>To demonstrate template based forms, we are going to be build a login component.</p>
 <h3 id="create-login-component">Create Login Component</h3>
+<p>The first thing we need to do is to create our login component using the Angular CLI.  We will use the <code>ng generate component</code> command to do this.  </p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Create Login  Component 
 </h4>
@@ -649,6 +670,7 @@ footer {
 <div class="exercise-end"></div>
 
 <h3 id="add-route">Add Route</h3>
+<p>In order to view our Login component we need to tell Angular how to route to it.  We are going to add a route at &#39;/login&#39; to the LoginComponent.</p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Login Routing 
 </h4>
@@ -677,6 +699,7 @@ footer {
 
 
 <h3 id="create-form">Create Form</h3>
+<p>Next we are going to create the form without any validation logic at all.  Our form will have 2 input fields:  email and password and 2 buttons: submit and cancel.  </p>
 <h4 class="exercise-start">
     <b>Exercise</b>:  Creating the Form
 </h4>
@@ -687,132 +710,323 @@ footer {
 <pre><code class="lang-html"> &lt;h1&gt;Login&lt;/h1&gt;
  &lt;hr&gt;
  &lt;div&gt;
-     &lt;form #loginForm=&quot;ngForm&quot; (ngSubmit)=&quot;login(loginForm.value)&quot; autocomplete=&quot;off&quot; novalidate&gt;
+     &lt;form autocomplete=&quot;off&quot; novalidate&gt;
          &lt;div class=&quot;form-group&quot;&gt;
-             &lt;label for=&quot;userName&quot;&gt;Email:&lt;/label&gt;
-             &lt;em *ngIf=&quot;email?.invalid &amp;&amp; (email?.touched  || mouseoverLogin)&quot;&gt;Required&lt;/em&gt;
-             &lt;input #email=&quot;ngModel&quot; (ngModel)=&quot;email&quot; minlength=&quot;6&quot; name=&quot;email&quot; id=&quot;email&quot; required email type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Email...&quot; /&gt;
-             &lt;div *ngIf=&quot;email.errors &amp;&amp; (email.dirty || email.touched)&quot; class=&quot;alert alert-danger&quot;&gt;
-                 &lt;div [hidden]=&quot;!email.errors.required&quot;&gt;
-                     Email is required
-                 &lt;/div&gt;
-                 &lt;div [hidden]=&quot;!email.errors.email&quot;&gt;
-                     Must be an email address
-                 &lt;/div&gt;
-             &lt;/div&gt;
+             &lt;label for=&quot;email&quot;&gt;Email:&lt;/label&gt;
+             &lt;input name=&quot;email&quot; id=&quot;email&quot; type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Email...&quot; /&gt;
          &lt;/div&gt;
          &lt;div class=&quot;form-group&quot;&gt;
              &lt;label for=&quot;password&quot;&gt;Password:&lt;/label&gt;
-             &lt;em *ngIf=&quot;password?.invalid &amp;&amp; (password?.touched || mouseoverLogin)&quot;&gt;Required&lt;/em&gt;
-             &lt;input #password=&quot;ngModel&quot; (ngModel)=&quot;password&quot; name=&quot;password&quot; id=&quot;password&quot; required id=&quot;password&quot; type=&quot;password&quot; class=&quot;form-control&quot; placeholder=&quot;Password...&quot; /&gt;
-             &lt;div *ngIf=&quot;minLengthError || (password.errors &amp;&amp; (password.dirty || password.touched))&quot; class=&quot;alert alert-danger&quot;&gt;
-                 &lt;div [hidden]=&quot;minLengthError || !password.errors.required&quot;&gt;
-                     Password is required
-                 &lt;/div&gt;
-                 &lt;div [hidden]=&quot;!minLengthError&quot;&gt;
-                     Password must be at least 6 characters long.
-                 &lt;/div&gt;
-             &lt;/div&gt;
+             &lt;input name=&quot;password&quot; id=&quot;password&quot; id=&quot;password&quot; type=&quot;password&quot; class=&quot;form-control&quot; placeholder=&quot;Password...&quot; /&gt;
          &lt;/div&gt;
-         &lt;span (mouseenter)=&quot;mouseoverLogin=true&quot; (mouseleave)=&quot;mouseoverLogin=false&quot;&gt;
-             &lt;button type=&quot;submit&quot; [disabled]=&quot;loginForm.invalid&quot; class=&quot;btn btn-primary&quot;&gt;Login&lt;/button&gt;
-         &lt;/span&gt;
-         &lt;button type=&quot;button&quot; (click)=&quot;cancel()&quot; class=&quot;btn btn-default&quot;&gt;Cancel&lt;/button&gt;
-         &lt;span&gt;&lt;a [routerLink]=&quot;[&#39;/signup&#39;]&quot;&gt;create account&lt;/a&gt;&lt;/span&gt;
+         &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Login&lt;/button&gt;
+         &lt;button type=&quot;button&quot; class=&quot;btn btn-default&quot;&gt;Cancel&lt;/button&gt;
      &lt;/form&gt;
-     &lt;br /&gt;
-     &lt;div *ngIf=&quot;loginInvalid&quot; class=&quot;alert alert-danger&quot;&gt;
-         Invalid Login Info
+ &lt;/div&gt;
+</code></pre>
+<ul>
+<li>This form is using Bootstrap for the styling with the form-group and form-control css classes.</li>
+<li>The autocomplete=&quot;off&quot; and novalidate directives for the form tag tell the browser to turn off that built-in functionality so that we can do our validation with Angular.</li>
+</ul>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="add-submit-method">Add Submit Method</h3>
+<p>In order to submit the form we need to tell Angular that that login form is an ngForm and use the ngSubmit event to tell Angular what to do when the form submit button is clicked.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>:  Add login function
+</h4>
+
+<ol>
+<li><p>In the login.component.html file on the <code>&lt;form&gt;</code> tag add the following attributes.  </p>
+<pre><code class="lang-html"> #loginForm=&quot;ngForm&quot; (ngSubmit)=&quot;login(loginForm.value)&quot;
+</code></pre>
+</li>
+<li><p>On the email field we need to add an attribute tell Angular to implement a 1 way binding of the field.  We use the <code>(ngModel)</code> attribute to tell Angular what field in the form values we want to the data to be bound to.</p>
+<pre><code class="lang-html"> (ngModel)=&quot;email&quot;
+</code></pre>
+</li>
+<li><p>On the password field we are going to do the same thing that we just did to the email field.  </p>
+<pre><code class="lang-html"> (ngModel)=&quot;password&quot;
+</code></pre>
+</li>
+</ol>
+<p>Next we need to implement the login function in the component.</p>
+<ol>
+<li>Open the login.component.ts file</li>
+<li><p>Inside of the LoginComponent class, add the login function below.  For now we are just going to output the form values to the console. </p>
+<pre><code class="lang-TypeScript"> login(formValues) {
+     console.log(formValues);
+ }
+</code></pre>
+</li>
+<li><p>In your browser, while viewing the login form at <a href="http://localhost:4200/login">http://localhost:4200/login</a> open the developer tools and click the console tab so that you can see the console output.    </p>
+</li>
+<li><p>Now enter a value into the email and password fields and click the submit button.  You will see output similar to the below image where I entered the email of email@gmail.com and password of 123456</p>
+<p> <img src="images/login-submit-console.png" alt="login console output"></p>
+</li>
+</ol>
+<p>At this point we are ready to wire up the login form to actually </p>
+<div class="exercise-end"></div>
+
+
+<h3 id="required-validation">Required Validation</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Required Validation
+</h4>
+
+
+<p>For both the email and password fields they are required.  While we could check them in the component TypeScript code, Angular has built in validation by adding the <code>required</code> attribute to each of the inputs.</p>
+<ol>
+<li>Open the login.component.html</li>
+<li><p>Add the <code>required</code> attribute to the email input field like so</p>
+<pre><code class="lang-html"> &lt;input required (ngModel)=&quot;email&quot; name=&quot;email&quot; id=&quot;email&quot;  type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Email...&quot; /&gt;
+</code></pre>
+</li>
+<li><p>Add the <code>required</code> attribute to the password input field</p>
+<pre><code class="lang-html"> &lt;input required (ngModel)=&quot;password&quot; name=&quot;password&quot; id=&quot;password&quot; id=&quot;password&quot; type=&quot;password&quot; class=&quot;form-control&quot; placeholder=&quot;Password...&quot; /&gt;
+</code></pre>
+</li>
+</ol>
+<p>Next we want to display a message to the user when they have invalid entries in the form fields</p>
+<ol>
+<li><p>For the email field, inside of the form-group div tag and after the input field add the following code.  This code will show when the required errors triggers.  To trigger the error message, click on the email field and then click on the password field.</p>
+<pre><code class="lang-TypeScript"> &lt;div *ngIf=&quot;email.errors &amp;&amp; (email.dirty || email.touched)&quot; class=&quot;alert alert-danger&quot;&gt;
+     &lt;div [hidden]=&quot;!email.errors.required&quot;&gt;
+     Email is required
      &lt;/div&gt;
  &lt;/div&gt;
 </code></pre>
 </li>
-<li><p>Open the src\app\login\login.component.scss file</p>
-</li>
-<li><p>Add the following to style the em tags</p>
-<pre><code class="lang-scss"> em {float:right; color:#E05C65; padding-left:10px;}
+<li><p>In order to refer to the email field by name when checking errors, we need to add the <code>#email=&quot;ngModel&quot;</code> attribute to the email input field to tell Angular to create a variable for the control and make the value the ngModel value for the email field.  </p>
+<pre><code class="lang-html"> &lt;input #email=&quot;ngModel&quot; required (ngModel)=&quot;email&quot; name=&quot;email&quot; id=&quot;email&quot; type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Email...&quot; /&gt;
 </code></pre>
 </li>
-<li><p>Open the src\app\login\login.component.ts file</p>
+<li><p>For the password field, inside of the form-group div tag and after the input field add the following code.  This code will show when the required errors triggers.  To trigger the error message, click on the password field and then click on the email field.</p>
+<pre><code class="lang-TypeScript"> &lt;div *ngIf=&quot;password.errors &amp;&amp; (password.dirty || password.touched)&quot; class=&quot;alert alert-danger&quot;&gt;
+     &lt;div [hidden]=&quot;!password.errors.required&quot;&gt;
+     Password is required
+     &lt;/div&gt;
+ &lt;/div&gt;
+</code></pre>
 </li>
-<li><p>Add the login function</p>
-<pre><code class="lang-TypeScript"> login(formValues) {
- let password: string = formValues.password;
+<li><p>Just like the email field, we need to add the <code>#password=&quot;ngModel&quot;</code> attribute to the input control to name the field</p>
+<pre><code class="lang-html"> &lt;input #password=&quot;ngModel&quot; required (ngModel)=&quot;password&quot; name=&quot;password&quot; id=&quot;password&quot; id=&quot;password&quot; type=&quot;password&quot; class=&quot;form-control&quot; placeholder=&quot;Password...&quot; /&gt;
+</code></pre>
+</li>
+</ol>
+<p>The last thing we want to do is to disable the login button until the form is valid.</p>
+<ol>
+<li><p>Find the submit button and add the following attribute to it to disable the button when the login form is invalid</p>
+<pre><code class="lang-html"> &lt;button type=&quot;submit&quot;  [disabled]=&quot;loginForm.invalid&quot; class=&quot;btn btn-primary&quot;&gt;Login&lt;/button&gt;
+</code></pre>
+</li>
+<li><p>Now we are ready to test our required validation.  </p>
+<ul>
+<li>Trigger email by clicking on the field and then clicking off the field with it still being blank or type something in the field and then erase it</li>
+<li><p>Trigger the password field the same way</p>
+<p><img src="images/login-required-validation.png" alt="required validation"></p>
+</li>
+</ul>
+</li>
+</ol>
+<div class="exercise-end"></div>
 
- if (password.length &lt; this.minLength){
-   this.minLengthError = true;
-   this.loginInvalid = false;
-   return;
+<h3 id="email-validation">Email  Validation</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Email Validation
+</h4>
+
+<p>With the Angular 4 release, they added an email validator.  To add the validator to our email field, we just need to add an <code>email</code> attribute like we did for the <code>required</code> attribute.</p>
+<pre><code class="lang-html">&lt;input email #email=&quot;ngModel&quot; required (ngModel)=&quot;email&quot; name=&quot;email&quot; id=&quot;email&quot; type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Email...&quot; /&gt;
+</code></pre>
+<p>Next we need to add a message like we did for the required validator for when the email validation triggers on an invalid email.  Add the following code below the required message but within the <code>&lt;div&gt;</code> that checks if there are errors.</p>
+<pre><code class="lang-html">&lt;div [hidden]=&quot;!email.errors.email&quot;&gt;
+    Must be an email address
+&lt;/div&gt;
+</code></pre>
+<p>Now we are ready to test the email validation.  </p>
+<ul>
+<li><p>The validation will trigger if you input text into the email field that is not a valid email address.</p>
+<p>  <img src="images/login-email-validation.png" alt="email validation"></p>
+</li>
+<li><p>The validation will also trigger at the same time as required </p>
+<p>  <img src="images/login-email-required-validation.png" alt="required validation"></p>
+</li>
+</ul>
+<p>Test</p>
+<div class="exercise-end"></div>
+
+<h3 id="disable-login-button">Disable Login Button</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Disable Login Button Until Valid
+</h4>
+
+<p>The last thing we want to do is to disable the login button until the form is valid.</p>
+<ol>
+<li><p>Find the submit button and add the following attribute to it to disable the button when the login form is invalid</p>
+<pre><code class="lang-html"> &lt;button type=&quot;submit&quot;  [disabled]=&quot;loginForm.invalid&quot; class=&quot;btn btn-primary&quot;&gt;Login&lt;/button&gt;
+</code></pre>
+</li>
+<li><p>Now when either field is invalid the login button will be disabled and a lighter share of blue</p>
+<p> <img src="images/login-submit-disabled.png" alt="required validation"></p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="implement-login-service">Implement Login Service</h3>
+<p>Now that we have our form done, we are going to implement our login service.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>:  Generate Service
+</h4>
+
+<ol>
+<li>Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then &quot;Integrated Terminal&quot;</li>
+<li><p>Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.</p>
+<pre><code class="lang-bash"> ng generate service shared/service/auth
+</code></pre>
+</li>
+<li><p>The generate command will create 2 files: </p>
+<p> <img src="images/login-service-generate.png" alt="output of generate"></p>
+<ul>
+<li>spec file (test)</li>
+<li>typescript (service)</li>
+</ul>
+</li>
+</ol>
+<p>You will also notice that thre is a warning that the service has not been provided. This means that we need to open up the module that we want to use the service in and add it to the providers list.</p>
+<ol>
+<li>Open src\app.module.ts</li>
+<li><p>Import the AuthService</p>
+<pre><code class="lang-TypeScript"> import { AuthService } from &#39;./shared/services/auth.service&#39;;
+</code></pre>
+</li>
+<li><p>Find the @NgModule providers list and add the AuthService</p>
+<pre><code class="lang-TypeScript">   providers: [AuthService],
+</code></pre>
+</li>
+<li><p>Now the AuthService is available to the AppModule and we can use it in our LoginComponent</p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>:  Starting JSON-Server
+</h4>
+
+<p>We are going to use the JSON server that we installed early to create a mock api for our UI so that we can focused on Angular and not worry about creating a real API.  The calls that we will be making to the API are the same calls in Angular that we would make to a real API.</p>
+<ol>
+<li>Right-click on the <a href="files/db.json">db.json</a> and save the db.json file to under your Angular project directory</li>
+<li>Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then &quot;Integrated Terminal&quot;</li>
+<li>Click the + sign to create a new terminal tab</li>
+<li><p>Run the following command to start up our json-server from the root directory of the Angular project </p>
+<pre><code class="lang-bash"> json-server db.json
+</code></pre>
+</li>
+<li><p>If everything worked correctly you should see the following output</p>
+<p> <img src="images/json-server-start.png" alt="json-server start output"></p>
+</li>
+</ol>
+<ol>
+<li>You can now make REST calls to <a href="http://localhost:3000/user">http://localhost:3000/user</a> and <a href="http://localhost:3000/todo">http://localhost:3000/todo</a></li>
+</ol>
+<div class="alert alert-danger" role="alert">
+In a real API, you would want to implement SSL to encrypt all of the traffic and protect the passwords by encrypting them in the data store.
+</div>
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Implement Auth Service Login Function
+</h4>
+
+<p>Now that we have our API server up and running, it is time to create our Auth service login function that call the API.</p>
+<ol>
+<li>Open the src\shared\services\auth.service.ts file</li>
+<li><p>Import the following so that we can make our HTTP calls and get a response back.  </p>
+<pre><code class="lang-TypeScript"> import { Http, Response } from &#39;@angular/http&#39;;
+ import { Observable } from &#39;rxjs/Rx&#39;;
+</code></pre>
+</li>
+<li><p>In order to use the HTTP module, we need to inject it into our constructor</p>
+<pre><code class="lang-TypeScript"> constructor(private http: Http) {
  }
-
- this.minLengthError = false;
- this.authService.login(formValues.email, formValues.password)
-   .subscribe(result =&gt; {
-     if (!result) {
-       this.loginInvalid = true;
-     } else {
-       this.router.navigate([&#39;/&#39;]);
-     }
-   });
-}
+</code></pre>
+</li>
+<li><p>We also want to create a public variable within the AuthClass to hold the output from the API call </p>
+<pre><code class="lang-TypeScript"> public currentUser: any;
+</code></pre>
+</li>
+<li><p>Next we need to create our login function within the AuthService class that will call our API</p>
+<pre><code class="lang-TypeScript"> login(email: string, password: string): Observable&lt;boolean | Response&gt; {
+     let url = `http://localhost:3000/user?email=${email}&amp;password=${password}`;
+     return this.http.get(url)
+         .do((res: Response) =&gt; {
+             let body = res.json();
+             if (body &amp;&amp; body.length === 1) {
+                 this.currentUser = body[0];
+             } else {
+                 this.currentUser = null;
+             }
+         })
+         .catch(error =&gt; {
+             console.log(&#39;login error&#39;, error)
+             return Observable.of(false);
+         });
+ }
 </code></pre>
 </li>
 </ol>
 <div class="exercise-end"></div>
 
-<h3 id="adding-validation">Adding Validation</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Add Required Validation
-</h4>
-
-<p>Something here!</p>
-<div class="exercise-end"></div>
-
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Add Email Validation
+    <b>Exercise</b>: Call AuthService from LoginComponent
 </h4>
 
-<p>Something here!</p>
+<p>Now that we have our AuthService completed, we need to call it from our LoginComponent.  If we get a user back we will redirect the user to the home page</p>
+<ol>
+<li>Open the src\login\login.component.ts file</li>
+<li><p>Import the AuthService so that we can make our HTTP calls and get a response back.  </p>
+<pre><code class="lang-TypeScript"> import { AuthService } from &#39;../shared/services/auth.service&#39;;
+ import { Router } from &#39;@angular/router&#39;;
+</code></pre>
+</li>
+<li><p>In order to use the AuthService and Router, we need to inject it into our constructor</p>
+<pre><code class="lang-TypeScript">constructor(private authService: AuthService, private router: Router) { }
+</code></pre>
+</li>
+<li><p>Next we need to update our login function to call the AuthService and redirect if it finds the user.</p>
+<pre><code class="lang-TypeScript">   login(formValues) {
+ this.authService.login(formValues.email, formValues.password)
+   .subscribe(result =&gt; {
+     if (!this.authService.currentUser) {
+       console.log(&#39;user not found&#39;);
+     } else {
+       this.router.navigate([&#39;/&#39;]);
+     }
+   });
+ }
+</code></pre>
+</li>
+<li><p>Navigate to <a href="http://localhost:4200/login">http://localhost:4200/login</a> .</p>
+<ul>
+<li>If you enter an email of foo@foo.com with a password 123456 you should be redirected to the home page</li>
+<li>If you enter a bogus email or password, you will see a &quot;user not found&quot; message in the browser developer tools console.</li>
+</ul>
+</li>
+</ol>
 <div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Add Password Min Length Validation
-</h4>
-
-<p>Something here!</p>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Disable Login Button Until Valid
-</h4>
-
-<p>Something here!</p>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Show Validation on MouseOver
-</h4>
-
-<p>Something here!</p>
-<div class="exercise-end"></div>
-
-<h3 id="submitting-form">Submitting Form</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Submitting Form
-</h4>
-
-<p>Something here!</p>
-<div class="exercise-end"></div>
-
-
-
 
 				</div>
 				<hr>
 
 				<div class="chapter">
 					<h2 id="reactive-forms">Reactive Forms</h2>
+<p>In the previous chapter, we took a look at template based forms.  In this chapter will will take a look at reactive based forms.</p>
+<p>Reactive forms allow you to define the form fields and validation in the component instead of the template.  You can easily test the form fields and validation logic.  You can also dynamically build the form and validation in the component.</p>
+<p>We are going to build the form to enter our Todo items using Reactive forms.</p>
 <h3 id="create-component">Create Component</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Create Todo Component 

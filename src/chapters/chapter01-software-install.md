@@ -4,9 +4,10 @@
 To get started, we need to install and configure the following software first.
 
 * Windows, Mac, or Linux computer
+* Visual Studio Code (can use any text editor but workshop tested with Visual Studio Code)
 * Node 6.9+
 * Angular CLI 1.0.0+
-* Visual Studio Code (can use any text editor but workshop tested with Visual Studio Code)
+* Json Server (used to fake our API calls)
 
 ### Windows Showing File Extensions 
 
@@ -39,6 +40,14 @@ Once the "Folder Options" dialog is open:
   
 <div class="exercise-end"></div>
 
+### Visual Studio Code
+
+Visual Studio Code is Microsoft lightweight cross platform IDE.  
+
+1. Download Visual Studio Code at [https://code.visualstudio.com/](https://code.visualstudio.com/)
+1. Once the download finishes, launch the installer except all of the defaults.
+
+
 ### Node.js
 
 NodeJS is used to power the Angular CLI as well as install all of our dependencies.  The Angular CLI requires Node version 6.9 or greater.
@@ -50,14 +59,6 @@ NodeJS is used to power the Angular CLI as well as install all of our dependenci
     ```bash
     node -v
     ```
-
-### Visual Studio Code
-
-Visual Studio Code is Microsoft lightweight cross platform IDE.  
-
-1. Download Visual Studio Code at [https://code.visualstudio.com/](https://code.visualstudio.com/)
-1. Once the download finishes, launch the installer except all of the defaults.
-
 
 ### Angular CLI Install
 
@@ -84,5 +85,28 @@ While you do not have to use the Angular CLI, it is highly recommended, will inc
     ```
 
     ![ng version output](images/chapter1/ng-version.png)
+    
+<div class="exercise-end"></div>
+
+### JSON Server Install
+
+JSON Server is a lightweight server to make REST api calls.  
+
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Install JSON Server
+</h4>
+
+1. Open a command prompt or terminal and run the following command
+
+    ```bash
+    npm install -g json-server
+    ```
+
+1. Verify JSON Server.  As of this writing version is 0.10.0
+
+    ```
+    json-server --verion
+    ```
     
 <div class="exercise-end"></div>

@@ -1,5 +1,12 @@
 ## Reactive Forms
 
+In the previous chapter, we took a look at template based forms.  In this chapter will will take a look at reactive based forms.
+
+Reactive forms allow you to define the form fields and validation in the component instead of the template.  You can easily test the form fields and validation logic.  You can also dynamically build the form and validation in the component.
+
+We are going to build the form to enter our Todo items using Reactive forms.
+
+
 ### Create Component
 
 <h4 class="exercise-start">
