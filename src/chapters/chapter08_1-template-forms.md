@@ -1,11 +1,19 @@
 ## Template Based Forms
 
+### Overview
+
 There are 2 options for creating forms within Angular: Template based and Model based.  This chapter will cover template based forms.
 
 Template based forms are simple and easy to use.  They are great for simple use cases.  However, there are some limitations with template  based forms: 1.) You end up with a lot of logic in your html code 2.) Cross field validation is more difficult 3.) You can not unit test your form and validation logic.
 
 To demonstrate template based forms, we are going to be build a login component.
 
+### Goals
+
+* Understand template based forms
+* Create template based form
+* Implement input validation
+* Submit form values to a service
 
 ### Create Login Component
 
@@ -44,7 +52,6 @@ In order to view our Login component we need to tell Angular how to route to it.
 </h4>
 
 Before we can view our Login component, we need to tell Angular how to route to the component
-
 
 1. Open the src\app\app-routing.module.ts file
 1. Add the Import statement for the login component on line 3
@@ -99,7 +106,7 @@ Next we are going to create the form without any validation logic at all.  Our f
     </div>
     ```
 
-    * This form is using Bootstrap for the styling with the form-group and form-control css classes.
+    * This form is using Bootstrap for the styling with the form-group, form-control btn, and btn-* css classes.
     * The autocomplete="off" and novalidate directives for the form tag tell the browser to turn off that built-in functionality so that we can do our validation with Angular.
 
 <div class="exercise-end"></div>
@@ -301,9 +308,9 @@ Now that we have our form done, we are going to implement our login service.
     * spec file (test)
     * typescript (service)
 
-You will also notice that thre is a warning that the service has not been provided. This means that we need to open up the module that we want to use the service in and add it to the providers list.
+You will also notice that there is a warning that the service has not been provided. This means that we need to open up the module that we want to use the service in and add it to the providers list.
 
-1. Open src\app.module.ts
+1. Open src\app\app.module.ts
 1. Import the AuthService
 
     ```TypeScript
@@ -438,4 +445,38 @@ Now that we have our AuthService completed, we need to call it from our LoginCom
     * If you enter an email of foo@foo.com with a password 123456 you should be redirected to the home page
     * If you enter a bogus email or password, you will see a "user not found" message in the browser developer tools console.
     
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>:  Show Invalid Login Message
+</h4>
+
+Up to this point, we have been using the console to output when the login failed but we can not expect the user to have the dev tools console open.  Instead we need to show to the user when there is an error.
+
+1. Open the login.component.ts file
+1. Create a new variable inside of the LoginComponent class called invalidLogin, is of type boolean and the default value is false.
+
+    ```TypeScript
+    invalidLogin: boolean = false;
+    ```
+
+1. Now in the login method replace the console.log line and set the invalidLogin variable to true.  Make sure in the else statement that you set the invalidLogin to false.
+
+    ```TypeScript
+    this.invalidLogin = true;
+    ```
+
+    * We have to use this. to access the variable due to scoping.  
+
+Now we are ready to implement the UI to show the error message.  
+
+1. Open the login.component.html file
+1. We want to put our message after the cancel button but inside the `</form>` tag
+1. Add the following alert message
+
+    ```html
+    <div *ngIf="loginInvalid" class="alert alert-danger">
+        Invalid Login
+    </div>
+    ```
 <div class="exercise-end"></div>

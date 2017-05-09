@@ -1,5 +1,7 @@
 ## Implementing Default Route
 
+### Overview
+
 
 We have not yet implemented a default route.  If you add anything to the end of the url, Angular will error out that it can not match it to any of the known routes.  You can see this error in the Chrome Developer Tools Console.
 
@@ -10,6 +12,9 @@ There are 2 ways to fix this.
 
 1. Make the TodoComponent the default so that it will redirect the user to that page.  This is not as nice of a user experience since it does not alert the user that the url they were trying to go to does not exist.
 1. Create a "Not Found" component and redirect the user to that component if none of the other routes match.  This is the preferred method.
+
+
+### Goals
 
 ### Add Default Route
 

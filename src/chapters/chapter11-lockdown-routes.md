@@ -1,5 +1,9 @@
 ## Locking Down Routes
 
+### Overview
+
+### Goals
+
 ### Create Guard
 
 <h4 class="exercise-start">

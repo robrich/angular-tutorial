@@ -1,6 +1,10 @@
 ## Environment Configuration
 
+### Overview
+
 One of the requirements that you commonly have it to be able to change configurations for your application based on the environment it is running in.  A common configuration is to change the API url between development and production.  In order to change the configurations for different environments, Angular uses configurations files that are stored in the src\environments folder.  
+
+### Goals
 
 ### Default Configuration
 

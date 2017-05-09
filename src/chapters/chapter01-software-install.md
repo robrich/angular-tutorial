@@ -1,5 +1,6 @@
 ## Getting up and running
 
+### Overview
 
 To get started, we need to install and configure the following software first.
 
@@ -8,6 +9,9 @@ To get started, we need to install and configure the following software first.
 * Node 6.9+
 * Angular CLI 1.0.0+
 * Json Server (used to fake our API calls)
+
+### Goals
+
 
 ### Windows Showing File Extensions 
 

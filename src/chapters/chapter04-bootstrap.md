@@ -1,6 +1,10 @@
 ## Bootstrap
 
+### Overview
+
 For our styling we are going to use [Bootstrap 4](https://v4-alpha.getbootstrap.com/) which is still in alpha.  The reason for picking Bootstrap 4 and not Bootstrap 3 is so that you will be able to use the [Angular UI library](https://ng-bootstrap.github.io) if you so choose.  We will not be using the Angular UI library in this workshop but it is a great library for component.  If you are a Bootstrap 3 developer, you can see all of the change in the [Migration Guide](https://v4-alpha.getbootstrap.com/migration/). 
+
+### Goals
 
 ### Install Bootstrap
 

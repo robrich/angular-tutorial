@@ -1,5 +1,9 @@
 ## Deploying
 
+### Overview
+
+### Goals
+
 ### Production Build
 
 Before deploy you will need to run an a build with the Angular CLI.  With the build you can tell it the environment to use and if it is a production build or not.  A production will minify everything.

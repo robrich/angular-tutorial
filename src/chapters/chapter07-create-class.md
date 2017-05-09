@@ -1,5 +1,9 @@
 ## Create TypeScript class
 
+### Overview
+
+### Goals
+
 <h4 class="exercise-start">
     <b>Exercise</b>: Creating an Object to Hold Data
 </h4>

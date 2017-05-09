@@ -1,7 +1,10 @@
 ## Header and footer
 
+### Overview
+
 In most web sites we have a header and footer at the top and bottom of the page respectively with our logo, navigation, and important links.  The header will contain our logo and navigation menu while the footer will contain our copyright info. 
 
+### Goals
 
 ### Create Header Component 
 

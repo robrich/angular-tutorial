@@ -1,4 +1,4 @@
-## Introduction
+## Overview
 
 Welcome to the Up and Running with Angular Workshop.  Angular 2 was released in September 2016 and was a full re-write of the framework.  With the re-write a lot has changed.   In this workshop, you will learn how to build an Angular UI from the ground up.  We will cover common UI requirements like navigation, footer, forms, Http API calls, routing, modules, and security.
 
