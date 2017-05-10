@@ -41,11 +41,3 @@ ng build --target=production --environment=prod
 ```
 
 <div class="exercise-end"></div>
-
-### Heroku
-
-<h4 class="exercise-start">
-  <b>Exercise</b>: Heroku
-</h4>
-
-<div class="exercise-end"></div>

@@ -6,11 +6,14 @@ One of the requirements that you commonly have it to be able to change configura
 
 ### Goals
 
+* Learn how to change configurations per environment
+* Implement environment configurations
+
 ### Default Configuration
 
 The src\environments\environment.ts file is the default configurations if no environment is specified when running `ng serve`
 
-In the environment.ts we need to add the environmentName and apiBaseUrl values.  The apiBaseUrl is how to get to your service layer, if you have one.  For now we are going to use localhost:1337/v1.
+In the environment.ts we need to add the environmentName and apiBaseUrl values.  The apiBaseUrl is how to get to your service layer, if you have one.  For now we are going to use http://localhost:3000.
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Setup Default Configuration
@@ -23,7 +26,7 @@ In the environment.ts we need to add the environmentName and apiBaseUrl values. 
     export const environment = {
         production: false,
         environmentName: 'Development',
-        apiBaseUrl: 'http://localhost:1337/v1'
+        apiBaseUrl: 'http://localhost:3000'
     };
     ```
 
@@ -34,13 +37,13 @@ In the environment.ts we need to add the environmentName and apiBaseUrl values. 
     ng serve
     ```
 
-1. Everything should still start as normal.  You will not see any changes at this point since nothing is using those settings.  We will use them when we create our footer.
+1. Everything should still start as normal.  You will not see any changes at this point since nothing is using those settings.  We will use them in a bit in our footer and our services.
 
 <div class="exercise-end"></div>
 
 ### Local Development
 
-The other environment that is typically created is for local development on your machine.  For this tutorial the environment.ts and local.ts have the same values but once you go to development and production they will differ.   
+The other environment that is typically created is for local development on your machine.  For this tutorial the environment.ts and local.ts have the same values but once you go from development to production they will differ.   
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Create Local Configuration
@@ -53,7 +56,7 @@ The other environment that is typically created is for local development on your
     export const environment = {
     production: false,
     environmentName: 'Local',
-    apiBaseUrl: 'http://localhost:1337/v1'
+    apiBaseUrl: 'http://localhost:3000'
     };
     ```
 
@@ -70,7 +73,7 @@ The other environment that is typically created is for local development on your
     ng serve -e local
     ```
 
-1. If the webpack compile was successful, you will now be using the local environment configuration. You will not see any changes at this point since nothing is using those settings.  We will use them when we create our footer.
+1. If the Angular compile was successful, you will now be using the local environment configuration. You will not see any changes at this point since nothing is using those settings.  We will use them in the next exercise in our footer.
 
 <div class="exercise-end"></div>
 
@@ -94,25 +97,51 @@ The other environment that is typically created is for local development on your
 
     ```
     <footer>
-        <div class="pull-right">
-            env: {{ env }} 
-        </div>
         <div class="pull-left">
             &copy;Angular WS
         </div>
+        <div class="pull-right">
+            env: {{ env }} 
+        </div>      
     </footer>
     ```
 
 1.  If you view the web page you should see the footer 
 
-    ![App Works with Footer](images/footer-development.png)
+    ![App Works with Footer](images/footer-with-env.png)
 
     <div class="alert alert-warning" role="alert">
         Notice that the env:Local in the footer is coming from the environment.local.ts file.  If you stop `ng serve` and run it without using the -e argument, the env value will change to Development
 
-        ![footer development env](images/footer-development.png)
+        ![footer development env](images/footer-with-env-dev.png)
         
     </div>
 
 <div class="exercise-end"></div>    
 
+<h4 class="exercise-start">
+    <b>Exercise</b>: Updating Services With Environment Url
+</h4>
+
+Now that we have the API url in the environments file, we should update the TodoService and AuthService to get the base url from the environments file instead of having it hard coded.  While we are at it, we should also create a variable in the services to hold the base url so that we don't have it all over the place in the services.
+
+1. Open the src\app\shared\services\todo.service.ts file
+1. Import the environment file
+
+    ```TypeScript
+
+    ```
+
+1. Create a variable called baseUrl inside the TodoService class that gets the variable from the environment file
+
+    ```TypeScript
+
+    ```
+
+1. Update each of the http calls to use the baseUrl variable instead of hard coding the url
+
+    ```TypeScript
+
+    ```
+
+<div class="exercise-end"></div>

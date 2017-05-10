@@ -3,7 +3,7 @@
 ### Overview
 
 
-We have not yet implemented a default route.  If you add anything to the end of the url, Angular will error out that it can not match it to any of the known routes.  You can see this error in the Chrome Developer Tools Console.
+We have not yet implemented a catch all route which will be the route that is used when Angular does not match any other configured routes.  .
 
 ![no route found](images/ng2/no-route-found.png)
 

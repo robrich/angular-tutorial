@@ -3,11 +3,11 @@
 
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Up and Running with Angular</title>
+	<title>Up and Running with Angular Workshop</title>
 
 
 	<meta charset="utf-8">
-	<meta name="description" content="Labs for Angular 2 Workshop">
+	<meta name="description" content="Up and Running with Angular Workshop">
 	<meta name="author" content="Justin James">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -30,9 +30,11 @@
 			<div id="book">
 				<div class="chapter">
 					<h2 id="overview">Overview</h2>
-<p>Welcome to the Up and Running with Angular Workshop.  Angular 2 was released in September 2016 and was a full re-write of the framework.  With the re-write a lot has changed.   In this workshop, you will learn how to build an Angular UI from the ground up.  We will cover common UI requirements like navigation, footer, forms, Http API calls, routing, modules, and security.</p>
+<p>Welcome to the Up and Running with Angular Workshop.  Angular 2 was released in September 2016 and was a full re-write of the framework.  With the re-write a lot has changed.   In this workshop, you will learn how to build an Angular UI from the ground up.  </p>
+<div class="alert alert-danger" role="alert">This workshop has been written for and tested with Angular 4.1</div>
+
 <h3 id="new-naming-convention">New Naming Convention</h3>
-<p>The first thing is what to call Angular.  Angular 1 is now referred to as AngularJS.  Angular 2 and above is referred to as just Angular.  From here on out, we will just call it Angular.  The only time to refer to Angular with a version number is when you are talking about a feature that it specific to that version.  For example, in Angular 4, they add the TitleCase Pipe.</p>
+<p>The first thing is what to call Angular.  Angular 1 is now referred to as AngularJS.  Angular 2 and above is referred to as just Angular.  From here on out, we will just call it Angular.  The only time to refer to Angular with a version number is when you are talking about a feature that it specific to that version.  For example, in Angular 4, they add the TitleCase Pipe and an email validator.</p>
 <h3 id="release-schedule">Release Schedule</h3>
 <p>The second thing is that they are now following SemVer for the versioning of Angular and have a release schedule.  For example, here is how version 2.3.1 would break down.</p>
 <p><img src="images/semver.png" alt="SemVer"></p>
@@ -1875,6 +1877,313 @@ createdAt: Date;
 				<hr>
 
 				<div class="chapter">
+					<h2 id="environment-configuration">Environment Configuration</h2>
+<h3 id="overview">Overview</h3>
+<p>One of the requirements that you commonly have it to be able to change configurations for your application based on the environment it is running in.  A common configuration is to change the API url between development and production.  In order to change the configurations for different environments, Angular uses configurations files that are stored in the src\environments folder.  </p>
+<h3 id="goals">Goals</h3>
+<ul>
+<li>Learn how to change configurations per environment</li>
+<li>Implement environment configurations</li>
+</ul>
+<h3 id="default-configuration">Default Configuration</h3>
+<p>The src\environments\environment.ts file is the default configurations if no environment is specified when running <code>ng serve</code></p>
+<p>In the environment.ts we need to add the environmentName and apiBaseUrl values.  The apiBaseUrl is how to get to your service layer, if you have one.  For now we are going to use <a href="http://localhost:3000">http://localhost:3000</a>.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Setup Default Configuration
+</h4>
+
+<ol>
+<li>Open the src\environments\environment.ts file</li>
+<li><p>Add the environmentName and apiBaseUrl values.  </p>
+<pre><code class="lang-TypeScript"> export const environment = {
+     production: false,
+     environmentName: &#39;Development&#39;,
+     apiBaseUrl: &#39;http://localhost:3000&#39;
+ };
+</code></pre>
+</li>
+<li><p>Go to the terminal that is running the <code>ng serve</code> command and do a ctrl+c to stop it.</p>
+</li>
+<li><p>Run the <code>ng serve</code> command again.</p>
+<pre><code class="lang-bash"> ng serve
+</code></pre>
+</li>
+<li><p>Everything should still start as normal.  You will not see any changes at this point since nothing is using those settings.  We will use them in a bit in our footer and our services.</p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="local-development">Local Development</h3>
+<p>The other environment that is typically created is for local development on your machine.  For this tutorial the environment.ts and local.ts have the same values but once you go from development to production they will differ.   </p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create Local Configuration
+</h4>
+
+<ol>
+<li>Create the file src\environments\environment.local.ts file</li>
+<li><p>Add the following to the environment.local.ts file</p>
+<pre><code class="lang-TypeScript"> export const environment = {
+ production: false,
+ environmentName: &#39;Local&#39;,
+ apiBaseUrl: &#39;http://localhost:3000&#39;
+ };
+</code></pre>
+</li>
+<li><p>Open the .angular-cli.json that is in the root of the project.  </p>
+</li>
+<li><p>Find the apps\environments section and add the local configuration to the at the top of the list of environments</p>
+<pre><code class="lang-json"> &quot;local&quot;: &quot;environments/environment.local.ts&quot;,
+</code></pre>
+</li>
+<li><p>If you want to run the local configuration we need to pass in the environment command line argument.  The environment argument value is the name of the environment name in the angular-cli.json file.  Note that you can only have 1 ng serve running at a time.    </p>
+<pre><code class="lang-bash"> ng serve -e local
+</code></pre>
+</li>
+<li><p>If the Angular compile was successful, you will now be using the local environment configuration. You will not see any changes at this point since nothing is using those settings.  We will use them in the next exercise in our footer.</p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Environment Name to Footer
+</h4>
+
+<ol>
+<li><p>Open the src\app\shared\footer\footer.component.ts file and import the environment into the file on line 2 right below the Angular core import</p>
+<pre><code class="lang-TypeScript"> import { environment } from &#39;../../../environments/environment&#39;;
+</code></pre>
+</li>
+<li><p>Inside the FooterComponent class we to add a variable to capture the environment name that Angular is running in</p>
+<pre><code class="lang-TypeScript"> public env = environment.environmentName;
+</code></pre>
+</li>
+<li><p>Open the src\app\shared\footer\footer.component.html and replace the contents with</p>
+<pre><code> &lt;footer&gt;
+     &lt;div class=&quot;pull-left&quot;&gt;
+         &amp;copy;Angular WS
+     &lt;/div&gt;
+     &lt;div class=&quot;pull-right&quot;&gt;
+         env: {{ env }} 
+     &lt;/div&gt;      
+ &lt;/footer&gt;
+</code></pre></li>
+<li><p>If you view the web page you should see the footer </p>
+<p><img src="images/footer-with-env.png" alt="App Works with Footer"></p>
+<div class="alert alert-warning" role="alert">
+    Notice that the env:Local in the footer is coming from the environment.local.ts file.  If you stop <code>ng serve</code> and run it without using the -e argument, the env value will change to Development
+
+    <img src="images/footer-with-env-dev.png" alt="footer development env">
+
+</div>
+
+</li>
+</ol>
+<div class="exercise-end"></div>    
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Updating Services With Environment Url
+</h4>
+
+<p>Now that we have the API url in the environments file, we should update the TodoService and AuthService to get the base url from the environments file instead of having it hard coded.  While we are at it, we should also create a variable in the services to hold the base url so that we don&#39;t have it all over the place in the services.</p>
+<ol>
+<li>Open the src\app\shared\services\todo.service.ts file</li>
+<li><p>Import the environment file</p>
+<pre><code class="lang-TypeScript">
+</code></pre>
+</li>
+<li><p>Create a variable called baseUrl inside the TodoService class that gets the variable from the environment file</p>
+<pre><code class="lang-TypeScript">
+</code></pre>
+</li>
+<li><p>Update each of the http calls to use the baseUrl variable instead of hard coding the url</p>
+<pre><code class="lang-TypeScript">
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+				</div>
+
+				<hr>
+				<div class="chapter">
+					<h2 id="locking-down-routes">Locking Down Routes</h2>
+<h3 id="overview">Overview</h3>
+<h3 id="goals">Goals</h3>
+<h3 id="create-guard">Create Guard</h3>
+<h4 class="exercise-start">
+  <b>Exercise</b>: Create Guard
+</h4>
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+  <b>Exercise</b>: Add Guard to Module
+</h4>
+
+<ol>
+<li>Open the app.module.ts </li>
+<li><p>Import the AdminGuard</p>
+<pre><code class="lang-TypeScript">import { AdminGuard } from &#39;./shared/guards/admin.guard&#39;;
+</code></pre>
+</li>
+<li><p>Add the AdminGuard to the providers list</p>
+<pre><code class="lang-TypeScript">providers: [TodoService, AdminGuard],
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="update-route-with-guard">Update Route With Guard</h3>
+<h4 class="exercise-start">
+  <b>Exercise</b>: Add Guard to Route
+</h4>
+
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+  <b>Exercise</b>: Test Unauthorized Access
+</h4>
+
+<p>To test that the guard is working, we need to return a false from canActivate and redirect to the unauthorized route.  </p>
+<ol>
+<li><p>In the admin.guard.ts file, change the canActivate route to the following</p>
+<pre><code class="lang-TypeScript"> canActivate(): boolean {
+ this.router.navigate([&#39;/unauthorized&#39;]);
+ return false;
+}
+</code></pre>
+</li>
+<li><p>Import the router into the admin.guard.ts file</p>
+<pre><code class="lang-TypeScript">import { Router } from &#39;@angular/router&#39;;
+</code></pre>
+</li>
+<li><p>Inject the Router into the constructor</p>
+<pre><code class="lang-TypeScript">constructor(private router: Router) { }
+</code></pre>
+</li>
+<li><p>Now if you navigate to <a href="http://localhost:4200/admin">http://localhost:4200/admin</a> you will be redirected to the unauthorized route</p>
+<p><img src="images/unauthorized-view.png" alt="unauthorized view"></p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+				</div>
+				<hr>
+				<div class="chapter">
+					<h2 id="implementing-default-route">Implementing Default Route</h2>
+<h3 id="overview">Overview</h3>
+<p>We have not yet implemented a catch all route which will be the route that is used when Angular does not match any other configured routes.  .</p>
+<p><img src="images/ng2/no-route-found.png" alt="no route found"></p>
+<p>There are 2 ways to fix this.  </p>
+<ol>
+<li>Make the TodoComponent the default so that it will redirect the user to that page.  This is not as nice of a user experience since it does not alert the user that the url they were trying to go to does not exist.</li>
+<li>Create a &quot;Not Found&quot; component and redirect the user to that component if none of the other routes match.  This is the preferred method.</li>
+</ol>
+<h3 id="goals">Goals</h3>
+<h3 id="add-default-route">Add Default Route</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Adding Default Route 
+</h4>
+
+<div class="alert alert-danger" role="alert">
+<strong>Note:</strong> Not the preferred method.<br></div>
+
+<ol>
+<li>Open the app.routing.ts file</li>
+<li><p>Add an additional route to the Routes list with a ** for the path and set the component to TodoComponent.  This will tell Angular to use the TodoComponent when it can not determine the route</p>
+<pre><code class="lang-TypeScript"> , { path: &#39;**&#39;, component: TodoComponent }
+</code></pre>
+ <div class="alert alert-warning">
+ Make sure that you make the default route the last route.  Any routes below the ** route will be ignored.
+ </div>
+
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="create-not-found-component">Create Not Found Component</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Redirecting User to &quot;Not Found&quot; component
+</h4>
+
+<div class="alert alert-success" role="alert">
+<strong>Note:</strong> This is the preferred method.<br></div>
+
+<p>From a user experience perspective, it is a much experience to redirect the user to a &quot;not found&quot; page instead of redirecting them back to the home page.  Create the route not found page is just like we did with the todo component.    </p>
+<ol>
+<li><p>Run the Angular Cli generate command to create the notFound component</p>
+<pre><code class="lang-bash"> ng generate component notFound
+</code></pre>
+</li>
+<li><p>4 files are created just like when we created the TodoComponent earlier.  You will notice this time though that the Angular Cli put a dash between not and found.  It will automatically do that when it encounters an uppercase character.</p>
+<p> <img src="images/ng2/notfound-generated.png" alt="not found generated file list"></p>
+</li>
+<li><p>In the src\app\app.module.ts file you may need to add an import statement for the NotFoundComponent and add it to the declarations list to make it available.  Sometimes the Angular CLI adds it automatically for you</p>
+<pre><code class="lang-TypeScript"> import { NotFoundComponent } from &#39;./not-found/not-found.component&#39;;
+</code></pre>
+<pre><code class="lang-TypeScript"> declarations: [
+     AppComponent,
+     HeaderComponent,
+     FooterComponent,
+     TodoComponent,
+     NotFoundComponent
+ ],
+</code></pre>
+</li>
+<li><p>In the src\app\app-routing.module.ts file, add an import statement for the NotFoundComponent </p>
+<pre><code class="lang-TypeScript"> import { NotFoundComponent } from &#39;./not-found/not-found.component&#39;;
+</code></pre>
+</li>
+<li><p>In the app-routing.module.ts file, change the ** route to use the NotFoundComponent</p>
+<pre><code class="lang-TypeScript"> , { path: &#39;**&#39;, component: NotFoundComponent }
+</code></pre>
+</li>
+<li><p>If you now try to navigate to <a href="http://localhost:4200/unknown">http://localhost:4200/unknown</a> you will be shown the NotFoundComponent </p>
+<p> <img src="images/view-route-unknown.png" alt="Not Found View"></p>
+</li>
+</ol>
+
+				</div>
+				<hr>
+
+				<div class="chapter">
+					<h2 id="deploying">Deploying</h2>
+<h3 id="overview">Overview</h3>
+<h3 id="goals">Goals</h3>
+<h3 id="production-build">Production Build</h3>
+<p>Before deploy you will need to run an a build with the Angular CLI.  With the build you can tell it the environment to use and if it is a production build or not.  A production will minify everything.</p>
+<div class="alert alert-info" role="alert">
+Note the build create a dist folder to hold the output.   This directory is removed before each build
+</div>
+
+<p>Select which type of build you want to run:  Non-Production or Production</p>
+<h4 class="exercise-start">
+  <b>Exercise</b>: Running Non-Production Build
+</h4>
+
+<p>Run the following command to run a build that uses the environment.ts file and is not a production build</p>
+<pre><code class="lang-bash">ng build
+</code></pre>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+  <b>Exercise</b>: Running a Production Build
+</h4>
+
+<div class="alert alert-warning" role="alert">
+Note that this will remove the dist directory before build.
+</div>
+
+<p>Run the following command to run a build that uses the environment.prod.ts file and is a production build.   The environment name must match the file name for it to be valid.</p>
+<pre><code class="lang-bash">ng build --target=production --environment=prod
+</code></pre>
+<div class="exercise-end"></div>
+
+				</div>
+				<hr>
+
+				<div class="chapter">
 					<h2 id="bonus-additional-todo-features">Bonus: Additional Todo Features</h2>
 <h3 id="displaying-open-item-count">Displaying Open Item Count</h3>
 <p>It would be nice to know how many todo items that the user has and display that in the UI.  You will need to make sure to update the open number when pulling, updating, and deleting todo items.</p>
@@ -2070,703 +2379,6 @@ createdAt: Date;
 <p>Instead, we can clear out the field on a successful save call by adding a call to <code>this.addForm.reset();</code></p>
 <pre><code class="lang-TypeScript">
 </code></pre>
-
-				</div>
-				<hr>
-
-				<div class="chapter">
-					<h2 id="environment-configuration">Environment Configuration</h2>
-<h3 id="overview">Overview</h3>
-<p>One of the requirements that you commonly have it to be able to change configurations for your application based on the environment it is running in.  A common configuration is to change the API url between development and production.  In order to change the configurations for different environments, Angular uses configurations files that are stored in the src\environments folder.  </p>
-<h3 id="goals">Goals</h3>
-<h3 id="default-configuration">Default Configuration</h3>
-<p>The src\environments\environment.ts file is the default configurations if no environment is specified when running <code>ng serve</code></p>
-<p>In the environment.ts we need to add the environmentName and apiBaseUrl values.  The apiBaseUrl is how to get to your service layer, if you have one.  For now we are going to use localhost:1337/v1.</p>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Setup Default Configuration
-</h4>
-
-<ol>
-<li>Open the src\environments\environment.ts file</li>
-<li><p>Add the environmentName and apiBaseUrl values.  </p>
-<pre><code class="lang-TypeScript"> export const environment = {
-     production: false,
-     environmentName: &#39;Development&#39;,
-     apiBaseUrl: &#39;http://localhost:1337/v1&#39;
- };
-</code></pre>
-</li>
-<li><p>Go to the terminal that is running the <code>ng serve</code> command and do a ctrl+c to stop it.</p>
-</li>
-<li><p>Run the <code>ng serve</code> command again.</p>
-<pre><code class="lang-bash"> ng serve
-</code></pre>
-</li>
-<li><p>Everything should still start as normal.  You will not see any changes at this point since nothing is using those settings.  We will use them when we create our footer.</p>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h3 id="local-development">Local Development</h3>
-<p>The other environment that is typically created is for local development on your machine.  For this tutorial the environment.ts and local.ts have the same values but once you go to development and production they will differ.   </p>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Create Local Configuration
-</h4>
-
-<ol>
-<li>Create the file src\environments\environment.local.ts file</li>
-<li><p>Add the following to the environment.local.ts file</p>
-<pre><code class="lang-TypeScript"> export const environment = {
- production: false,
- environmentName: &#39;Local&#39;,
- apiBaseUrl: &#39;http://localhost:1337/v1&#39;
- };
-</code></pre>
-</li>
-<li><p>Open the .angular-cli.json that is in the root of the project.  </p>
-</li>
-<li><p>Find the apps\environments section and add the local configuration to the at the top of the list of environments</p>
-<pre><code class="lang-json"> &quot;local&quot;: &quot;environments/environment.local.ts&quot;,
-</code></pre>
-</li>
-<li><p>If you want to run the local configuration we need to pass in the environment command line argument.  The environment argument value is the name of the environment name in the angular-cli.json file.  Note that you can only have 1 ng serve running at a time.    </p>
-<pre><code class="lang-bash"> ng serve -e local
-</code></pre>
-</li>
-<li><p>If the webpack compile was successful, you will now be using the local environment configuration. You will not see any changes at this point since nothing is using those settings.  We will use them when we create our footer.</p>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Add Environment Name to Footer
-</h4>
-
-<ol>
-<li><p>Open the src\app\shared\footer\footer.component.ts file and import the environment into the file on line 2 right below the Angular core import</p>
-<pre><code class="lang-TypeScript"> import { environment } from &#39;../../../environments/environment&#39;;
-</code></pre>
-</li>
-<li><p>Inside the FooterComponent class we to add a variable to capture the environment name that Angular is running in</p>
-<pre><code class="lang-TypeScript"> public env = environment.environmentName;
-</code></pre>
-</li>
-<li><p>Open the src\app\shared\footer\footer.component.html and replace the contents with</p>
-<pre><code> &lt;footer&gt;
-     &lt;div class=&quot;pull-right&quot;&gt;
-         env: {{ env }} 
-     &lt;/div&gt;
-     &lt;div class=&quot;pull-left&quot;&gt;
-         &amp;copy;Angular WS
-     &lt;/div&gt;
- &lt;/footer&gt;
-</code></pre></li>
-<li><p>If you view the web page you should see the footer </p>
-<p><img src="images/footer-development.png" alt="App Works with Footer"></p>
-<div class="alert alert-warning" role="alert">
-    Notice that the env:Local in the footer is coming from the environment.local.ts file.  If you stop <code>ng serve</code> and run it without using the -e argument, the env value will change to Development
-
-    <img src="images/footer-development.png" alt="footer development env">
-
-</div>
-
-</li>
-</ol>
-<div class="exercise-end"></div>    
-
-
-				</div>
-
-				<hr>
-				<div class="chapter">
-					<h2 id="locking-down-routes">Locking Down Routes</h2>
-<h3 id="overview">Overview</h3>
-<h3 id="goals">Goals</h3>
-<h3 id="create-guard">Create Guard</h3>
-<h4 class="exercise-start">
-  <b>Exercise</b>: Create Guard
-</h4>
-
-<ol>
-<li>Create the file src\app\shared\guards\admin.guard.ts</li>
-<li><p>Make the contents of the admin.guard.ts file.  Right now the canActivate return a true.  To block access set it to return false.  Normally the canActivate would call your authentication code to validate the user access.  </p>
-<pre><code class="lang-TypeScript">import { Injectable } from &#39;@angular/core&#39;;
-import { AuthenticationService } from &#39;../services/authentication.service&#39;;
-import { CanActivate } from &#39;@angular/router&#39;;
-
-@Injectable()
-export class AdminGuard implements CanActivate {
- constructor(private authService: AuthenticationService) { }
-
- canActivate(): boolean {
-   return true;
- }
-}
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-  <b>Exercise</b>: Add Guard to Module
-</h4>
-
-<ol>
-<li>Open the app.module.ts </li>
-<li><p>Import the AdminGuard</p>
-<pre><code class="lang-TypeScript">import { AdminGuard } from &#39;./shared/guards/admin.guard&#39;;
-</code></pre>
-</li>
-<li><p>Add the AdminGuard to the providers list</p>
-<pre><code class="lang-TypeScript">providers: [TodoService, AdminGuard],
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h3 id="update-route-with-guard">Update Route With Guard</h3>
-<h4 class="exercise-start">
-  <b>Exercise</b>: Add Guard to Route
-</h4>
-
-<ol>
-<li><p>Generate the admin and NotAuthorized components</p>
-<pre><code class="lang-TypeScript">ng component admin
-</code></pre>
-<pre><code class="lang-TypeScript">ng component NotAuthorized
-</code></pre>
-</li>
-<li><p>Open the src\app\app-routing.module.ts</p>
-</li>
-<li><p>Import the AdminGuard</p>
-<pre><code class="lang-TypeScript">import { AdminGuard } from &#39;./shared/guards/admin.guard&#39;;
-</code></pre>
-</li>
-<li><p>Add a new unauthorized route that loads the NotAuthorizedComponent</p>
-<pre><code class="lang-TypeScript">{ path: &#39;unauthorized&#39;, component: NotAuthorizedComponent },
-</code></pre>
-</li>
-<li><p>Add a new admin route that loads the AdminComponent and has a canActivate attribute that calls the AdminGuard.  Note that the canActive value is an array.</p>
-<pre><code class="lang-TypeScript">{ path: &#39;admin&#39;, component: AdminComponent, canActivate: [AdminGuard]  },
-</code></pre>
-</li>
-<li><p>If you navigate to <a href="http://localhost:4200/admin">http://localhost:4200/admin</a> you will be able to get into the route since canActivate is returning true.</p>
-<p><img src="images/admin-view.png" alt="Admin View"></p>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-  <b>Exercise</b>: Test Unauthorized Access
-</h4>
-
-<p>To test that the guard is working, we need to return a false from canActivate and redirect to the unauthorized route.  </p>
-<ol>
-<li><p>In the admin.guard.ts file, change the canActivate route to the following</p>
-<pre><code class="lang-TypeScript"> canActivate(): boolean {
- this.router.navigate([&#39;/unauthorized&#39;]);
- return false;
-}
-</code></pre>
-</li>
-<li><p>Import the router into the admin.guard.ts file</p>
-<pre><code class="lang-TypeScript">import { Router } from &#39;@angular/router&#39;;
-</code></pre>
-</li>
-<li><p>Inject the Router into the constructor</p>
-<pre><code class="lang-TypeScript">constructor(private router: Router) { }
-</code></pre>
-</li>
-<li><p>Now if you navigate to <a href="http://localhost:4200/admin">http://localhost:4200/admin</a> you will be redirected to the unauthorized route</p>
-<p><img src="images/unauthorized-view.png" alt="unauthorized view"></p>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h3 id="implementing-real-authentication">Implementing Real Authentication</h3>
-<p>So far we have just been testing out the authentication with hard coded values within the UI.  Authorization should be done on the server side as it is very easy to forge and change the authorization on the client just by using the browser developer tools. </p>
-<p>With our Sails API, we have implemented a policy that stores the user profile in a user object and then returns back a cookie with the user profile information that includes if the user is an admin or not for the client to use.</p>
-<div class="alert alert-danger" role="alert">
-For testing purposes, I have created different routes and policies to return back cookies with the admin flag set and without the admin flag set.  Normally, you would use just 1 policy and not have seperate routes.
-</div>
-
-<h4 class="exercise-start">
-  <b>Exercise</b>: Install Cookie Library
-</h4>
-
-<p>To read the cookie information returned from the Sails API, we are going to use the angular2-cookie npm package</p>
-<ol>
-<li>From the integrated termainal, stop the ng server process from running</li>
-<li><p>Run the following command to install the angular2-cookie library from npm and store it in the dependencies section of the package.json file</p>
-<pre><code class="lang-bash">npm install --save angular2-cookie
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-  <b>Exercise</b>: Add angular2-cookie to module
-</h4>
-
-<ol>
-<li>Open the src\app\app.module.ts file </li>
-<li><p>Import the angular2-cookis CookieService.  To workaround an issue with the Ahead Of Time compliation, there is a little bit more work to do with this import than we normally would have</p>
-<pre><code class="lang-TypeScript">// FIX: https://github.com/salemdar/angular2-cookie/issues/37
-import { CookieService, CookieOptions } from &#39;angular2-cookie/core&#39;;
-export function cookieServiceFactory() {
-   return new CookieService();
-}
-</code></pre>
-</li>
-<li><p>Add the CookieService and CookieOptions to the module providers list</p>
-<pre><code class="lang-TypeScript">, { provide: CookieService, useFactory: cookieServiceFactory }, { provide: CookieOptions, useValue: {} }
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h4 id="creating-utility-service">Creating Utility Service</h4>
-<p>With our API calls, we want to ensure that we always call the Sails API initially to get the user cookie.  If we waiting until the guard was called, we would not be able to change things like menus and other options from within the site that an admin might also see.  To ensure we make the call on AppComponent load. we are going to create a UtilityService that is called within the App Page ngOnInit function.  The ngOnInit lifecycle function we run once the component has loaded.</p>
-<h4 class="exercise-start">
-  <b>Exercise</b>: Create the UtilityService
-</h4>
-
-<ol>
-<li><p>From the integrated termainal generate a new service called UtilityService that is stored in the src\app\shared\services folder.</p>
-<pre><code class="lang-TypeScript">ng g service shared\services\Utility
-</code></pre>
-</li>
-<li><p>Open the src\app\app.module.ts file</p>
-</li>
-<li><p>Import the UtilityService</p>
-<pre><code class="lang-TypeScript">import { UtilityService } from &#39;./shared/services/utility.service&#39;;
-</code></pre>
-</li>
-<li><p>Add the UtilityService to the list of providers</p>
-<pre><code class="lang-TypeScript">providers: [TodoService, AdminGuard, { provide: CookieService, useFactory: cookieServiceFactory }, { provide: CookieOptions, useValue: {} }, UtilityService],
-</code></pre>
-</li>
-<li><p>Open the src\app\shared\services\utility.service.ts file</p>
-</li>
-<li><p>Make the contents the following to call the Sails utility/version route</p>
-<pre><code class="lang-TypeScript">import { Injectable } from &#39;@angular/core&#39;;
-import { Http, Headers, Response, RequestOptions } from &#39;@angular/http&#39;;
-import { Observable } from &#39;rxjs/Rx&#39;;
-
-import { environment } from &#39;../../../environments/environment&#39;;
-
-let apiUrl = environment.apiBaseUrl;
-let httpRequestOptions = new RequestOptions( { withCredentials: true } );
-
-@Injectable()
-export class UtilityService {
- constructor(private _http: Http) { }
-
- getApiBuild() {
-   let url = apiUrl + &#39;/utility/version&#39;;
-   return this._http.get(url, httpRequestOptions)
-     .map(data =&gt; data.json())
-     .catch(this.handleError);
- }
-
- // TODO
- // implement exception handling strategy
- private handleError(error: Response) {
-   console.log(error);
-   return Observable.throw(error.json().error || &#39;Server error&#39;);
- }
-}
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-  <b>Exercise</b>: Update the AppComponent to Call the UtilityService
-</h4>
-
-<ol>
-<li>Open the src\app\app.Component.ts file</li>
-<li><p>Add OnInit to the @angular/core import</p>
-<pre><code class="lang-TypeScript">import { Component, OnInit } from &#39;@angular/core&#39;;
-</code></pre>
-</li>
-<li><p>To the AppComponent class definition add an &quot;implements OnInit&quot;</p>
-<pre><code class="lang-TypeScript">export class AppComponent implements OnInit {
-</code></pre>
-</li>
-<li><p>Add a variable called apiBuild that is a type of number after the title variable</p>
-<pre><code class="lang-TypeScript">apiBuild: number;
-</code></pre>
-</li>
-<li><p>Add a constructor and inject the UtilityService</p>
-<pre><code class="lang-TypeScript">constructor(private utilityService: UtilityService) { }
-</code></pre>
-</li>
-<li><p>Add an ngOnInit after the constructor  and with the ngOnInit call the UtilityService getApiBuild and store the result in the apiBuild variable</p>
-<pre><code class="lang-TypeScript">ngOnInit() {
- this.utilityService.getApiBuild()
-   .subscribe(
-   data =&gt; this.apiBuild = data.build,
-   err =&gt; console.log(`Get UI Build failed: ${err}`)
-   );
-}
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-  <b>Exercise</b>: Update Footer with Api Build Info
-</h4>
-
-<ol>
-<li>Open the src\app\shared\footer\footer.component.ts file</li>
-<li><p>Add Input to the @angular/core import</p>
-<pre><code class="lang-TypeScript">import { Component, OnInit, Input } from &#39;@angular/core&#39;;
-</code></pre>
-</li>
-<li><p>Within the FooterComponent class, add an @Input variable to hold the apiBuild that will be passed from the AppComponent</p>
-<pre><code class="lang-TypeScript">@Input() apiBuild: number;
-</code></pre>
-<div class="alert alert-info" role="alert">
-The @Input is used when you want to pass a value as an Html property when you use the component from the parent component.  In this case the AppComponent will pass the value to the FooterComponent.
-</div>
-</li>
-<li><p>Open the src\app\shared\footer\footer.component.html file</p>
-</li>
-<li><p>Replace the line that outputs the env value with the following line to output both the env and apiBuild values.</p>
-<pre><code class="lang-TypeScript">env: {{ env }} &amp;nbsp;|&amp;nbsp; API: {{apiBuild}}
-</code></pre>
-</li>
-<li><p>Open the src\app\app.component.html </p>
-</li>
-<li><p>To the app-footer html add an apiBuild property that is set to apiBuild</p>
-<pre><code class="lang-html">&lt;app-footer [apiBuild]=&quot;apiBuild&quot;&gt;&lt;/app-footer&gt;
-</code></pre>
-<div class="alert alert-info" role="alert">
-The brackets around apiBuild tell Angular to data bind the property with the value of the variable apiBuild. 
-</div>
-</li>
-<li><p>If you run ng serve and look at the page, you should now see an apibuild value in the footer</p>
-<p><img src="images/footer-apibuild.png" alt="ApiBuild in Footer"></p>
-<div class="alert alert-info" role="alert">
-A side benefit to having the apiBuild number in the footer, is that you know exactly which version of the Api the UI is going against.  Also when you update the API you can make sure that the UI is not caching the API results. Later on in the deployment chapter, we will add the UI build version into the footer.
-</div>
-
-
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-
-<h4 id="implement-the-authentication-service">Implement the Authentication Service</h4>
-<p>Now that we the utility service capturing the user profile cookie information, we are ready to create the Authentication Service that will be used in the AdminGuard.</p>
-<h4 class="exercise-start">
-  <b>Exercise</b>: Create the Authentication Service
-</h4>
-
-<ol>
-<li>Open the integrated terminal</li>
-<li><p>In the src\app\shared\services folder create new service called AuthenticationService</p>
-<pre><code class="lang-TypeScript">ng g service shared\services\authentication
-</code></pre>
-</li>
-</ol>
-<p>Now we need to import the service and add it to the providers list for the module.</p>
-<ol>
-<li>Open the src\app\app.module.ts file</li>
-<li><p>Add the AuthenticationService to the list of imports</p>
-<pre><code class="lang-TypeScript">import { AuthenticationService } from &#39;./shared/services/authentication.service&#39;;
-</code></pre>
-</li>
-<li><p>Add the AuthenticationService to the module&#39;s providers list</p>
-<pre><code class="lang-TypeScript">providers: [TodoService, AdminGuard, { provide: CookieService, useFactory: cookieServiceFactory }, { provide: CookieOptions, useValue: {} }, UtilityService, AuthenticationService],
-</code></pre>
-</li>
-</ol>
-<p>Now we are ready to write the code for the AuthenticationService</p>
-<ol>
-<li>Open the src\app\shared\services\authentication.service.ts file</li>
-<li><p>Since we are going to be reading a cookie, we need to import the CookieService</p>
-<pre><code class="lang-TypeScript">import { CookieService } from &#39;angular2-cookie/services/cookies.service&#39;;
-</code></pre>
-</li>
-<li><p>We are also going to give the ability to redirect if not an admin to the unauthorized route, so we need to import the Router as well</p>
-<pre><code class="lang-TypeScript">import { Router } from &#39;@angular/router&#39;;
-</code></pre>
-</li>
-<li><p>Before the @Injectable for the service, add a let variable to hold the cookie name to look for</p>
-<pre><code class="lang-TypeScript">let cookieName: string = &quot;sails-tutorial-user&quot;;
-</code></pre>
-</li>
-<li><p>Now we need to inject both the CookieService and Router into the constructor</p>
-<pre><code class="lang-TypeScript">constructor(private cookieService: CookieService,
- private router: Router) { }
-</code></pre>
-</li>
-<li><p>Next we need to create 3 variables in the AuthenticationService class to hold if they are an admin, if the service is ready with the cookie, and what is the cookie name to use.  </p>
-<pre><code class="lang-TypeScript">private admin: boolean;
-private ready: boolean;
-</code></pre>
-</li>
-</ol>
-<p>Now we are ready to create our functions </p>
-<ol>
-<li><p>The first function we are creating is called getCookie and it is used to get a cookie from the CookieService</p>
-<pre><code class="lang-TypeScript">private getCookie(key: string) {
- return this.cookieService.get(key);
-}
-</code></pre>
-</li>
-<li><p>Next we are going to create an isReady function that is used to determine if the cookie is avaiable yet.  It uses a promise to wait for the cookie to be ready.  This allows us to have our first page be an admin page and still be able to validate access with the cookie when it is ready.  </p>
-<pre><code class="lang-TypeScript">private isReady(): Promise&lt;boolean&gt; {
- var self = this;
- return new Promise(function (resolve, reject) {
-   if (typeof self.ready === &#39;undefined&#39;) {
-     var intervalReady = setInterval(function () {
-       if (self.getCookie(cookieName)) {
-         clearInterval(intervalReady);
-         self.ready = true;
-         resolve(self.ready);
-       }
-     }, 250);
-   }
-   else {
-     resolve(self._ready);
-   }
- });
-}
-</code></pre>
-</li>
-<li><p>Next we are going go create a function to check if the user is authorized which checks the cookie for the admin field to be true.  The functions is marked private as it is only called interally within the service.</p>
-<pre><code class="lang-TypeScript">private isAuthorized(key: string): boolean {
- var user = null;
- var authorized = false;
- var temp = this.getCookie(cookieName);
-
- if (typeof temp === &quot;string&quot;) {
-   user = JSON.parse(temp);
- }
-
- if (user &amp;&amp; user.admin &amp;&amp; /admin/.test(key)) {
-   authorized = true;
- }
-
- return authorized;
-}
-</code></pre>
-</li>
-<li><p>The last function is the one that will be exposed to the rest of the application as a public function.  It checks that the cookie is available and then checks that the admin field is true.  If the admin field is not true then it can redirect the user to the unauthorized route.</p>
-<pre><code class="lang-TypeScript">public isAdmin(withRedirect: boolean): Promise&lt;boolean&gt; {
- var self = this;
- return new Promise(function (resolve, reject) {
-   if (typeof self.admin === &#39;undefined&#39;) {
-     return self.isReady().
-       then(function (readyResult) {
-         self.admin = self.isAuthorized(&#39;admin&#39;);
-         if (!self.admin &amp;&amp; withRedirect) {
-           self.router.navigate([&#39;/unauthorized&#39;]);
-         }
-         resolve(self.admin);
-       });
-   }
-   else {
-     resolve(self.admin)
-   }
- });
-}
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-
-<h4 class="exercise-start">
-  <b>Exercise</b>: Update AdminGuard to Use AuthenticationService
-</h4>
-
-<ol>
-<li>Open the src\app\shared\guards\admin.guard.ts</li>
-<li><p>You can remove the router import statement since we will not be using it directly in the AdminGuard anymore.</p>
-<pre><code class="lang-TypeScript">import { Router } from &#39;@angular/router&#39;;
-</code></pre>
-</li>
-<li><p>Import the AuthenticationService</p>
-<pre><code class="lang-TypeScript">import { AuthenticationService } from &#39;../services/authentication.service&#39;;
-</code></pre>
-</li>
-<li><p>Inject the AuthenticationService into the constructor</p>
-<pre><code class="lang-TypeScript">constructor(private authenticationService: AuthenticationService) { }
-</code></pre>
-</li>
-<li><p>Replace the canActivate function with the following.  The function now returns a Promise<boolean> and calls the AuthenticationService isAdmin function with the flag to redirect to unauthorized if not an admin</p>
-<pre><code class="lang-TypeScript"> canActivate(): Promise&lt;boolean&gt; {
- var isAdmin = this.authenticationService.isAdmin(true);
- return isAdmin;
-}
-</code></pre>
-</li>
-</ol>
-<p>In order for the cookies to be available, we can&#39;t continue to use the localhost url since the browsers do not support cross domain cookies.  Typically, we do not have this issue since we would be running both the Angular and Sails APIs on your local development machines.  Luckily, we can get around this restriction on cross domain cookies, but changing how we run ng serve and the url that we use for the site.  </p>
-<ol>
-<li>Stop the ng serve that you have running</li>
-<li><p>Restart the ng serve command with the -H parameter along with any other parameters you were using before.  The -H 0.0.0.0 will make the web site available on your computer name.</p>
-<pre><code class="lang-bash">ng serve -H 0.0.0.0
-</code></pre>
-<div class="alert alert-danger" role="alert">Warning: By running with the -H other people can also get to your website by using your computer name and port number 4200</div>
-</li>
-<li><p>If you navigate to <a href="http://??????/admin">http://??????/admin</a>, you should be able to get into the admin component.  Right now the cookie that is returned from the UtilityService API call has the admin flag set to true.</p>
-<ul>
-<li><p>Replace the &quot;YourComputerName&quot; in the above url with the actual name of your computer.  Find your computer name on Windows by using the VSCode integrated terminal and running the following powershell snippet</p>
-<pre><code class="lang-bash"> $env:computername
-</code></pre>
-</li>
-</ul>
-</li>
-<li><p>If you open up the Chrome Developer Tools (press F12) and inspect the cookies, you will see 2 cookies, sails-tutorial-sid-default and sails-tutorial-user.  To get to the cookies, click on the Application tab, Expand Cookies under Storage, and click on the <a href="http://?????:4200">http://?????:4200</a> url.</p>
-<p><img src="images/cookies.png" alt="Cookies"></p>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-  <b>Exercise</b>: Test AdminGuard Unauthorized
-</h4>
-
-<p>Since we are faking out the admin access control in order to do a tutorial that shows off being an admin and not an admin, we need to change the API that we are using to get the cookie from the API to another API endpoint that will return admin is false in the cookie.</p>
-<ol>
-<li>Open the src\app\shared\services\utility.service.ts file</li>
-<li><p>In the getApiBuild function, change the url that is used to </p>
-<pre><code>let url = apiUrl + &#39;/version&#39;;
-</code></pre></li>
-<li><p>If you now navigate to or refresh <a href="http://?????:4200">http://?????:4200</a>, you should get redirected to the unauthorized page</p>
-</li>
-<li><p>Make sure when you are done testing to change the url back to</p>
-<pre><code class="lang-TypeScript"> let url = apiUrl + &#39;/utility/version&#39;;
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-				</div>
-				<hr>
-				<div class="chapter">
-					<h2 id="implementing-default-route">Implementing Default Route</h2>
-<h3 id="overview">Overview</h3>
-<p>We have not yet implemented a default route.  If you add anything to the end of the url, Angular will error out that it can not match it to any of the known routes.  You can see this error in the Chrome Developer Tools Console.</p>
-<p><img src="images/ng2/no-route-found.png" alt="no route found"></p>
-<p>There are 2 ways to fix this.  </p>
-<ol>
-<li>Make the TodoComponent the default so that it will redirect the user to that page.  This is not as nice of a user experience since it does not alert the user that the url they were trying to go to does not exist.</li>
-<li>Create a &quot;Not Found&quot; component and redirect the user to that component if none of the other routes match.  This is the preferred method.</li>
-</ol>
-<h3 id="goals">Goals</h3>
-<h3 id="add-default-route">Add Default Route</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Adding Default Route 
-</h4>
-
-<div class="alert alert-danger" role="alert">
-<strong>Note:</strong> Not the preferred method.<br></div>
-
-<ol>
-<li>Open the app.routing.ts file</li>
-<li><p>Add an additional route to the Routes list with a ** for the path and set the component to TodoComponent.  This will tell Angular to use the TodoComponent when it can not determine the route</p>
-<pre><code class="lang-TypeScript"> , { path: &#39;**&#39;, component: TodoComponent }
-</code></pre>
- <div class="alert alert-warning">
- Make sure that you make the default route the last route.  Any routes below the ** route will be ignored.
- </div>
-
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h3 id="create-not-found-component">Create Not Found Component</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Redirecting User to &quot;Not Found&quot; component
-</h4>
-
-<div class="alert alert-success" role="alert">
-<strong>Note:</strong> This is the preferred method.<br></div>
-
-<p>From a user experience perspective, it is a much experience to redirect the user to a &quot;not found&quot; page instead of redirecting them back to the home page.  Create the route not found page is just like we did with the todo component.    </p>
-<ol>
-<li><p>Run the Angular Cli generate command to create the notFound component</p>
-<pre><code class="lang-bash"> ng generate component notFound
-</code></pre>
-</li>
-<li><p>4 files are created just like when we created the TodoComponent earlier.  You will notice this time though that the Angular Cli put a dash between not and found.  It will automatically do that when it encounters an uppercase character.</p>
-<p> <img src="images/ng2/notfound-generated.png" alt="not found generated file list"></p>
-</li>
-<li><p>In the src\app\app.module.ts file you may need to add an import statement for the NotFoundComponent and add it to the declarations list to make it available.  Sometimes the Angular CLI adds it automatically for you</p>
-<pre><code class="lang-TypeScript"> import { NotFoundComponent } from &#39;./not-found/not-found.component&#39;;
-</code></pre>
-<pre><code class="lang-TypeScript"> declarations: [
-     AppComponent,
-     HeaderComponent,
-     FooterComponent,
-     TodoComponent,
-     NotFoundComponent
- ],
-</code></pre>
-</li>
-<li><p>In the src\app\app-routing.module.ts file, add an import statement for the NotFoundComponent </p>
-<pre><code class="lang-TypeScript"> import { NotFoundComponent } from &#39;./not-found/not-found.component&#39;;
-</code></pre>
-</li>
-<li><p>In the app-routing.module.ts file, change the ** route to use the NotFoundComponent</p>
-<pre><code class="lang-TypeScript"> , { path: &#39;**&#39;, component: NotFoundComponent }
-</code></pre>
-</li>
-<li><p>If you now try to navigate to <a href="http://localhost:4200/unknown">http://localhost:4200/unknown</a> you will be shown the NotFoundComponent </p>
-<p> <img src="images/view-route-unknown.png" alt="Not Found View"></p>
-</li>
-</ol>
-
-				</div>
-				<hr>
-
-				<div class="chapter">
-					<h2 id="deploying">Deploying</h2>
-<h3 id="overview">Overview</h3>
-<h3 id="goals">Goals</h3>
-<h3 id="production-build">Production Build</h3>
-<p>Before deploy you will need to run an a build with the Angular CLI.  With the build you can tell it the environment to use and if it is a production build or not.  A production will minify everything.</p>
-<div class="alert alert-info" role="alert">
-Note the build create a dist folder to hold the output.   This directory is removed before each build
-</div>
-
-<p>Select which type of build you want to run:  Non-Production or Production</p>
-<h4 class="exercise-start">
-  <b>Exercise</b>: Running Non-Production Build
-</h4>
-
-<p>Run the following command to run a build that uses the environment.ts file and is not a production build</p>
-<pre><code class="lang-bash">ng build
-</code></pre>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-  <b>Exercise</b>: Running a Production Build
-</h4>
-
-<div class="alert alert-warning" role="alert">
-Note that this will remove the dist directory before build.
-</div>
-
-<p>Run the following command to run a build that uses the environment.prod.ts file and is a production build.   The environment name must match the file name for it to be valid.</p>
-<pre><code class="lang-bash">ng build --target=production --environment=prod
-</code></pre>
-<div class="exercise-end"></div>
-
-<h3 id="heroku">Heroku</h3>
-<h4 class="exercise-start">
-  <b>Exercise</b>: Heroku
-</h4>
-
-<div class="exercise-end"></div>
 
 				</div>
 				<hr>
