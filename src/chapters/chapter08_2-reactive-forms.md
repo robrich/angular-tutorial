@@ -144,7 +144,7 @@ The OnInit lifecycle event will run before the component has rendered.
 1. Then in order to use the OnInit event, we need to add an implements OnInit to the class definition
 
     ```TypeScript
-    export Class TodoCompoment implements OnInit {
+    export Class Todocomponent implements OnInit {
     ```    
 
 1. Last, we need to create the ngOnInit function in the TodoComponent class
@@ -347,7 +347,7 @@ The last thing we need to do is up the UI to display the form error messages.
 
 You can also add a border around the Bootstrap form-group by adding the has-danger css class when the formErrorMessage has a value.
 
-1. Open the todo.compoment.html file
+1. Open the todo.component.html file
 1. To the form-group div tag, add an ]ngClass]` attribute that checks for formErrorMessage and adds the has-danger when there is a value.
 
     ```html
@@ -388,6 +388,59 @@ Angular makes it very easy to implement what they call debounce to wait for the 
 
 We are at the point, where we are ready to create a service to save the todo item.  Right now, we are just output the add form values to the console.
 
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Class to Hold Todo item
+</h4>
+
+Since TypeScript is a strongly typed language it is best practice to create a class to hold our Todo items.  This way we can get the type support for the different fields.
+
+
+1. Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then "Integrated Terminal"
+1. Run the ng generate command below to create the todo component
+
+    ```bash
+    ng generate class shared/classes/Todo
+    ```
+
+1. This will create 1 files: 
+
+    ![generate output](images/todo-generate-class.png)
+
+    * todo.ts
+
+1. Open src/app/shared/classes/todo
+1. Add 4 fields to the Todo class
+
+    * id:string -> id number of the todo item
+    * item:string -> the todo item text
+    * createdAt:Date -> The date added
+    * completed:boolean -> completion state
+
+    ```TypeScript
+    id: string;
+    item: string;
+    completed: boolean;
+    createdAt: Date;
+    ```
+
+1. Add a constructor to initialize the fields.  Item will required while id, completed and createdAt will be optional. The optional fields must be after all of the required fields.  Having the value populated in the constructor will also make it easier to test later on.
+
+    ```TypeScript
+    constructor(
+        item: string, 
+        id?: string,
+        completed?: boolean,
+        createdAt?: Date) {
+        id = id ? id : '';
+        this.item = item;
+        this.completed = completed ? completed: false;
+        this.createdAt = createdAt ? createdAt: new Date();
+    }    
+    ```    
+
+<div class="exercise-end"></div>
+
 <h4 class="exercise-start">
     <b>Exercise</b>:  Create Todo Service
 </h4>
@@ -399,7 +452,7 @@ We are at the point, where we are ready to create a service to save the todo ite
     ng generate service shared/services/Todo
     ```
 
-1. This will create 2 files: 
+1. This will create 2 files:  
 
     ![generate output](images/todo-service-generate.png)
 
@@ -439,6 +492,12 @@ Now that we have the Todo service file created, we need to add our save method t
     import { Observable } from 'rxjs/Rx';
     ```
 
+1. Import the todo class 
+
+    ```TypeScript
+    import { Todo } from '../classes/todo';
+    ```
+
 1. In order to use the HTTP module, we need to inject it into our constructor
 
     ```TypeScript
@@ -448,15 +507,16 @@ Now that we have the Todo service file created, we need to add our save method t
 1. Next we need to create our login function within the AuthService class that will call our API
 
     ```TypeScript
-    save(item: string): Observable<Response> {
+    save(item: string): Observable<Todo> {
         let url = 'http://localhost:3000/todo';
         var body = {
         "item": item,
-        "completed": false
+        "completed": false,
+        "createdAt": new Date()
         };
         return this.http.post(url, body)
         .map((res: Response) => {
-            return res.json();
+            return <Todo>res.json();
         })
         .catch(error => {
             console.log('save error', error)
@@ -467,7 +527,7 @@ Now that we have the Todo service file created, we need to add our save method t
     
 Now we need to call the TodoService save function in the TodoComponent
 
-1. Open the src\app\todo\todo.compoment.ts file
+1. Open the src\app\todo\todo.component.ts file
 1. Import the TodoService
 
     ```TypeScript
@@ -493,13 +553,13 @@ Now we need to call the TodoService save function in the TodoComponent
     }
     ```
 
-1. We now need to create the errorMessage variable that is of type string in the TodoCompoment class
+1. We now need to create the errorMessage variable that is of type string in the Todocomponent class
 
     ```TypeScript
     errorMessage: string;
     ```
 
-1. Now we need to add an alert section to our todo.compoment.html to display the error message.  After the `</form>` tag, add the following code
+1. Now we need to add an alert section to our todo.component.html to display the error message.  After the `</form>` tag, add the following code
 
     ```TypeScript
     <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
@@ -522,11 +582,9 @@ Now that we have the ability to save our items, we need to be able to display th
 1. After the error message alert, add the following html to display the list of todo items
 
     ```html
-        <div class="row">
-      <div class="col-md-12">
-        <div class="todo" *ngFor="let todoItem of todoList">
-          <span class="done-{{todoItem.completed}}">{{todoItem.item}} <small>created: {{todoItem.createdAt | date:'short'}}</small></span>
-        </div>
+    <div class="row" *ngFor="let todoItem of todoList">
+      <div class="col-12 done-{{todoItem.completed}}">
+        {{todoItem.item}} <small>created: {{todoItem.createdAt | date:'short'}}</small>
       </div>
     </div>
     ```
@@ -537,90 +595,283 @@ Now that we have the ability to save our items, we need to be able to display th
 
 <div class="exercise-end"></div>
 
+
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add TodoService Get All 
+</h4>
+
+Next we need to add a getAll function to our TodoService that does an http get to our API to get all of the todo items.
+
+1. Open the src\app\shared\services\todo.service.ts file
+1. Add the following function to do an http get call against our API
+
+    ```TypeScript
+    getAll(): Observable<Array<Todo>>{
+    let url = "http://localhost:3000/todo";
+    return this.http.get(url)
+      .map((res: Response) => {
+        return <Array<Todo>>res.json();
+      })
+      .catch(error => {
+        console.log('get error', error);
+        return error;
+      });
+    }
+    ```
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Call TodoService Get All from Component 
+</h4>
+
+Now that we have the TodoService.getAll function created, we are ready to create the getTodoListAll function that will call the TodoService.  We will wire up the getTodoListAll function to be called in ngOnInit so that it will populate the todo list on component load.
+
+1. Open the src\app\todo\todo.component.ts file
+1. Import the todo class 
+
+    ```TypeScript
+    import { Todo } from '../shared/classes/todo';
+    ```
+
+1. Create a variable in the TodoComponent class called todoList that is an array of Todo and intialize to an empty array
+
+    ```TypeScript
+    todoList: Array<Todo> = [];
+    ```
+
+1. Create the getTodoListAll function that will return void, call the TodoService.getAll function and set a todoList variable at the Todocomponent class level.
+
+    ```TypeScript
+    getTodoListAll(): void {
+    this.todoService.getAll()
+      .subscribe(
+      data => {
+        this.todoList = data;
+      },
+      error => {
+        this.errorMessage = <any>error;
+      }
+      );
+    }
+    ```
+
+1. Now we are ready to call the getTodoListAll function in ngOnInit
+
+    ```TypeScript
+    this.getTodoListAll();
+    ```
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Updating Todo list on save 
+</h4>
+
+Now that we have the Todo list being stored in the todoList variable, when we save a new todo item, we can add it to the todoList array and the todo list will automatically update with the change.
+
+1. In the todo.component.ts file, we need to update the save function to push the save result into the todoList array.
+
+    ```TypeScript
+    this.todoList.push(result);
+    ```
+
+1. When you add a new todo item, the list will now update itself.
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Complete Todo Item
+</h4>
+
+Right now the todo list is just a read only view but we need to be able to complete the todo items.  We need to add an icon to the todo list that will toggle the completed status and save the new todo item state to the API.
+
+
+1. Open the src\app\shared\services\todo.service.ts file
+1. We are going to create an update method that will take in a Todo item and make an  http put call to our API to update the one record with the new completion state.
+
+    ```TypeScript
+    updateTodo(todo: Todo): Observable<Todo> {
+        let url = `http://localhost:3000/todo/${todo.id}`;
+
+        return this.http.put(url, todo)
+        .map((res: Response) => <Todo>res.json())
+        .catch(error => {
+            console.log('update error', error);
+            return error;
+        });
+    }
+    ```
+
+    * For the url we are using string interpolation to create the url.  This is done with the &#96;&#96; tags and the ${}
+
+Now we need to call the updateTodo service function in our component.
+
+1. Open the todo.component.ts file
+1. Create the completeTodo method that the UI will call 
+
+    ```TypeScript
+    completeTodo(todo: Todo): void {
+        todo.completed = !todo.completed;
+        this.todoService.updateTodo(todo)
+        .subscribe(
+            data => {
+                // do nothing
+            },
+            error => {
+                todo.completed = !todo.completed;
+                this.errorMessage = <any>error;
+                console.log('complete error', this.errorMessage);
+            });
+    }
+    ```
+
+    * For now we are not going to do anything with the returned result.  In the future you could call a sort function or update an open todo item counter.
+
+The last thing we need to do it do update the UI to have a checkbox icon that will be clicked on to toggle the completion state.
+
+1. Open the todo.component.html file
+1. Inside the ngFor loop, above the existing div add the following icon that uses the Font Awesome library for the icon and is set to take up 1 column of space
+
+    ```html
+      <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
+    ```
+
+    * We are passing in the todo item that we are wanting to update to the completedTodo function.  This will pass in the whole object so we have access to all of the fields.
+    * We are updating the icon used based on the completed field state.  If completed we are using fa-check-square-o.  If not completed, we are using fa-square-o
+
+1. With Bootstrap it is a 12 column grid, so we need to reduce the size of the existing div from col-12 to col-11
+
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Delete Todo Item
+</h4>
+
+In addition to being able to complete a todo item, we also need to be able to delete one.  We need to add an icon to the todo list that will call a delete function in the component and delete the todo item from our database.
+
+
+1. Open the src\app\shared\services\todo.service.ts file
+1. We are going to create delete method
+
+    ```TypeScript
+    deleteTodo(todo: Todo): Observable<Response> {
+        let url = `http://localhost:3000/todo/${todo.id}`;
+        return this.http.delete(url)
+        .catch(error => {
+            console.log('delete error', error);
+            return error;
+        });
+    }
+    ```
+
+    * We are passing in the todo item that we are wanting to update to the completedTodo function.  This will pass in the whole object so we have access to all of the fields.
+    * We are not doing any kind of mapping of the return results since there is none.  It is either successful or not.
+
+Next we need to create the deleteTodo item function in the component that will call the TodoService.delete function
+
+1. Open the todo.component.ts file
+1. Create the deleteTodo function that takes in a todo item and calls the TodoService.delete function
+
+    ```TypeScript
+    deleteTodo(todo: Todo): void {
+        this.todoService.deleteTodo(todo)
+        .subscribe(
+        data => {
+            let index = this.todoList.indexOf(todo);
+            this.todoList.splice(index, 1);
+        },
+        error => {
+            todo.completed = !todo.completed;
+            this.errorMessage = <any>error;
+            console.log('complete error', this.errorMessage);
+        });
+    }
+    ```
+
+    * In the results of the deleteTodo service, we are going to remove the todo item from the displayed list since it no longer exist.  We could have also call the TodoService.getAll function but since we already have all of the items and the items are specific to a single user, there is no need to make the extra database call.
+
+The last thing that we need to do is to add the delete icon to the todo list.
+
+1. Open the todo.component.html file
+1. Add a div after the div displays the todo item text but still inside of the ngFor div.  This new div will hold the delete icon which we will use the fa-trash icon and when clicked it will call the deleteTodo function.  The icon is going to take up 1 column of space in the grid.
+
+    ```TypeScript
+    <div class="col-1" (click)="deleteTodo(todoItem)"><i class="fa fa-trash"></i></div>
+    ```
+
+1. Since the Bootstrap grid is 12 columns wide, we need to reduce the text div from col-11 to col-10.
+
+<div class="alert alert-info" role="alert">The reason that we used the Bootstrap grid is so that everything wrapped correctly with longer todo items and when the screen was smaller.  The Bootstrap grid provides this functionality automatically for you.</div>
+
+The html for the display of the Todo list should look like the following:
+
+```html
+<div class="row todo" *ngFor="let todoItem of todoList">
+    <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
+
+    <div class="col-10 done-{{todoItem.completed}}">{{todoItem.item}} <br /><small>created: {{todoItem.createdAt | date:'short'}}</small></div>
+
+    <div class="col-1" (click)="deleteTodo(todoItem)"><i class="fa fa-trash"></i></div>
+</div>
+```
+
+<div class="exercise-end"></div>
+
 ### Adding Style
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Making the UI Pretty
+    <b>Exercise</b>: Making the Todo list look nicer
 </h4>
 
-Right now the UI looks pretty plain.  The add textbox and add button are on different lines and there is no indication if you have met the requirements to for the todo item to be added.  The only styling right now is the bootstrap classes.  
+Right now the UI looks decent but with a few tweaks it could look much better.  
 
-Lets add some component level styling like we did with the footer earlier to get our todo form looking nicer.  
+![todo unstyled](images/todo-unstyled.png)
+
+If we added some padding around each row, a bottom border, made the date smaller and gray, increased the size of each icon and made the completed items gray with a strike-through, the UI would pop.
+
+The first thing we need to do is add in our styles to the Todo component.  Since these styles are strictly for the Todo component we are going to add them into the todo.component.scss instead of the app's style.scss file.
 
 1. Open the src\app\todo\todo.component.scss 
 1. Add the following contents to the file.  To ensure we are following our branding, we are importing our scss color variables.
 
     ```scss
     @import "../../assets/bootstrap/variables";
-
-    .todo-wrapper {
+    div.todo {
         width: 100%;
+        padding-bottom: .2em;
+        padding-top: .2em;
+        border-bottom: 1px solid $gray-light;
+        font-size: 1.4em;
 
-        .ng-valid:not(form) {
-            border-left: 5px solid $green;
+        small {
+            font-size: .7em;
+            color: $gray-light;
         }
-
-        .ng-invalid:not(form) {
-            border-left: 5px solid $red;
+        
+        i {
+            width: 40px;
+            padding-right: 10px;
+            vertical-align: middle
         }
-
-        div.todo {
-            padding-bottom: .2em;
-            padding-top: .2em;
-            border-bottom: 1px solid $gray-light; 
-            font-size: 1.4em;
-
-            small {
-                font-size: .7em;
-                color: $gray-light;
-            }
-
-            i {
-                width: 40px;
-                padding-right: 10px;
-                vertical-align: middle
-            }
-
-            .done-true {
-                text-decoration: line-through;
-                color: $gray-light;
-            }
-        }       
+        
+        .done-true {
+            text-decoration: line-through;
+            color: $gray-light;
+        }
     }
     ```
 
 1. Now if you view the UI it should look like below.  
     
-    ![unstyled ui](images/todo-styled.png)
+    ![unstyled ui](images/todo-styled-final.png)
 
-    * Add form has spacing between the textbox and the button.
-    * There is more padding in the todo item list 
-    * The created date is muted with a light gray color
-    * There is a gray line between each of the todo items
-    * The text and icons in the todo list is bigger
-    * There is a red line on the left side of the textbox to indicate it is required.  It will turn green once there is a value in the box. 
-
-1. Before we can interact with the data we need to create our service and call the service from the TodoCompoment.
 
 <div class="exercise-end"></div>
 
-1. We need to create serveral variables within the TodoComponent  class
 
-    ```TypeScript
-    todoList: Array<any> = [];
-    addForm: FormGroup;
-    todo: any = {};
-    submitting: boolean = false;
-    errorMessage: string;
-    openItemCount: number = 0;
-    ```
-
-    * todoList -> holds our todo list.  Is an Array of Todo.
-    * addForm -> holds our configuration for the add form
-    * todo -> object to hold the values from our add form
-    * submitting -> used in the UI to toggle on and off features and change text of the add button
-    * errorMessage -> holds any error messages from the service calls and used to toggle div in UI 
-    * openItemCount -> holds the number of items that need to be completed
 
 ### Review
 
