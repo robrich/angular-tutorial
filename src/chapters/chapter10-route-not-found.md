@@ -61,21 +61,6 @@ From a user experience perspective, it is a much experience to redirect the user
 
     ![not found generated file list](images/ng2/notfound-generated.png)
 
-1. In the src\app\app.module.ts file you may need to add an import statement for the NotFoundComponent and add it to the declarations list to make it available.  Sometimes the Angular CLI adds it automatically for you
-
-    ```TypeScript
-    import { NotFoundComponent } from './not-found/not-found.component';
-    ```
-
-    ```TypeScript
-    declarations: [
-        AppComponent,
-        HeaderComponent,
-        FooterComponent,
-        TodoComponent,
-        NotFoundComponent
-    ],
-    ```
 1. In the src\app\app-routing.module.ts file, add an import statement for the NotFoundComponent 
 
     ```TypeScript
