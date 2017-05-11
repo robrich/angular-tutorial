@@ -1,5 +1,10 @@
 ## Bonus: Additional Todo Features
 
+### Overview
+
+### Goals
+
+
 ### Displaying Open Item Count
 
 It would be nice to know how many todo items that the user has and display that in the UI.  You will need to make sure to update the open number when pulling, updating, and deleting todo items.
