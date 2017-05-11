@@ -129,19 +129,26 @@ Now that we have the API url in the environments file, we should update the Todo
 1. Import the environment file
 
     ```TypeScript
-
+    import { environment } from '../../../environments/environment';
     ```
 
-1. Create a variable called baseUrl inside the TodoService class that gets the variable from the environment file
+1. Create a private variable called url inside the TodoService class that gets the apiBaseUrl from the environment file and append on the /todo
 
     ```TypeScript
-
+      private url: string = `${environment.apiBaseUrl}/todo`;
     ```
 
-1. Update each of the http calls to use the baseUrl variable instead of hard coding the url
+1. For the save and getAll functions update the hard coded url to use the class level url variable.  You will need to change url to this.url in order to access the class level variable.
+
+1. For the updateTodo and deleteTodo we need to replace the hard coded url with the class level url variable.  Since we are already using string interpolation to create the string, we need to replace the hard coded value with `${this.url}`
 
     ```TypeScript
-
+    let url = `${this.url}/${todo.id}`;
     ```
+
+1. Everything should still work to list, insert, update and delete todo items as before but now the url is no longer hard coded and can easily be changed as you move to different environments.
+
+1. Now repeat the same process with the AuthService
+
 
 <div class="exercise-end"></div>
