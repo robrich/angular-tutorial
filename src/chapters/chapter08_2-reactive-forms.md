@@ -415,13 +415,17 @@ Since TypeScript is a strongly typed language it is best practice to create a cl
     * id:string -> id number of the todo item
     * item:string -> the todo item text
     * createdAt:Date -> The date added
+    * updatedAt: Date -> The date last updated
     * completed:boolean -> completion state
+    * user -> id of the user that created the todo item
 
     ```TypeScript
     id: string;
     item: string;
     completed: boolean;
     createdAt: Date;
+    updatedAt: Date;
+    user: string;
     ```
 
 1. Add a constructor to initialize the fields.  Item will required while id, completed and createdAt will be optional. The optional fields must be after all of the required fields.  Having the value populated in the constructor will also make it easier to test later on.
@@ -431,11 +435,13 @@ Since TypeScript is a strongly typed language it is best practice to create a cl
         item: string, 
         id?: string,
         completed?: boolean,
-        createdAt?: Date) {
+        createdAt?: Date,
+        updatedAt?: Date) {
         id = id ? id : '';
         this.item = item;
         this.completed = completed ? completed: false;
         this.createdAt = createdAt ? createdAt: new Date();
+        this.updatedAt = updatedAt ? updatedAt: new Date();
     }    
     ```    
 
@@ -488,7 +494,7 @@ Now that we have the Todo service file created, we need to add our save method t
 1. Import the following so that we can make our HTTP calls and get a response back.  
 
     ```TypeScript
-    import { Http, Response } from '@angular/http';
+    import { Http, Response, RequestOptions } from '@angular/http';
     import { Observable } from 'rxjs/Rx';
     ```
 
@@ -504,17 +510,22 @@ Now that we have the Todo service file created, we need to add our save method t
     constructor(private http: Http) { }
     ```
 
+1. For the API that we are using (SailsJS based), it requires that we set the HTTP option to allow credentials so that the session cookie can be passed back and forth, else it will always think you haven't logged in.  
+
+    ```TypeScript
+    private options = new RequestOptions({ withCredentials: true });
+    ```
+
+    <div class="alert alert-info" role="alert">You will need to pass in this.options as the last parameter for all of our http calls.</div>
+
+
 1. Next we need to create our login function within the AuthService class that will call our API
 
     ```TypeScript
     save(item: string): Observable<Todo> {
-        let url = 'http://localhost:3000/todo';
-        var body = {
-        "item": item,
-        "completed": false,
-        "createdAt": new Date()
-        };
-        return this.http.post(url, body)
+        let url = 'https://dj-sails-todo.azurewebsites.net/todo';
+        var todo  = new Todo(item);
+        return this.http.post(url, todo, this.options)
         .map((res: Response) => {
             return <Todo>res.json();
         })
@@ -608,8 +619,8 @@ Next we need to add a getAll function to our TodoService that does an http get t
 
     ```TypeScript
     getAll(): Observable<Array<Todo>>{
-    let url = "http://localhost:3000/todo";
-    return this.http.get(url)
+    let url = "https://dj-sails-todo.azurewebsites.net/todo";
+    return this.http.get(url, this.options)
       .map((res: Response) => {
         return <Array<Todo>>res.json();
       })
@@ -693,9 +704,9 @@ Right now the todo list is just a read only view but we need to be able to compl
 
     ```TypeScript
     updateTodo(todo: Todo): Observable<Todo> {
-        let url = `http://localhost:3000/todo/${todo.id}`;
+        let url = `https://dj-sails-todo.azurewebsites.net/todo/${todo.id}`;
 
-        return this.http.put(url, todo)
+        return this.http.put(url, todo, this.options)
         .map((res: Response) => <Todo>res.json())
         .catch(error => {
             console.log('update error', error);
@@ -758,8 +769,8 @@ In addition to being able to complete a todo item, we also need to be able to de
 
     ```TypeScript
     deleteTodo(todo: Todo): Observable<Response> {
-        let url = `http://localhost:3000/todo/${todo.id}`;
-        return this.http.delete(url)
+        let url = `https://dj-sails-todo.azurewebsites.net/todo/${todo.id}`;
+        return this.http.delete(url, this.options)
         .catch(error => {
             console.log('delete error', error);
             return error;

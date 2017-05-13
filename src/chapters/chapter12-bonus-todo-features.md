@@ -79,7 +79,7 @@ It would be nice to know how many todo items that the user has and display that 
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Complete Todo 
+    <b>Exercise</b>: Update Open Item on Complete 
 </h4>
 
 When we toggle the completion status of a Todo item we also need to update the openItemCount value.
@@ -109,10 +109,10 @@ completeTodo(todo: Todo): void {
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Delete Todo
+    <b>Exercise</b>: Update Open Item on Delete
 </h4>
 
-The last thing we need to do is to decrement the openItemCount when an item is deleted.
+The last thing we need to do is to re-calculate the openItemCount when an item is deleted.  We don't just decrement since a user can delete a completed it and there is no sense in adding in additional logic since the calculateOpenItems already has the logic.
 
 1.  In the todo.component.ts file, find the deleteTodo function and add the call to the calculateOpenItems function after removing the deleted item from the todoList.
 
@@ -123,7 +123,7 @@ deleteTodo(todo: Todo): void {
         data => {
             let index = this.todoList.indexOf(todo);
             this.todoList.splice(index, 1);
-            this.openItemCount--;
+            this.calculateOpenItems();
         },
         error => {
             todo.completed = !todo.completed;

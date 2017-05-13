@@ -328,32 +328,47 @@ You will also notice that there is a warning that the service has not been provi
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>:  Starting JSON-Server
+    <b>Exercise</b>: Create Class
 </h4>
 
-We are going to use the JSON server that we installed early to create a mock api for our UI so that we can focused on Angular and not worry about creating a real API.  The calls that we will be making to the API are the same calls in Angular that we would make to a real API.
+In the AuthService, In order to hold our user data and get type checking we need to create a TypeScript class with an email and id field.  We are going to leave the password field out of the class as we do not want to store this in memory at all.  
 
-1. Right-click on the [db.json](files/db.json) and save the db.json file to under your Angular project directory
 1. Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then "Integrated Terminal"
-1. Click the + sign to create a new terminal tab
-1. Run the following command to start up our json-server from the root directory of the Angular project 
+1. Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.
 
     ```bash
-    json-server db.json 
+    ng generate class shared/classes/User
     ```
 
-1. If everything worked correctly you should see the following output
+1. The generate command will create 2 files: 
 
-    ![json-server start output](images/json-server-start.png)
+    ![output of generate](images/user-generate.png)
 
+    * user.ts 
 
-1. You can now make REST calls to http://localhost:3000/user and http://localhost:3000/todo
+1. Open the src\app\shared\classes\User.ts file
+1. Add email, id, createdAt, and updatedAt variables that of type script.  The createdAt and updatedAt are automatically added by the API.
 
-<div class="alert alert-danger" role="alert">
-In a real API, you would want to implement SSL to encrypt all of the traffic and protect the passwords by encrypting them in the data store.
-</div>
+    ```TypeScript
+    email: string;
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    ```
+
+1. Add a constructor that requires an email and make an id field optional (hint: the `?` make the parameter optional)
+
+    ```TypeScript
+    constructor(email: string, id?: string, createdAt?: Date, updatedAt?: Date){
+        this.email = email;
+        this.id = id;
+        if (createdAt) this.createdAt = createdAt;
+        if (updatedAt) this.updatedAt = updatedAt;
+    }
+    ```
 
 <div class="exercise-end"></div>
+
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Implement Auth Service Login Function
@@ -365,7 +380,7 @@ Now that we have our API server up and running, it is time to create our Auth se
 1. Import the following so that we can make our HTTP calls and get a response back.  
 
     ```TypeScript
-    import { Http, Response } from '@angular/http';
+    import { Http, Response, RequestOptions } from '@angular/http';
     import { Observable } from 'rxjs/Rx';
     ```
 
@@ -379,20 +394,26 @@ Now that we have our API server up and running, it is time to create our Auth se
 1. We also want to create a public variable within the AuthClass to hold the output from the API call 
 
     ```TypeScript
-    public currentUser: any;
+    public currentUser: User;
     ```
+
+1. For the API that we are using (SailsJS based), it requires that we set the HTTP option to allow credentials so that the session cookie can be passed back and forth, else it will always think you haven't logged in.  
+
+    ```TypeScript
+    private options = new RequestOptions({ withCredentials: true });
+    ```
+
+    <div class="alert alert-info" role="alert">You will need to pass in this.options as the last parameter for all of our http calls.</div>
+
 1. Next we need to create our login function within the AuthService class that will call our API
 
     ```TypeScript
     login(email: string, password: string): Observable<boolean | Response> {
-        let url = `http://localhost:3000/user?email=${email}&password=${password}`;
-        return this.http.get(url)
+        let loginInfo = { "email": email, "password": password };
+        return this.http.put("https://dj-sails-todo.azurewebsites.net/user", loginInfo, this.options)
             .do((res: Response) => {
-                let body = res.json();
-                if (body && body.length === 1) {
-                    this.currentUser = body[0];
-                } else {
-                    this.currentUser = null;
+                if (res){
+                    this.currentUser = <User>res.json();
                 }
             })
             .catch(error => {
@@ -401,6 +422,8 @@ Now that we have our API server up and running, it is time to create our Auth se
             });
     }
     ```
+
+    <div class="alert alert-info" role="alert">Since we have to pass the password to the API to validate the login, make sure you do not use your real passwords as we are communicating in development over a non-secure http connection so anyone can easily capture your email and password combo for the todo API.  In production, you would want use an SSL certificate.  As well for development, typically you would have the API locally but since this is an Angular workshop and not an API workshop, a remote API was provided for you.</div>
 
 <div class="exercise-end"></div>
 

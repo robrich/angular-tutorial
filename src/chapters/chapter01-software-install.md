@@ -8,7 +8,6 @@ To get started, we need to install and configure the following software first.
 * Visual Studio Code (can use any text editor but workshop tested with Visual Studio Code)
 * Node 6.9+
 * Angular CLI 1.0.0+
-* Json Server (used to fake our API calls)
 
 ### Goals
 
@@ -89,28 +88,5 @@ While you do not have to use the Angular CLI, it is highly recommended, will inc
     ```
 
     ![ng version output](images/chapter1/ng-version.png)
-    
-<div class="exercise-end"></div>
-
-### JSON Server Install
-
-JSON Server is a lightweight server to make REST api calls.  
-
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Install JSON Server
-</h4>
-
-1. Open a command prompt or terminal and run the following command
-
-    ```bash
-    npm install -g json-server
-    ```
-
-1. Verify JSON Server.  As of this writing version is 0.10.0
-
-    ```
-    json-server --verion
-    ```
     
 <div class="exercise-end"></div>

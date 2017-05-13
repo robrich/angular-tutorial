@@ -13,7 +13,7 @@ One of the requirements that you commonly have it to be able to change configura
 
 The src\environments\environment.ts file is the default configurations if no environment is specified when running `ng serve`
 
-In the environment.ts we need to add the environmentName and apiBaseUrl values.  The apiBaseUrl is how to get to your service layer, if you have one.  For now we are going to use http://localhost:3000.
+In the environment.ts we need to add the environmentName and apiBaseUrl values.  The apiBaseUrl is how to get to your service layer, if you have one.  I have created an API for us to use at https://dj-sails-todo.azurewebsites.net
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Setup Default Configuration
@@ -26,7 +26,7 @@ In the environment.ts we need to add the environmentName and apiBaseUrl values. 
     export const environment = {
         production: false,
         environmentName: 'Development',
-        apiBaseUrl: 'http://localhost:3000'
+        apiBaseUrl: 'https://dj-sails-todo.azurewebsites.net'
     };
     ```
 
@@ -56,7 +56,7 @@ The other environment that is typically created is for local development on your
     export const environment = {
     production: false,
     environmentName: 'Local',
-    apiBaseUrl: 'http://localhost:3000'
+    apiBaseUrl: 'https://dj-sails-todo.azurewebsites.net'
     };
     ```
 
