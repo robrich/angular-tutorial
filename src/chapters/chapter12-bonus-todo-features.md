@@ -2,6 +2,12 @@
 
 ### Overview
 
+Right now the Todo UI is fully functional but there is some nice usability things that could be immplemented.  
+
+* The todo list is sorted by when it was created, it would be much nicer to sort alphabetically and by completion status.  
+* There is no way to see a count of how many items you have open.  The form also 
+* The add form is not cleared out on successful save
+
 ### Goals
 
 * Show how to implement additional usability features such as running open item count, sorting in the UI and resetting the form. 
@@ -218,7 +224,8 @@ With ES6 and TypeScript we can use a map and reduce function to accomplish this 
 
 Right now after you add a new todo item, the form does not clear out the input box.  Then when you go to clear it out, the required field validator will be fired.
 
-Instead, we can clear out the field on a successful save call by adding a call to `this.addForm.reset();`
+Instead, we can clear out the form on a successful save call by calling `this.addForm.reset();`
 
 ```TypeScript
+this.addForm.reset();
 ```

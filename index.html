@@ -2114,10 +2114,11 @@ user: string;
    });
 }
 </code></pre>
+</li>
+</ol>
 <p>Next we need to add logic to the guard&#39;s canActivate function to call the AuthService.isAuthenticated function </p>
-</li>
-<li><p>Open src\app\shared\guards\is-logged-in.guard.ts </p>
-</li>
+<ol>
+<li>Open src\app\shared\guards\is-logged-in.guard.ts </li>
 <li><p>Import the AuthService</p>
 <pre><code class="lang-TypeScript">import { AuthService } from &#39;../services/auth.service&#39;;
 </code></pre>
@@ -2180,11 +2181,13 @@ user: string;
 <div class="exercise-end"></div>
 
 
-
-<div class="exercise-end"></div>
-
 <h3 id="create-create-account-component">Create Create Account Component</h3>
-<p>Up to this point, we have only been able to login to an existing account.  Now we are going to quickly create the signup page.  It is a template based form, just like the login form that was completed in a previous chapter.</p>
+<p>Up to this point, we have only been able to login to an existing account.  Now we are going to create the signup page.  Creating the signup component is just like the rest of the component that we have created.  We will have an html, scss, spec, and ts file.  We will have a form that calls to a function in the component that calls to a service to process the data. Since it is the same the rest of the components and service functions that we have created, there is not much explanation about what we are doing, just a walk through of the steps.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: AuthService Signup Function 
+</h4>
+
+<p>We are first going to create the signup function in the AuthService.</p>
 <ol>
 <li>Open src\app\shared\services\auth.service.ts</li>
 <li>Add RequestOptions to the @angular/http import</li>
@@ -2195,8 +2198,7 @@ user: string;
  return this.http.post(this.url, loginInfo, this.options)
    .do((res: Response) =&gt; {
      if (res) {
-       let currentUser: User = &lt;User&gt;res.json();
-       this.setUser(new User(currentUser.email, currentUser.id));
+       this.currentUser = &lt;User&gt;res.json();
      }
    })
    .catch(error =&gt; {
@@ -2207,9 +2209,14 @@ user: string;
 </code></pre>
 <div class="alert alert-info" role="alert">REMINDER: Since we have to pass the password to the API in order to create the account and we are communicating over a non-secure channel, make sure you do not use your real passwords.  With the non-secure connection anyone can easily capture your email and password combo for the todo API.  In production, you would want use an SSL certificate.  As well for development, typically you would have the API locally but since this is an Angular workshop and not an API workshop, a remote API was provided for you.</div>
 
-
 </li>
 </ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create Signup Component
+</h4>
+
 <ol>
 <li><p>Open terminal and run</p>
 <pre><code class="lang-TypeScript">ng generate component signup
@@ -2296,8 +2303,15 @@ import { Router } from &#39;@angular/router&#39;;
 }
 </code></pre>
 </li>
-<li><p>Open the login.component.html file</p>
-</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Link Between Login and Signup
+</h4>
+
+<ol>
+<li>Open the login.component.html file</li>
 <li><p>Next to the cancel button add the following HTML to give a link to the create page</p>
 <pre><code class="lang-html">&lt;span&gt;&lt;a [routerLink]=&quot;[&#39;/signup&#39;]&quot;&gt;create account&lt;/a&gt;&lt;/span&gt;
 </code></pre>
@@ -2305,6 +2319,7 @@ import { Router } from &#39;@angular/router&#39;;
 <li><p>You should now to be able to create accounts and navigate between the signup and login pages.  Once logged in or account created, you will be redirected to the home page and shown the todo items.</p>
 </li>
 </ol>
+<div class="exercise-end"></div>
 
 				</div>
 				<hr>
@@ -2419,6 +2434,12 @@ Note that this will remove the dist directory before build.
 				<div class="chapter">
 					<h2 id="bonus-additional-todo-features">Bonus: Additional Todo Features</h2>
 <h3 id="overview">Overview</h3>
+<p>Right now the Todo UI is fully functional but there is some nice usability things that could be immplemented.  </p>
+<ul>
+<li>The todo list is sorted by when it was created, it would be much nicer to sort alphabetically and by completion status.  </li>
+<li>There is no way to see a count of how many items you have open.  The form also </li>
+<li>The add form is not cleared out on successful save</li>
+</ul>
 <h3 id="goals">Goals</h3>
 <ul>
 <li>Show how to implement additional usability features such as running open item count, sorting in the UI and resetting the form. </li>
@@ -2614,8 +2635,8 @@ Note that this will remove the dist directory before build.
 
 <h3 id="reset-form-after-save">Reset Form After Save</h3>
 <p>Right now after you add a new todo item, the form does not clear out the input box.  Then when you go to clear it out, the required field validator will be fired.</p>
-<p>Instead, we can clear out the field on a successful save call by adding a call to <code>this.addForm.reset();</code></p>
-<pre><code class="lang-TypeScript">
+<p>Instead, we can clear out the form on a successful save call by calling <code>this.addForm.reset();</code></p>
+<pre><code class="lang-TypeScript">this.addForm.reset();
 </code></pre>
 
 				</div>
@@ -2623,9 +2644,11 @@ Note that this will remove the dist directory before build.
 
 				<div class="chapter">
 					<h2 id="bonus-additional-login-features">Bonus: Additional Login Features</h2>
-<p><strong>CHAPTER IS NOT COMPLETE</strong></p>
-<h3 id="overview">Overview</h3>
 <h3 id="goals">Goals</h3>
+<ul>
+<li>Understand how to create a cookie with user information in it</li>
+<li>Understand how to logout the user </li>
+</ul>
 <h3 id="caching-user">Caching User</h3>
 <p>Right now when you refresh the page the current user information in the AuthService is lost.  We can cache the data using cookies.  To implement the cookie storage we are going to use the ngx-cookie library.</p>
 <h4 class="exercise-start">
@@ -2633,14 +2656,14 @@ Note that this will remove the dist directory before build.
 </h4>
 
 <ol>
-<li><p>Open terminal and generate the guard </p>
+<li><p>Open terminal and add/install the ngx-cookie library</p>
 <pre><code class="lang-bash">npm install --save ngx-cookie
 </code></pre>
 </li>
 <li><p>Open src\app\app.module.ts</p>
 </li>
 <li><p>Import the ngx-cookie library</p>
-<pre><code class="lang-TypeScript">
+<pre><code class="lang-TypeScript"> import { CookieModule } from &#39;ngx-cookie&#39;;
 </code></pre>
 </li>
 <li><p>Add the ngx-cookie library to the @Ngmodule imports sections</p>
@@ -2653,41 +2676,73 @@ Note that this will remove the dist directory before build.
      CookieModule.forRoot()
  ],
 </code></pre>
+<div class="exercise-end"></div>
+
 </li>
-<li><p>Open the auth.service.ts file</p>
-</li>
+</ol>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Cookie Get/Set Functions 
+</h4>
+
+<ol>
+<li>Open the auth.service.ts file</li>
 <li><p>Add the following functions to get/set the cookie</p>
 <pre><code class="lang-TypeScript"> getUser(): User {
      return &lt;User&gt;this.cookieService.getObject(this.cookieKey)
  }
 
- private setUser(value: User) {
+ private setUser(value: User): void {
      this.cookieService.putObject(this.cookieKey, value);
  }
 
- private clearUser() {
+ private clearUser() : void {
      this.cookieService.remove(this.cookieKey);
  }
 </code></pre>
 </li>
-<li><p>In the login function, change the do statement that is setting the currentUser value to</p>
+</ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Setting Cookie
+</h4>
+
+
+<ol>
+<li><p>In the login and signup functions, inside the do statement remove the existing code that is setting the this.currentUser variable and replace it with the following.  </p>
 <pre><code class="lang-TypeScript"> if (res) {
-       let currentUser: User = &lt;User&gt;res.json();
-       this.setUser(new User(currentUser.email, currentUser.id));
+       this.setUser(&lt;User&gt;res.json());
  }
+</code></pre>
+</li>
+<li><p>In the login and isAuthenticated functions, in the catch section, add a call to clearUser </p>
+<pre><code class="lang-TypeScript"> this.clearUser();
+</code></pre>
+</li>
+<li><p>In the isAuthenticated function, in the map section, if res is false call clearUser</p>
+<pre><code class="lang-TypeScript"> this.clearUser();
 </code></pre>
 </li>
 <li><p>You can remote the class variable currentUser as it will no longer be used.</p>
 </li>
 </ol>
-<h3 id="is-user-logged-out">Is User Logged Out</h3>
+<div class="exercise-end"></div>
+
+
+<h3 id="logout-user">Logout User</h3>
 <p>Before being able to signup for an account, we need the user to be logged out first.</p>
 <h3 id="logout-user">Logout User</h3>
+<p>In order to complete the login process, you also need to create a way for the user to logout.  There are a number of ways that you could implement this such as giving a logout button in the header or showing user info in header with link to profile page with a logout button.</p>
+<p>We are going to implement the logout button in the header.  </p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create AuthService Logout 
+</h4>
+
 <ol>
 <li>open the auth.service.ts file</li>
 <li><p>Add the logout function below that will call the API logout function and clear out the cookie</p>
 <pre><code class="lang-TypeScript"> logout(): Observable&lt;boolean&gt; {
-   return this.http.get(this.url + &#39;/logout&#39;, this.options)
+     return this.http.get(`${this.url}/logout`, this.options)
      .map((res: Response) =&gt; {
        if (res.ok) {
          this.clearUser();
@@ -2696,13 +2751,64 @@ Note that this will remove the dist directory before build.
 
        return Observable.of(false);
      })
-     .catch(error =&gt; this.handleError(error));
+     .catch(error =&gt; {
+         console.log(&#39;logout error&#39;, error)
+         this.clearUser();
+         return Observable.of(false);
+      });
  }
 </code></pre>
 </li>
-<li><p>Open the     </p>
+</ol>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Logout Button
+</h4>
+
+<ol>
+<li>Open the src\app\shared\header\header.component.html</li>
+<li><p>Inside of the <code>&lt;div class=&quot;collapse navbar-collapse&quot;....</code> tag add the following after the closing <code>&lt;/ul&gt;</code></p>
+<pre><code class="lang-html"> &lt;ul class=&quot;nav navbar-nav&quot;&gt;
+     &lt;li class=&quot;nav-item&quot;&gt;
+         &lt;span class=&quot;nav-link&quot;&gt;Welcome {{(authService.getUser())?.email}}  &lt;a [hidden]=&quot;!authService.getUser()&quot; (click)=&quot;logout()&quot;&gt; | Logout&lt;/a&gt;&lt;/span&gt;
+     &lt;/li&gt;
+ &lt;/ul&gt;
+</code></pre>
+<ul>
+<li>This code will display a Welcome along with the email if it is populated.  </li>
+</ul>
 </li>
 </ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Compoment Logging Out Function
+</h4>
+
+<ol>
+<li>Open header.component.ts</li>
+<li><p>Import the AuthService and Router</p>
+<pre><code class="lang-TypeScript"> import { Router } from &#39;@angular/router&#39;;
+ import { AuthService } from &#39;../services/auth.service&#39;;
+ `
+</code></pre>
+</li>
+<li><p>Add the AuthService and Router to the constructor</p>
+<pre><code class="lang-TypeScript"> constructor(private authService: AuthService, private router: Router) { }
+</code></pre>
+</li>
+<li><p>Add the logout function</p>
+<pre><code class="lang-TypeScript"> logout() {
+     this.authService.logout().subscribe(() =&gt; {
+         this.router.navigate([&#39;/login&#39;]);
+     });
+ }
+</code></pre>
+</li>
+<li><p>You are now ready to test it.</p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
 
 				</div>
 				<hr>

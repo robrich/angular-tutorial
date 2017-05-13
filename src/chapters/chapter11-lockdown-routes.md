@@ -83,6 +83,7 @@ We need to do add logic in the AuthService to verify that the currentUser variab
       });
   }
   ```
+
 Next we need to add logic to the guard's canActivate function to call the AuthService.isAuthenticated function 
 
 1. Open src\app\shared\guards\is-logged-in.guard.ts 
@@ -155,13 +156,16 @@ In order to use the Guard we need to add it to the route.  Each route has a canA
 
 <div class="exercise-end"></div>
 
-
-  
-<div class="exercise-end"></div>
  
 ### Create Create Account Component
 
-Up to this point, we have only been able to login to an existing account.  Now we are going to quickly create the signup page.  It is a template based form, just like the login form that was completed in a previous chapter.
+Up to this point, we have only been able to login to an existing account.  Now we are going to create the signup page.  Creating the signup component is just like the rest of the component that we have created.  We will have an html, scss, spec, and ts file.  We will have a form that calls to a function in the component that calls to a service to process the data. Since it is the same the rest of the components and service functions that we have created, there is not much explanation about what we are doing, just a walk through of the steps.
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: AuthService Signup Function 
+</h4>
+
+We are first going to create the signup function in the AuthService.
 
 1. Open src\app\shared\services\auth.service.ts
 1. Add RequestOptions to the @angular/http import
@@ -174,8 +178,7 @@ Up to this point, we have only been able to login to an existing account.  Now w
     return this.http.post(this.url, loginInfo, this.options)
       .do((res: Response) => {
         if (res) {
-          let currentUser: User = <User>res.json();
-          this.setUser(new User(currentUser.email, currentUser.id));
+          this.currentUser = <User>res.json();
         }
       })
       .catch(error => {
@@ -187,7 +190,12 @@ Up to this point, we have only been able to login to an existing account.  Now w
 
   <div class="alert alert-info" role="alert">REMINDER: Since we have to pass the password to the API in order to create the account and we are communicating over a non-secure channel, make sure you do not use your real passwords.  With the non-secure connection anyone can easily capture your email and password combo for the todo API.  In production, you would want use an SSL certificate.  As well for development, typically you would have the API locally but since this is an Angular workshop and not an API workshop, a remote API was provided for you.</div>
 
+<div class="exercise-end"></div>
 
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create Signup Component
+</h4>
+  
 1. Open terminal and run
 
   ```TypeScript
@@ -285,6 +293,12 @@ Up to this point, we have only been able to login to an existing account.  Now w
   }
   ```  
 
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Link Between Login and Signup
+</h4>
+
 1. Open the login.component.html file
 1. Next to the cancel button add the following HTML to give a link to the create page
 
@@ -293,3 +307,6 @@ Up to this point, we have only been able to login to an existing account.  Now w
   ```
 
 1. You should now to be able to create accounts and navigate between the signup and login pages.  Once logged in or account created, you will be redirected to the home page and shown the todo items.
+
+
+<div class="exercise-end"></div>
