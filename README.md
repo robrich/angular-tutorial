@@ -1,24 +1,28 @@
-# Angular 2 Tutorial
+# Ngws
 
-Angular 2 is the next generation of the popular Angular framework.  Learning Angular 2 is easier than Angular 1.x was but getting started can be a little bit daunting.  In this tutorial, we will walk through getting a project setup, integrating bootstrap, creating a header/footer component, and adding new pages/services.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0.
 
-To view this repository online visit 
+## Development server
 
-## Running Tutorial Locally
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-If you would like to run this tutorial locally, you need to have node 6.x or greater installed and the npm package gulp-cli installed globally.
+## Code scaffolding
 
-Start by running `npm install` to install this template’s dependencies:
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class/module`.
 
-```
-$ npm install
-```
+## Build
 
-And then run `gulp` to launch the guide in your browser:
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-```
-$ gulp
-```
+## Running unit tests
 
-Gulp starts up a development server and launches the quick start guide in it. Gulp also watches for changes to files in the `src` folder (including the chapter Markdown files), and refreshes the site in your browser automatically.
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Before running the tests make sure you are serving the app via `ng serve`.
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

@@ -1,13 +1,13 @@
-FROM digitaldrummerj/tutorials
+FROM digitaldrummerj/angular-cli
 
-WORKDIR /home/app
+WORKDIR /home/app/ng
 
-COPY package.json /home/app
+COPY ./package.json /home/app/ng
+RUN npm install
 
-RUN npm install;npm cache clean;rm package.json
+EXPOSE 4200
+EXPOSE 9222
+EXPOSE 9876
+EXPOSE 49153
 
-EXPOSE 3027
-
-VOLUME ["/home/app/node_modules"]
-
-# CMD ["sails", "lift"]
+VOLUME ["/home/app/ng/node_modules"]

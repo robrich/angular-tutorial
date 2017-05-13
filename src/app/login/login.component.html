@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="page-header">
+    <h1>Login</h1>
+  </div>
+  <div>
+    <form #loginForm="ngForm" (ngSubmit)="login(loginForm.value)" autocomplete="off" novalidate>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input email #email="ngModel" required (ngModel)="email" name="email" id="email" type="text" class="form-control" placeholder="Email..."
+        />
+        <div *ngIf="email.errors && (email.dirty || email.touched)" class="alert alert-danger">
+          <div [hidden]="!email.errors.required">
+            Email is required
+          </div>
+          <div [hidden]="!email.errors.email">
+            Must be an email address
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input #password="ngModel" required (ngModel)="password" name="password" id="password" id="password" type="password" class="form-control"
+          placeholder="Password..." />
+        <div *ngIf="password.errors && (password.dirty || password.touched)" class="alert alert-danger">
+          <div [hidden]="!password.errors.required">
+            Password is required
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
+      <button type="button" class="btn btn-default">Cancel</button>
+      <span><a [routerLink]="['/signup']">create account</a></span>
+    </form>
+
+    <br />
+    <div *ngIf="invalidLogin" class="alert alert-danger">Invalid Login Info</div>
+
+  </div>
+</div>

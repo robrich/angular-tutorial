@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="page-header">
+    <h1>Todo List</h1>
+    <p class="lead">You've got <em>{{openItemCount}}</em> things to do</p>
+
+  </div>
+  <form [formGroup]="addForm" novalidate (ngSubmit)="save()" class="form-horizontal">
+    <div class="form-group row" [ngClass]="{'has-danger': formErrorMessage}">
+      <div class="col-sm-10">
+        <input type="text" class="form-control form-control-lg" formControlName="item" placeholder="Todo!">
+      </div>
+      <div class="col-sm-2">
+        <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="!addForm.valid">Add
+      </button>
+      </div>
+    </div>
+    <div *ngIf="formErrorMessage" class="alert alert-danger">
+      {{ formErrorMessage }}
+    </div>
+  </form>
+
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+  </div>
+
+
+  <div class="row todo" *ngFor="let todoItem of todoList">
+    <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
+
+    <div class="col-10 done-{{todoItem.completed}}">{{todoItem.item}} <br /><small>created: {{todoItem.createdAt | date:'short'}}</small></div>
+
+    <div class="col-1" (click)="deleteTodo(todoItem)"><i class="fa fa-trash"></i></div>
+
+  </div>
+</div>
