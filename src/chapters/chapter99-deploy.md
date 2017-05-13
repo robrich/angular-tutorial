@@ -2,11 +2,15 @@
 
 ### Overview
 
+Before deploy you will need to run an a build with the Angular CLI.  With the build you can tell it the environment to use and if it is a production build or not.  A production will minify everything.
+
 ### Goals
 
-### Production Build
 
-Before deploy you will need to run an a build with the Angular CLI.  With the build you can tell it the environment to use and if it is a production build or not.  A production will minify everything.
+* Learn how to create a build that is ready to deploy.
+
+
+### Non-Production Build
 
 <div class="alert alert-info" role="alert">
 Note the build create a dist folder to hold the output.   This directory is removed before each build
@@ -25,6 +29,8 @@ ng build
 ```
 
 <div class="exercise-end"></div>
+
+### Production Build
 
 <h4 class="exercise-start">
   <b>Exercise</b>: Running a Production Build

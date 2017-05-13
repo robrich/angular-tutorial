@@ -6,6 +6,10 @@ In most web sites we have a header and footer at the top and bottom of the page 
 
 ### Goals
 
+* Understand how to create a new component
+* Understand how to include components inside of other components
+* Understand how to utilize Bootstrap 
+
 ### Create Header Component 
 
 <h4 class="exercise-start">

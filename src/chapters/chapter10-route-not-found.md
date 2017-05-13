@@ -16,6 +16,8 @@ There are 2 ways to fix this.
 
 ### Goals
 
+* Understand how to deal with an unknown route
+
 ### Add Default Route
 
 <h4 class="exercise-start">

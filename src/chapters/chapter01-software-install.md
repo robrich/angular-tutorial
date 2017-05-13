@@ -11,6 +11,8 @@ To get started, we need to install and configure the following software first.
 
 ### Goals
 
+* Undersstand how to install the Angular Command Line (CLI)
+* Setup your machine for the Workshop
 
 ### Windows Showing File Extensions 
 

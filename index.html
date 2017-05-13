@@ -62,6 +62,10 @@
 <li>Angular CLI 1.0.0+</li>
 </ul>
 <h3 id="goals">Goals</h3>
+<ul>
+<li>Undersstand how to install the Angular Command Line (CLI)</li>
+<li>Setup your machine for the Workshop</li>
+</ul>
 <h3 id="windows-showing-file-extensions">Windows Showing File Extensions</h3>
 <div class="alert alert-danger" role="alert">
 <strong>Windows Only</strong> 
@@ -132,6 +136,12 @@
 					<h2 id="create-new-project">Create New Project</h2>
 <h3 id="overview">Overview</h3>
 <h3 id="goals">Goals</h3>
+<ul>
+<li>Understand how to create a new project</li>
+<li>Understand how to find help for an Angular CLI command</li>
+<li>Understand the project layout</li>
+<li>Understand how to run the project</li>
+</ul>
 <h3 id="generate-new-project">Generate New Project</h3>
 <p>The project that the Angular CLI create for you follows all of the suggested standards and has webpack for bundling built-in to it.    </p>
 <h4 class="exercise-start">
@@ -164,7 +174,7 @@
 <pre><code class="lang-bash"> ng new ngws --style scss --routing
 </code></pre>
 </li>
-<li><p>If you want to see the other ng new options, run</p>
+<li><p>If you want to see the other ng new options or any Angular CLI command append the --help</p>
 <pre><code class="lang-bash"> ng new --help
 </code></pre>
 </li>
@@ -222,6 +232,9 @@
 <h3 id="overview">Overview</h3>
 <p>For our styling we are going to use <a href="https://v4-alpha.getbootstrap.com/">Bootstrap 4</a> which is still in alpha.  The reason for picking Bootstrap 4 and not Bootstrap 3 is so that you will be able to use the <a href="https://ng-bootstrap.github.io">Angular UI library</a> if you so choose.  We will not be using the Angular UI library in this workshop but it is a great library for component.  If you are a Bootstrap 3 developer, you can see all of the change in the <a href="https://v4-alpha.getbootstrap.com/migration/">Migration Guide</a>. </p>
 <h3 id="goals">Goals</h3>
+<ul>
+<li>Understand how to include Bootstrap 4 into your project</li>
+</ul>
 <h3 id="install-bootstrap">Install Bootstrap</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Install Bootstrap
@@ -414,6 +427,11 @@
 <h3 id="overview">Overview</h3>
 <p>In most web sites we have a header and footer at the top and bottom of the page respectively with our logo, navigation, and important links.  The header will contain our logo and navigation menu while the footer will contain our copyright info. </p>
 <h3 id="goals">Goals</h3>
+<ul>
+<li>Understand how to create a new component</li>
+<li>Understand how to include components inside of other components</li>
+<li>Understand how to utilize Bootstrap </li>
+</ul>
 <h3 id="create-header-component">Create Header Component</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Creating the header component
@@ -2033,8 +2051,8 @@ user: string;
 <p>In this chapter we are going to implement a check for if the user is logged in.</p>
 <h3 id="goals">Goals</h3>
 <ul>
-<li>Create a guard</li>
-<li>Add a guard to a route</li>
+<li>Understand how to protect a route</li>
+<li>Understand how to use a guard</li>
 </ul>
 <h3 id="create-guard">Create Guard</h3>
 <h4 class="exercise-start">
@@ -2301,6 +2319,9 @@ import { Router } from &#39;@angular/router&#39;;
 <li>Create a &quot;Not Found&quot; component and redirect the user to that component if none of the other routes match.  This is the preferred method.</li>
 </ol>
 <h3 id="goals">Goals</h3>
+<ul>
+<li>Understand how to deal with an unknown route</li>
+</ul>
 <h3 id="add-default-route">Add Default Route</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Adding Default Route 
@@ -2358,9 +2379,12 @@ import { Router } from &#39;@angular/router&#39;;
 				<div class="chapter">
 					<h2 id="deploying">Deploying</h2>
 <h3 id="overview">Overview</h3>
-<h3 id="goals">Goals</h3>
-<h3 id="production-build">Production Build</h3>
 <p>Before deploy you will need to run an a build with the Angular CLI.  With the build you can tell it the environment to use and if it is a production build or not.  A production will minify everything.</p>
+<h3 id="goals">Goals</h3>
+<ul>
+<li>Learn how to create a build that is ready to deploy.</li>
+</ul>
+<h3 id="non-production-build">Non-Production Build</h3>
 <div class="alert alert-info" role="alert">
 Note the build create a dist folder to hold the output.   This directory is removed before each build
 </div>
@@ -2375,6 +2399,7 @@ Note the build create a dist folder to hold the output.   This directory is remo
 </code></pre>
 <div class="exercise-end"></div>
 
+<h3 id="production-build">Production Build</h3>
 <h4 class="exercise-start">
   <b>Exercise</b>: Running a Production Build
 </h4>
@@ -2395,6 +2420,9 @@ Note that this will remove the dist directory before build.
 					<h2 id="bonus-additional-todo-features">Bonus: Additional Todo Features</h2>
 <h3 id="overview">Overview</h3>
 <h3 id="goals">Goals</h3>
+<ul>
+<li>Show how to implement additional usability features such as running open item count, sorting in the UI and resetting the form. </li>
+</ul>
 <h3 id="displaying-open-item-count">Displaying Open Item Count</h3>
 <p>It would be nice to know how many todo items that the user has and display that in the UI.  You will need to make sure to update the open number when pulling, updating, and deleting todo items.</p>
 <h4 class="exercise-start">

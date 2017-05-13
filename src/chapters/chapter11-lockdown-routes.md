@@ -12,8 +12,8 @@ In this chapter we are going to implement a check for if the user is logged in.
 
 ### Goals
 
-* Create a guard
-* Add a guard to a route
+* Understand how to protect a route
+* Understand how to use a guard
 
 ### Create Guard
 

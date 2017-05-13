@@ -4,6 +4,7 @@
 
 ### Goals
 
+* Show how to implement additional usability features such as running open item count, sorting in the UI and resetting the form. 
 
 ### Displaying Open Item Count
 

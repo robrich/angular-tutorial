@@ -4,6 +4,10 @@
 
 ### Goals
 
+* Understand how to create a new project
+* Understand how to find help for an Angular CLI command
+* Understand the project layout
+* Understand how to run the project
 
 ### Generate New Project
 
@@ -45,7 +49,7 @@ The project that the Angular CLI create for you follows all of the suggested sta
     ng new ngws --style scss --routing
     ```
 
-1. If you want to see the other ng new options, run
+1. If you want to see the other ng new options or any Angular CLI command append the --help
 
     ```bash
     ng new --help

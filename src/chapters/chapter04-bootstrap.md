@@ -6,6 +6,8 @@ For our styling we are going to use [Bootstrap 4](https://v4-alpha.getbootstrap.
 
 ### Goals
 
+* Understand how to include Bootstrap 4 into your project
+
 ### Install Bootstrap
 
 <h4 class="exercise-start">
