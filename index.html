@@ -33,6 +33,10 @@
 <p>Welcome to the Up and Running with Angular Workshop.  Angular 2 was released in September 2016 and was a full re-write of the framework.  With the re-write a lot has changed.   In this workshop, you will learn how to build an Angular UI from the ground up.  </p>
 <div class="alert alert-danger" role="alert">This workshop has been written for and tested with Angular 4.1</div>
 
+<h3 id="goal">Goal</h3>
+<p>The goal of this tutorial is to walk you through creating an application with the common features that a web application would have (headers, footers, forms, calls to API services, authentication, etc).  </p>
+<p>The tutorial is designed to be gone through from start to finish to build the application as the chapters build on each other.  </p>
+<p>For each chapter there is a start and complete branch in Github that you can pull down if you need it.  </p>
 <h3 id="new-naming-convention">New Naming Convention</h3>
 <p>The first thing is what to call Angular.  Angular 1 is now referred to as AngularJS.  Angular 2 and above is referred to as just Angular.  From here on out, we will just call it Angular.  The only time to refer to Angular with a version number is when you are talking about a feature that it specific to that version.  For example, in Angular 4, they add the TitleCase Pipe and an email validator.</p>
 <h3 id="release-schedule">Release Schedule</h3>
@@ -48,6 +52,14 @@
 <p>Third, if you are coming from an Angular 1 background, it is best if you do not try to compare the concepts between Angular 1 and Angular 2+.  You will be able to learn Angular Just treat Angular 2 as a whole new framework  </p>
 <h3 id="materials">Materials</h3>
 <p><a href="https://github.com/digitaldrummerj/angular2-tutorial/tree/code">Completed Source Code</a></p>
+<h3 id="using-this-tutorial">Using This Tutorial</h3>
+<h4 id="collapse-chapter-list">Collapse Chapter List</h4>
+<p>If you click on the hamburger icon in the header (left icon with the 3 lines), it will toggle the view of the chapters so that you have more room to view the tutorial.</p>
+<h4 id="copy-code-snippets">Copy Code Snippets</h4>
+<p>Every code snippet has a copy button on the right side of the snippet that will put the code onto the clipboard for you to paste into your code.</p>
+<h4 id="found-an-issue-with-tutorial">Found An Issue with Tutorial</h4>
+<p>If we are doing this tutorial in person as part of a class or workshop, please flag me down and let me know.</p>
+<p>If you are going through this tutorial online by yourself, click on the github icon in the header (right icon) and log an issue so that I can take a look at it.</p>
 
 				</div>
 				<hr>
@@ -206,9 +218,8 @@
 <pre><code class="lang-bash"> ng serve
 </code></pre>
 <p> <img src="images/ng-serve.png" alt="ng serve output"></p>
+ <div class="alert alert-info" role="alert">The ng serve command will stay running in order to provide live reloading functionality.  If you need to stop ng serve, press ctrl+c</div>
 </li>
-</ol>
-<ol>
 <li><p>If you launch your browser and navigate to <a href="http://localhost:4200">http://localhost:4200</a>, you will see a page that looks like</p>
 <p> <img src="images/appworks.png" alt="app works"></p>
 </li>
@@ -240,8 +251,13 @@
     <b>Exercise</b>: Install Bootstrap
 </h4>
 
+<ol>
+<li>In the VS Code Integrated Terminal, click the + to open a 2nd terminal</li>
+<li><p>Run the npm install command for bootstrap and font-awesome</p>
 <pre><code class="lang-bash"> npm install --save bootstrap@next font-awesome
 </code></pre>
+</li>
+</ol>
 <div class="exercise-end"></div>
 
 <h3 id="add-bootstrap-to-project">Add Bootstrap to Project</h3>
@@ -807,8 +823,18 @@ footer {
 </code></pre>
 </li>
 </ol>
-<p>Next we want to display a message to the user when they have invalid entries in the form fields</p>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Display Validation Errors
+</h4>
+
+<p>Next we want to display a message to the user when they have invalid entries in the form fields.</p>
 <ol>
+<li><p>In order to refer to the email field by name when checking errors, we need to add the <code>#email=&quot;ngModel&quot;</code> attribute to the email input field to tell Angular to create a variable for the control and make the value the ngModel value for the email field.  </p>
+<pre><code class="lang-html"> #email=&quot;ngModel&quot;
+</code></pre>
+</li>
 <li><p>For the email field, inside of the form-group div tag and after the input field add the following code.  This code will show when the required errors triggers.  To trigger the error message, click on the email field and then click on the password field.</p>
 <pre><code class="lang-TypeScript"> &lt;div *ngIf=&quot;email.errors &amp;&amp; (email.dirty || email.touched)&quot; class=&quot;alert alert-danger&quot;&gt;
      &lt;div [hidden]=&quot;!email.errors.required&quot;&gt;
@@ -817,8 +843,8 @@ footer {
  &lt;/div&gt;
 </code></pre>
 </li>
-<li><p>In order to refer to the email field by name when checking errors, we need to add the <code>#email=&quot;ngModel&quot;</code> attribute to the email input field to tell Angular to create a variable for the control and make the value the ngModel value for the email field.  </p>
-<pre><code class="lang-html"> &lt;input #email=&quot;ngModel&quot; required (ngModel)=&quot;email&quot; name=&quot;email&quot; id=&quot;email&quot; type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Email...&quot; /&gt;
+<li><p>Just like the email field, we need to add the <code>#password=&quot;ngModel&quot;</code> attribute to the input control to name the field</p>
+<pre><code class="lang-html"> #password=&quot;ngModel&quot;
 </code></pre>
 </li>
 <li><p>For the password field, inside of the form-group div tag and after the input field add the following code.  This code will show when the required errors triggers.  To trigger the error message, click on the password field and then click on the email field.</p>
@@ -828,25 +854,6 @@ footer {
      &lt;/div&gt;
  &lt;/div&gt;
 </code></pre>
-</li>
-<li><p>Just like the email field, we need to add the <code>#password=&quot;ngModel&quot;</code> attribute to the input control to name the field</p>
-<pre><code class="lang-html"> &lt;input #password=&quot;ngModel&quot; required (ngModel)=&quot;password&quot; name=&quot;password&quot; id=&quot;password&quot; id=&quot;password&quot; type=&quot;password&quot; class=&quot;form-control&quot; placeholder=&quot;Password...&quot; /&gt;
-</code></pre>
-</li>
-</ol>
-<p>The last thing we want to do is to disable the login button until the form is valid.</p>
-<ol>
-<li><p>Find the submit button and add the following attribute to it to disable the button when the login form is invalid</p>
-<pre><code class="lang-html"> &lt;button type=&quot;submit&quot;  [disabled]=&quot;loginForm.invalid&quot; class=&quot;btn btn-primary&quot;&gt;Login&lt;/button&gt;
-</code></pre>
-</li>
-<li><p>Now we are ready to test our required validation.  </p>
-<ul>
-<li>Trigger email by clicking on the field and then clicking off the field with it still being blank or type something in the field and then erase it</li>
-<li><p>Trigger the password field the same way</p>
-<p><img src="images/login-required-validation.png" alt="required validation"></p>
-</li>
-</ul>
 </li>
 </ol>
 <div class="exercise-end"></div>
@@ -873,7 +880,6 @@ footer {
 <p>  <img src="images/login-email-required-validation.png" alt="required validation"></p>
 </li>
 </ul>
-<p>Test</p>
 <div class="exercise-end"></div>
 
 <h3 id="disable-login-button">Disable Login Button</h3>
@@ -902,7 +908,7 @@ footer {
 <ol>
 <li>Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then &quot;Integrated Terminal&quot;</li>
 <li><p>Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.</p>
-<pre><code class="lang-bash"> ng generate service shared/service/auth
+<pre><code class="lang-bash"> ng generate service shared/services/auth
 </code></pre>
 </li>
 <li><p>The generate command will create 2 files: </p>
@@ -980,9 +986,15 @@ footer {
  import { Observable } from &#39;rxjs/Rx&#39;;
 </code></pre>
 </li>
+</ol>
+<ol>
 <li><p>In order to use the HTTP module, we need to inject it into our constructor</p>
 <pre><code class="lang-TypeScript"> constructor(private http: Http) {
  }
+</code></pre>
+</li>
+<li><p>Import the User class that we created earlier</p>
+<pre><code class="lang-TypeScript"> import { User } from &#39;../classes/user&#39;;
 </code></pre>
 </li>
 <li><p>We also want to create a public variable within the AuthClass to hold the output from the API call </p>
@@ -992,12 +1004,12 @@ footer {
 <li><p>For the API that we are using (SailsJS based), it requires that we set the HTTP option to allow credentials so that the session cookie can be passed back and forth, else it will always think you haven&#39;t logged in.  </p>
 <pre><code class="lang-TypeScript"> private options = new RequestOptions({ withCredentials: true });
 </code></pre>
- <div class="alert alert-info" role="alert">You will need to pass in this.options as the last parameter for all of our http calls.</div>
+ <div class="alert alert-info" role="alert">For the <a href="http://sailsjs.org">Sails</a> API that we are using, you have to pass in this.options as the last parameter for all of our http calls in order to tell Sails the user session to use.  </div>
 </li>
 <li><p>Next we need to create our login function within the AuthService class that will call our API</p>
 <pre><code class="lang-TypeScript"> login(email: string, password: string): Observable&lt;boolean | Response&gt; {
      let loginInfo = { &quot;email&quot;: email, &quot;password&quot;: password };
-     return this.http.put(&quot;https://dj-sails-todo.azurewebsites.net/user&quot;, loginInfo, this.options)
+     return this.http.put(&quot;https://dj-sails-todo.azurewebsites.net/user/login&quot;, loginInfo, this.options)
          .do((res: Response) =&gt; {
              if (res){
                  this.currentUser = &lt;User&gt;res.json();
@@ -1196,12 +1208,13 @@ footer {
 <pre><code class="lang-TypeScript"> import { FormGroup, FormBuilder } from &#39;@angular/forms&#39;;
 </code></pre>
 </li>
-<li><p>In the TodoComponent constructor we need to inject FormBuilder and configure the addForm.</p>
+<li><p>In the TodoComponent constructor we need to inject FormBuilder so that we can use it to create our form.</p>
 <pre><code class="lang-TypeScript"> constructor(private formBuilder: FormBuilder) {}
 </code></pre>
-<ul>
-<li>This creates a form with a form control that is named item and has a default value of blank.</li>
-</ul>
+</li>
+<li><p>Before creating our form, we need to define the addForm variable to hold the configuration.  Inside of the TodoComponent class above the constructor, add the following variable</p>
+<pre><code class="lang-TypeScript"> addForm: FormGroup;
+</code></pre>
 </li>
 </ol>
 <p>We need to implement an OnInit lifecycle event to configure the Form Builder.    </p>
@@ -1228,6 +1241,9 @@ The OnInit lifecycle event will run before the component has rendered.<br></div>
      &#39;item&#39;: &#39;&#39;
  });
 </code></pre>
+<ul>
+<li>This creates a form with a form control that is named item and has a default value of blank.</li>
+</ul>
 </li>
 </ol>
 <div class="exercise-end"></div>
@@ -1344,7 +1360,7 @@ The OnInit lifecycle event will run before the component has rendered.<br></div>
 
 <ol>
 <li>Open the src\app\todo\todo.component.ts file</li>
-<li><p>In the ngOnInit function after the addForm setup, we need to get a reference to the item input field.  We can do this by using the get function of the form.</p>
+<li><p>In the ngOnInit function <strong>after the addForm setup</strong>, we need to get a reference to the item input field.  We can do this by using the get function of the form.</p>
 <pre><code class="lang-TypeScript"> const itemControl = this.addForm.get(&#39;item&#39;);
 </code></pre>
 </li>
@@ -1352,7 +1368,14 @@ The OnInit lifecycle event will run before the component has rendered.<br></div>
 <pre><code class="lang-TypeScript"> itemControl.valueChanges.subscribe(value =&gt; this.setMessage(itemControl));
 </code></pre>
 </li>
-<li><p>Then we need to create the setMessage function that will examine the item control and any errors if has with validation.</p>
+</ol>
+<p>Then we need to create the setMessage function that will examine the item control and any errors if has with validation.</p>
+<ol>
+<li><p>Add AbstractControl to the import statement for the @angular/forms like this example (you should already have the 1st 3 in the import list).  The AbstractControl allows us to create a generic setMessage function to check which validation message to display since AbstractControl can refer to any input control.</p>
+<pre><code class="lang-TypeScript"> import { FormGroup, FormBuilder, Validators, AbstractControl } from &#39;@angular/forms&#39;;
+</code></pre>
+</li>
+<li><p>Now we need to create a new function called setMessage that takes in an AbstractControl </p>
 <pre><code class="lang-TypeScript"> setMessage(c: AbstractControl): void {
      this.formErrorMessage = &#39;&#39;;
      if ((c.touched || c.dirty) &amp;&amp; c.errors){
@@ -1564,7 +1587,7 @@ user: string;
 <ol>
 <li>Open the src\app\todo\todo.component.ts file</li>
 <li><p>Import the TodoService</p>
-<pre><code class="lang-TypeScript"> import &#39;TodoService&#39; from &#39;../shared/services/todo.service&#39;;
+<pre><code class="lang-TypeScript"> import { TodoService } from &#39;../shared/services/todo.service&#39;;
 </code></pre>
 </li>
 <li><p>Add the TodoService to the constructor</p>

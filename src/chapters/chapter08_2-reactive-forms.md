@@ -121,13 +121,17 @@ Now we are ready to add all of the functionality to the component for the UI to 
     ```TypeScript
     import { FormGroup, FormBuilder } from '@angular/forms';
     ```
-1. In the TodoComponent constructor we need to inject FormBuilder and configure the addForm.
+1. In the TodoComponent constructor we need to inject FormBuilder so that we can use it to create our form.
 
     ```TypeScript
     constructor(private formBuilder: FormBuilder) {}
     ```    
 
-    * This creates a form with a form control that is named item and has a default value of blank.
+1. Before creating our form, we need to define the addForm variable to hold the configuration.  Inside of the TodoComponent class above the constructor, add the following variable
+
+    ```TypeScript
+    addForm: FormGroup;
+    ```
 
 We need to implement an OnInit lifecycle event to configure the Form Builder.    
 
@@ -162,6 +166,8 @@ The OnInit lifecycle event will run before the component has rendered.
         'item': ''
     });
     ```
+
+    * This creates a form with a form control that is named item and has a default value of blank.
 
 <div class="exercise-end"></div>
 
@@ -287,7 +293,7 @@ We are going to setup a watcher to run when the item input field changes.  This 
 </h4>
 
 1. Open the src\app\todo\todo.component.ts file
-1. In the ngOnInit function after the addForm setup, we need to get a reference to the item input field.  We can do this by using the get function of the form.
+1. In the ngOnInit function **after the addForm setup**, we need to get a reference to the item input field.  We can do this by using the get function of the form.
 
     ```TypeScript
     const itemControl = this.addForm.get('item');
@@ -299,7 +305,15 @@ We are going to setup a watcher to run when the item input field changes.  This 
     itemControl.valueChanges.subscribe(value => this.setMessage(itemControl));
     ```
 
-1. Then we need to create the setMessage function that will examine the item control and any errors if has with validation.
+Then we need to create the setMessage function that will examine the item control and any errors if has with validation.
+
+1. Add AbstractControl to the import statement for the @angular/forms like this example (you should already have the 1st 3 in the import list).  The AbstractControl allows us to create a generic setMessage function to check which validation message to display since AbstractControl can refer to any input control.
+
+    ```TypeScript
+    import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+    ```
+
+1. Now we need to create a new function called setMessage that takes in an AbstractControl 
 
     ```TypeScript
     setMessage(c: AbstractControl): void {
@@ -542,7 +556,7 @@ Now we need to call the TodoService save function in the TodoComponent
 1. Import the TodoService
 
     ```TypeScript
-    import 'TodoService' from '../shared/services/todo.service';
+    import { TodoService } from '../shared/services/todo.service';
     ```
 1. Add the TodoService to the constructor
 

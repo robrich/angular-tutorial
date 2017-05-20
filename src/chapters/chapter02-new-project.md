@@ -87,6 +87,7 @@ The Angular CLI has a built-in command for starting up a web server for your pro
 
     ![ng serve output](images/ng-serve.png)
 
+    <div class="alert alert-info" role="alert">The ng serve command will stay running in order to provide live reloading functionality.  If you need to stop ng serve, press ctrl+c</div>
 
 1. If you launch your browser and navigate to http://localhost:4200, you will see a page that looks like
 

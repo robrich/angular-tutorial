@@ -14,9 +14,12 @@ For our styling we are going to use [Bootstrap 4](https://v4-alpha.getbootstrap.
     <b>Exercise</b>: Install Bootstrap
 </h4>
 
-```bash
- npm install --save bootstrap@next font-awesome
- ```
+1. In the VS Code Integrated Terminal, click the + to open a 2nd terminal
+1. Run the npm install command for bootstrap and font-awesome
+
+    ```bash
+    npm install --save bootstrap@next font-awesome
+    ```
 
 <div class="exercise-end"></div>
 

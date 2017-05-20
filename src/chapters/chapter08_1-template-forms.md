@@ -181,7 +181,19 @@ For both the email and password fields they are required.  While we could check 
     <input required (ngModel)="password" name="password" id="password" id="password" type="password" class="form-control" placeholder="Password..." />
     ```
 
-Next we want to display a message to the user when they have invalid entries in the form fields
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Display Validation Errors
+</h4>
+
+Next we want to display a message to the user when they have invalid entries in the form fields.
+
+1. In order to refer to the email field by name when checking errors, we need to add the `#email="ngModel"` attribute to the email input field to tell Angular to create a variable for the control and make the value the ngModel value for the email field.  
+
+    ```html
+    #email="ngModel"
+    ```
 
 1. For the email field, inside of the form-group div tag and after the input field add the following code.  This code will show when the required errors triggers.  To trigger the error message, click on the email field and then click on the password field.
 
@@ -193,10 +205,10 @@ Next we want to display a message to the user when they have invalid entries in 
     </div>
     ```
 
-1. In order to refer to the email field by name when checking errors, we need to add the `#email="ngModel"` attribute to the email input field to tell Angular to create a variable for the control and make the value the ngModel value for the email field.  
+1. Just like the email field, we need to add the `#password="ngModel"` attribute to the input control to name the field
 
     ```html
-    <input #email="ngModel" required (ngModel)="email" name="email" id="email" type="text" class="form-control" placeholder="Email..." />
+    #password="ngModel"
     ```
 
 1. For the password field, inside of the form-group div tag and after the input field add the following code.  This code will show when the required errors triggers.  To trigger the error message, click on the password field and then click on the email field.
@@ -208,26 +220,6 @@ Next we want to display a message to the user when they have invalid entries in 
         </div>
     </div>
     ```
-
-1. Just like the email field, we need to add the `#password="ngModel"` attribute to the input control to name the field
-
-    ```html
-    <input #password="ngModel" required (ngModel)="password" name="password" id="password" id="password" type="password" class="form-control" placeholder="Password..." />
-    ```
-
-The last thing we want to do is to disable the login button until the form is valid.
-
-1. Find the submit button and add the following attribute to it to disable the button when the login form is invalid
-
-    ```html
-    <button type="submit"  [disabled]="loginForm.invalid" class="btn btn-primary">Login</button>
-    ```
-
-1. Now we are ready to test our required validation.  
-    * Trigger email by clicking on the field and then clicking off the field with it still being blank or type something in the field and then erase it
-    * Trigger the password field the same way
-
-    ![required validation](images/login-required-validation.png)
 
 <div class="exercise-end"></div>
 
@@ -260,8 +252,6 @@ Now we are ready to test the email validation.
 * The validation will also trigger at the same time as required 
 
     ![required validation](images/login-email-required-validation.png)
-
-Test
 
 <div class="exercise-end"></div>
 
@@ -298,7 +288,7 @@ Now that we have our form done, we are going to implement our login service.
 1. Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.
 
     ```bash
-    ng generate service shared/service/auth
+    ng generate service shared/services/auth
     ```
 
 1. The generate command will create 2 files: 
@@ -384,11 +374,18 @@ Now that we have our API server up and running, it is time to create our Auth se
     import { Observable } from 'rxjs/Rx';
     ```
 
+
 1. In order to use the HTTP module, we need to inject it into our constructor
 
     ```TypeScript
     constructor(private http: Http) {
     }
+    ```
+
+1. Import the User class that we created earlier
+
+    ```TypeScript
+    import { User } from '../classes/user';
     ```
 
 1. We also want to create a public variable within the AuthClass to hold the output from the API call 
@@ -403,14 +400,14 @@ Now that we have our API server up and running, it is time to create our Auth se
     private options = new RequestOptions({ withCredentials: true });
     ```
 
-    <div class="alert alert-info" role="alert">You will need to pass in this.options as the last parameter for all of our http calls.</div>
+    <div class="alert alert-info" role="alert">For the [Sails](http://sailsjs.org) API that we are using, you have to pass in this.options as the last parameter for all of our http calls in order to tell Sails the user session to use.  </div>
 
 1. Next we need to create our login function within the AuthService class that will call our API
 
     ```TypeScript
     login(email: string, password: string): Observable<boolean | Response> {
         let loginInfo = { "email": email, "password": password };
-        return this.http.put("https://dj-sails-todo.azurewebsites.net/user", loginInfo, this.options)
+        return this.http.put("https://dj-sails-todo.azurewebsites.net/user/login", loginInfo, this.options)
             .do((res: Response) => {
                 if (res){
                     this.currentUser = <User>res.json();
