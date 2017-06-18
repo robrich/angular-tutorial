@@ -484,7 +484,7 @@ Now we are ready to implement the UI to show the error message.
 1. Add the following alert message
 
     ```html
-    <div *ngIf="loginInvalid" class="alert alert-danger">
+    <div *ngIf="invalidLogin" class="alert alert-danger">
         Invalid Login
     </div>
     ```
