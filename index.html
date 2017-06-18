@@ -75,7 +75,7 @@
 </ul>
 <h3 id="goals">Goals</h3>
 <ul>
-<li>Undersstand how to install the Angular Command Line (CLI)</li>
+<li>Under stand how to install the Angular Command Line (CLI)</li>
 <li>Setup your machine for the Workshop</li>
 </ul>
 <h3 id="windows-showing-file-extensions">Windows Showing File Extensions</h3>
@@ -83,7 +83,7 @@
 <strong>Windows Only</strong> 
 </div>
 
-<p><strong>Non-Windows users can <a href="#chapter2.2">skip to next section</a></strong></p>
+<p><strong>Non-Windows users can <a href="#chapter2.4">skip to next section</a></strong></p>
 <p>By default Windows is set to not show file extensions for known files which causes files such as .gitconfig and .npmrc to show up as just a period with no file extension which makes it extremely difficult to figure out what the file actually is.  To fix this we need to turn set Windows Explorer to show file extensions.</p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Turn On Windows Showing File Extensions
@@ -115,7 +115,7 @@
 <h3 id="node-js">Node.js</h3>
 <p>NodeJS is used to power the Angular CLI as well as install all of our dependencies.  The Angular CLI requires Node version 6.9 or greater.</p>
 <ol>
-<li>Download the latest stable version (LTS) of <a href="http://nodejs.org">NodeJS</a> which as of this writing is 6.10.2.    </li>
+<li>Download the latest stable version (LTS) of <a href="http://nodejs.org">NodeJS</a> which as of this writing is 6.11.0.    </li>
 <li>Run the installer and accept all defaults.</li>
 <li><p>Verify that Node installed.  Start a command prompt or terminal window and run: </p>
 <pre><code class="lang-bash"> node -v
@@ -147,6 +147,7 @@
 				<div class="chapter">
 					<h2 id="create-new-project">Create New Project</h2>
 <h3 id="overview">Overview</h3>
+<p>In this chapter we will be creating our project with the Angular CLI.  We will use this project throughout the workshop.</p>
 <h3 id="goals">Goals</h3>
 <ul>
 <li>Understand how to create a new project</li>
@@ -185,6 +186,8 @@
 <li><p>Generate a project named ngws that uses scss for styling and includes a routing file by running</p>
 <pre><code class="lang-bash"> ng new ngws --style scss --routing
 </code></pre>
+<p> <strong>Sample Output:</strong>
+ <img src="images/ng-new.png" alt="ng new"></p>
 </li>
 <li><p>If you want to see the other ng new options or any Angular CLI command append the --help</p>
 <pre><code class="lang-bash"> ng new --help
@@ -267,8 +270,18 @@
 
 <p>First we need to create our own custom Bootstrap style sheet so that we can override the scss variables if we want to with your own colors and styles.</p>
 <ol>
-<li>In the src\assets folder, create a new folder named bootstrap</li>
-<li>In the bootstrap folder, create a file called _variables.scss</li>
+<li><p>In the src\assets folder, create a new folder named <strong>bootstrap</strong></p>
+   <div class="alert alert-info" role="alert">You can create folder right in Visual Studio Code by right-click on the src\assets folder</div>
+
+<pre><code class="lang-bash"> bootstrap
+</code></pre>
+</li>
+<li><p>In the bootstrap folder, create a file called <strong>_variables.scss</strong></p>
+   <div class="alert alert-info" role="alert">You can create file right in Visual Studio Code by right-click on the src\assets folder</div>
+
+<pre><code class="lang-bash"> _variables.scss
+</code></pre>
+</li>
 <li><p>Add the following to the _variables.scss file</p>
 <pre><code class="lang-scss"> // Variables
  // Colors
@@ -304,9 +317,13 @@
  $brand-inverse:             $gray-dark !default;
 </code></pre>
 </li>
-<li><p>In the bootstrap folder, create a file called bootstrap.scss</p>
+<li><p>In the bootstrap folder, create a file called <strong>bootstrap.scss</strong></p>
+<pre><code class="lang-bash"> bootstrap.scss
+</code></pre>
 </li>
-<li><p>Add the following contents to the bootstrap.scss file. Note that the list of included files outside of the variables file is the same as the ones in the  node_modules\bootstrap\scss\bootstrap.scss file with a ~bootstrap/scss prefix so that the scss compiler is able to find the included file in the node_modules\bootstrap\scss directory.</p>
+<li><p>Add the following contents to the bootstrap.scss file. </p>
+   <div class="alert alert-info" role="alert">Note that the list of included files outside of the variables file is the same as the ones in the  node_modules\bootstrap\scss\bootstrap.scss file with a ~bootstrap/scss prefix so that the scss compiler is able to find the included file in the node_modules\bootstrap\scss directory.</div>
+
 <pre><code class="lang-scss"> @import &quot;variables&quot;;
 
  @import &quot;~bootstrap/scss/variables&quot;;
@@ -366,13 +383,20 @@
 </ol>
 <p>Now we need to configure the angular cli to import the bootstrap libraries.  </p>
 <ol>
-<li>Open the .angular-cli.json file which is the configuration file for our project for the Angular CLI </li>
+<li><p>Open the <strong>.angular-cli.json</strong> file that is in the root of the project.  This file  is the configuration file for our project for the Angular CLI </p>
+ <div class="alert alert-info" role="alert">In Visual Studio Code you can quickly open a file by using ctrl+p to open the &quot;Go To File&quot; prompt and typing in the file name</div>
+
+<pre><code class="lang-bash"> .angular-cli.json
+</code></pre>
+</li>
 <li><p>Find the apps\styles section and replace the section with:  </p>
 <pre><code class="lang-TypeScript">   &quot;styles&quot;: [
      &quot;assets/bootstrap/bootstrap.scss&quot;,
       &quot;styles.scss&quot;
    ],
 </code></pre>
+   <div class="alert alert-info" role="alert">If the code alignment upon paste is off you can run the &quot;Format Document&quot; command to fix it.  Ctrl+Shift+P and search for &quot;Format Document&quot; or use Alt+Shift+F</div>
+
 </li>
 </ol>
 <div class="exercise-end"></div>
@@ -407,13 +431,18 @@
 <div class="exercise-end"></div>
 
 <h3 id="view-changes">View Changes</h3>
-<p>Normally, we would just be able to use the live reload feature of the ng serve command but since we changed the Angular CLI configuration file (.angulal-cli.json), we have to restart the ng serve command for the changes to take effect.  </p>
+<div class="alert alert-danger" role="alert">Since we already had ng serve running, it picked up the html changes but you will notice that there is no styling.  This is because whenever you change the .angular-cli.json file, you need to restart ng serve before they take effect.</div>
+
 <h4 class="exercise-start">
     <b>Exercise</b>: Restart ng serve
 </h4>
 
 <ol>
-<li>Go to the terminal that is running the <code>ng serve</code> command and do a ctrl+c to stop it.</li>
+<li><p>Go to the integrated terminal in Visual Studio Code that is running the <code>ng serve</code> command and do a ctrl+c to stop it.</p>
+<blockquote>
+<p>There is a dropdown on the right side of the Visual Studio Code integrated terminal that allows you to change to the other terminals that are currently open for your project</p>
+</blockquote>
+</li>
 <li><p>Run the <code>ng serve</code> command again.</p>
 <pre><code class="lang-bash"> ng serve
 </code></pre>
@@ -434,232 +463,6 @@
 <li>How to create a banner at the top of the page</li>
 <li>How to change the text that appears in the banner using our TypeScript title variable</li>
 <li>Learned that when you modify the .angular-cli.json file that you have to restart <code>ng serve</code> for the changes to take effect</li>
-</ol>
-
-				</div>
-				<hr>
-				<div class="chapter">
-					<h2 id="header-and-footer">Header and footer</h2>
-<h3 id="overview">Overview</h3>
-<p>In most web sites we have a header and footer at the top and bottom of the page respectively with our logo, navigation, and important links.  The header will contain our logo and navigation menu while the footer will contain our copyright info. </p>
-<h3 id="goals">Goals</h3>
-<ul>
-<li>Understand how to create a new component</li>
-<li>Understand how to include components inside of other components</li>
-<li>Understand how to utilize Bootstrap </li>
-</ul>
-<h3 id="create-header-component">Create Header Component</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Creating the header component
-</h4>
-
-<p>We can leave ng serve running while we make these changes and open up another Integrate Terminal for the commands below.</p>
-<ol>
-<li>In the VS Code Integrated Terminal, click the + to open a 2nd terminal</li>
-<li><p>Run the ng generate command to create the header component</p>
-<pre><code class="lang-bash"> ng generate component shared/header
-</code></pre>
-</li>
-<li><p>The generate command will create 4 files: </p>
-<p> <img src="images/header-generate.png" alt="output of generate"></p>
-<ul>
-<li>scss (styles)</li>
-<li>html (view)</li>
-<li>spec file (test)</li>
-<li>component (controller)</li>
-<li>add reference to the component in the app.module.ts file.</li>
-</ul>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Add the Menu 
-</h4>
-
-<div class="alert alert-warning" role="alert">This is a sample menu that includes a few links and a sub-menu dropdown.  Note that none of the links will work since we have not created any of those other pages or routes.</div>
-
-<ol>
-<li><p>Open the src\app\shared\header.component.html file and replace the contents with the following. </p>
-<pre><code class="lang-html"> &lt;header&gt;
-     &lt;nav class=&quot;navbar navbar-toggleable-md navbar-light bg-faded&quot;&gt;
-         &lt;button class=&quot;navbar-toggler navbar-toggler-right&quot; type=&quot;button&quot; data-toggle=&quot;collapse&quot; data-target=&quot;#navbarSupportedContent&quot;
-         aria-controls=&quot;navbarSupportedContent&quot; aria-expanded=&quot;false&quot; aria-label=&quot;Toggle navigation&quot;&gt;
-         &lt;span class=&quot;navbar-toggler-icon&quot;&gt;&lt;/span&gt;
-     &lt;/button&gt;
-         &lt;a class=&quot;navbar-brand&quot; [routerLink]=&quot;[&#39;/&#39;]&quot;&gt;&lt;img class=&quot;navbar-logo&quot; src=&quot;./assets/todo_logo.png&quot; alt=&quot;Logo&quot;&gt;&lt;/a&gt;
-         &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;navbarSupportedContent&quot;&gt;
-         &lt;ul class=&quot;nav navbar-nav mr-auto&quot;&gt;
-             &lt;li class=&quot;nav-item active&quot;&gt;
-             &lt;a class=&quot;nav-link&quot; [routerLink]=&quot;[&#39;/&#39;]&quot;&gt;All Items&lt;/a&gt;
-             &lt;/li&gt;
-         &lt;/ul&gt;
-         &lt;/div&gt;
-     &lt;/nav&gt;
- &lt;/header&gt;
-</code></pre>
-</li>
-<li><p>Right-click on the logo below and save it to the src/assets folder of our project</p>
-<p> <img src="images/todo_logo.png" alt="Logo"></p>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h3 id="display-header">Display Header</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Update Main page
-</h4>
-
-<p>Now that we have created the menu, we need to add it to our rendered view.  </p>
-<ol>
-<li>Open the src\app\app.component.ts file </li>
-<li><p>Import the header component.  Add the import statement on line 2 right below the existing import statement.</p>
-<pre><code class="lang-TypeScript"> import { HeaderComponent } from &#39;./shared/header/header.component&#39;;
-</code></pre>
-</li>
-<li><p>Open the src\app\app.component.html file and replace the contents of this file with the following html.  </p>
-<pre><code class="lang-html"> &lt;app-header&gt;&lt;/app-header&gt;
- &lt;div class=&quot;jumbotron&quot;&gt;
-     &lt;div class=&quot;container&quot;&gt;
-         &lt;h1&gt;{{title}}&lt;/h1&gt;
-     &lt;/div&gt;
- &lt;/div&gt;
- &lt;div class=&quot;container clearfix&quot;&gt;
-     &lt;router-outlet&gt;&lt;/router-outlet&gt;
- &lt;/div&gt;
-</code></pre>
- <div class="alert alert-info" role="alert"><strong>Note:</strong> that the router-outlet tag is how Angular knows where to put the content of each of the views.</div>
-</li>
-<li><p>If you view the web page you should see the header with logo, &quot;All Items&quot; menu and our banner.</p>
-<p><img src="images/header-view.png" alt="App Component with Header View"></p>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h3 id="create-footer">Create Footer</h3>
-<p>Creating the footer is very similar to creating the header.  The biggest difference is that we have some css styling that we will apply to position the footer at the bottom of the page.  </p>
-<p>The really awesome part of the css we are going to apply is that Angular has the concept of CSS encapsulation so the styling will only apply to the footer component and not to the rest of the site.  This gets automatically implemented for us, just by putting the styling in the footer components scss file instead of using th global style.scss file.</p>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Creating the footer component
-</h4>
-
-
-<ol>
-<li><p>In the Integrated Terminal, run the ng generate command to create the header component</p>
-<pre><code class="lang-bash"> ng generate component shared/footer
-</code></pre>
-</li>
-<li><p>The generate command will create 4 files: </p>
-<p> <img src="images/footer-generate.png" alt="Generate Output"></p>
-<ul>
-<li>scss (styles)</li>
-<li>html (view)</li>
-<li>spec file (test)</li>
-<li>component (controller)</li>
-<li>add reference to the component in the app.module.ts file.</li>
-</ul>
-</li>
-<li><p>Open the src\app\shared\footer\footer.component.html and replace the contents with</p>
-<pre><code> &lt;footer&gt;
-     &lt;div class=&quot;pull-center&quot;&gt;
-         &amp;copy;Angular WS
-     &lt;/div&gt;
- &lt;/footer&gt;
-</code></pre></li>
-</ol>
-<div class="exercise-end"></div>    
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Styling the Footer
-</h4>
-
-<p>We want to postion the footer at bottom of the page and change the background color.  With Angular 2, we now have the ablity to have css constrained to an individual component like the footer instead of being global for the whole site to use.  We still have the ability to have global css for those styles that should be applied to the whole site by using the src\styles.scss file.  </p>
-<p>Since the footer is in the src\app\shared\footer\footer.component.html file we need to add the footer styles to the src\app\footer\footer.component.scss file and add the following content</p>
-<pre><code class="lang-scss">@import &quot;../../../assets/bootstrap/variables.scss&quot;;
-
-footer {
-    position: fixed;
-    height: 50px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 10px 5px;
-    border-top: 1px solid $gray-light;
-    background-color: $gray-lighter;
-    font-size: 0.8em;
-    color: $dark-blue;
-    div {
-        margin-left: 25px;
-        margin-right: 25px;
-    }
-}
-</code></pre>
-<div class="exercise-end"></div>
-
-<h3 id="display-footer">Display Footer</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Update Main page
-</h4>
-
-<p>Now we are ready to add our footer to the Main page</p>
-<ol>
-<li><p>Open the src\app\app.component.ts file and import the footer component below the HeaderComponent import statement (note: order is not important)</p>
-<pre><code class="lang-TypeScript">import { FooterComponent } from &#39;./shared/footer/footer.component&#39;;
-</code></pre>
-</li>
-<li><p>Open the src\app\app.component.html file and replace the contents of this file with the following html</p>
-<pre><code class="lang-html"> &lt;app-header&gt;&lt;/app-header&gt;
- &lt;div class=&quot;jumbotron&quot;&gt;
-     &lt;div class=&quot;container&quot;&gt;
-         &lt;h1&gt;{{title}}&lt;/h1&gt;
-     &lt;/div&gt;
- &lt;/div&gt;
- &lt;div class=&quot;container clearfix&quot;&gt;
-     &lt;router-outlet&gt;&lt;/router-outlet&gt;
- &lt;/div&gt;
- &lt;app-footer&gt;&lt;/app-footer&gt;
-</code></pre>
-</li>
-<li><p>If you view the web page you should see the footer </p>
-<p><img src="images/footer-view.png" alt="App Works with Footer"></p>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Fixing body height
-</h4>
-
-<p>Since we have a static footer, will need to change the body height to account for the footer height.  Without doing this the body content will be hidden for the last 50px of the screen.</p>
-<p>So far we have seen how to use component level css but Angular still has the ability to do global styles that will apply to the whole by adding them into the src\style.scss file.</p>
-<ol>
-<li><p>Open the src\style.scss file and add the following css </p>
-<pre><code class="lang-html"> html {
-     position: relative;
-     height: auto;
-     min-height: 100%;
- }
-
- body {
-     position: static;
-     height: auto;
-     margin: 0 0 60px; /* bottom = footer height */
- }
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h3 id="review">Review</h3>
-<p>In this chapter will learned:</p>
-<ol>
-<li>How to create new components</li>
-<li>How to import and use components within other components</li>
-<li>Learned about component level styles so that they only apply to a single component</li>
-<li>Learned how to do global styles that apply to the whole site</li>
-<li>Learned that if we have a static footer that we need to adjust the body margin height to stop content for being hidden behind the footer.</li>
-<li>Learned that the <code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code> tag is used to tell Angular the location within the html code to render the routed component&#39;s template (html)</li>
 </ol>
 
 				</div>
@@ -711,20 +514,30 @@ footer {
 
 <p>Before we can view our Login component, we need to tell Angular how to route to the component</p>
 <ol>
-<li>Open the src\app\app-routing.module.ts file</li>
-<li><p>Add the Import statement for the login component on line 3</p>
+<li><p>Open the src\app\app-routing.module.ts file</p>
+<pre><code class="lang-bash"> app-routing.module.ts
+</code></pre>
+</li>
+<li><p>You need to import the LoginComponent before we can reference it.  On line 3, add the following statement</p>
 <pre><code class="lang-TypeScript"> import { LoginComponent } from &#39;./login/login.component&#39;;
 </code></pre>
 </li>
-<li><p>Add the LoginComponent route to the list of routes+</p>
-<pre><code class="lang-TypeScript"> { path: &#39;login&#39;, children: [], component: LoginComponent }
+<li><p>In the routes array, we need to add another array item to be able to route to the LoginComponent. Add the following at the end of line 9</p>
+<pre><code class="lang-TypeScript"> ,
+ { path: &#39;login&#39;, children: [], component: LoginComponent }
 </code></pre>
  <div class="alert alert-info" role="alert"><strong>Note:</strong> This will cause the LoginComponent to load into the <code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code> in the src\app\app.component.html when navigate to <a href="http://localhost:4200/login">http://localhost:4200/login</a> .  The router-outlet tag is how Angular knows where to put the rendered content of the routed componente.</div>
-
-
 </li>
-</ol>
-<ol>
+<li><p>Your routes should look like the following</p>
+<pre><code class="lang-TypeScript"> const routes: Routes = [
+     {
+         path: &#39;&#39;,
+         children: []
+     },
+     { path: &#39;login&#39;, children: [], component: LoginComponent }
+ ];
+</code></pre>
+</li>
 <li><p>The Login page should be able to be displayed if you navigate to <a href="http://localhost:4200/login">http://localhost:4200/login</a></p>
 <p> <img src="images/login-initial-view.png" alt="login initial view"></p>
 </li>
@@ -733,13 +546,16 @@ footer {
 
 
 <h3 id="create-form">Create Form</h3>
-<p>Next we are going to create the form without any validation logic at all.  Our form will have 2 input fields:  email and password and 2 buttons: submit and cancel.  </p>
+<p>Next we are going to create the form without any validation logic at all.  Our form will have 2 input fields:  email and password and 2 buttons: submit and cancel.  We will use Bootstrap for the styling and Angular for the validation.</p>
 <h4 class="exercise-start">
     <b>Exercise</b>:  Creating the Form
 </h4>
 
 <ol>
-<li>Open src\app\login\login.component.html</li>
+<li><p>Open src\app\login\login.component.html</p>
+<pre><code class="lang-bash"> login.component.html
+</code></pre>
+</li>
 <li><p>Replace the existing html with the following</p>
 <pre><code class="lang-html"> &lt;h1&gt;Login&lt;/h1&gt;
  &lt;hr&gt;
@@ -766,18 +582,58 @@ footer {
 </ol>
 <div class="exercise-end"></div>
 
-<h3 id="add-submit-method">Add Submit Method</h3>
+<h3 id="handle-form-submission">Handle Form Submission</h3>
 <p>In order to submit the form we need to tell Angular that that login form is an ngForm and use the ngSubmit event to tell Angular what to do when the form submit button is clicked.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>:  Import Angular FormsModule
+</h4>
+
+<p>Before we can interact with our form using Angular, we need to import the FormsModule into our application.</p>
+<ol>
+<li><p>Open src\app\app.module.ts</p>
+<pre><code class="lang-bash"> app.module.ts
+</code></pre>
+</li>
+<li><p>Add an import statement for FormsModule from @angular/forms</p>
+<pre><code class="lang-TypeScript"> import { FormsModule } from &#39;@angular/forms&#39;;
+</code></pre>
+</li>
+<li><p>Before we can use the imported module, we need to add it to the @NgModule declaration in the imports array.  We are going to add it between the BrowserModule and AppRoutingModule.</p>
+<pre><code class="lang-TypeScript"> FormsModule,
+</code></pre>
+</li>
+<li><p>Your @NgModule imports section should now look like:</p>
+<pre><code class="lang-TypeScript"> imports: [
+     BrowserModule,
+     FormsModule,
+     AppRoutingModule
+ ],
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
 <h4 class="exercise-start">
     <b>Exercise</b>:  Add login function
 </h4>
 
 <ol>
-<li><p>In the login.component.html file on the <code>&lt;form&gt;</code> tag add the following attributes.  </p>
-<pre><code class="lang-html"> #loginForm=&quot;ngForm&quot; (ngSubmit)=&quot;login(loginForm.value)&quot;
+<li><p>Go back to the login.component.html file</p>
+<pre><code class="lang-bash"> login.component.html
 </code></pre>
 </li>
-<li><p>On the email field we need to add an attribute tell Angular to implement a 1 way binding of the field.  We use the <code>(ngModel)</code> attribute to tell Angular what field in the form values we want to the data to be bound to.</p>
+<li><p>On the <code>&lt;form&gt;</code> tag we need to add 2 additional attributes to create a reference variable to the form and handle the form submit.  </p>
+<pre><code class="lang-html"> #loginForm=&quot;ngForm&quot; (ngSubmit)=&quot;login(loginForm.value)&quot;
+</code></pre>
+<ul>
+<li>The #loginForm creates a variable called loginForm that reference ngForm.  This will allow us to reference the loginForm in the login.component.ts file. </li>
+<li>The ngSubmit upon form submit event will call the login function in the login.component.ts file and pass the loginForm.value into it.  The loginForm.value holds the values for the form fields.</li>
+</ul>
+</li>
+</ol>
+<p>In order to be able to access all of the form field values by using <code>loginForm.value</code> we need tdo add an <code>(ngModel)=&quot;NAME&quot;</code> attribute onto each field, replacing &quot;NAME&quot; with the name that we want to refer to the field as.</p>
+<ol>
+<li><p>On the email input field we need to add an attribute to tell Angular to implement 1 way binding on the field by using the <code>(ngModel)</code> attribute</p>
 <pre><code class="lang-html"> (ngModel)=&quot;email&quot;
 </code></pre>
 </li>
@@ -786,10 +642,13 @@ footer {
 </code></pre>
 </li>
 </ol>
-<p>Next we need to implement the login function in the component.</p>
+<p>Now that the basics of the form have been created, we are ready handle the form submit event and implement the login function that <code>(ngSubmit)</code> is calling.  </p>
 <ol>
-<li>Open the login.component.ts file</li>
-<li><p>Inside of the LoginComponent class, add the login function below.  For now we are just going to output the form values to the console. </p>
+<li><p>Open the login.component.ts file</p>
+<pre><code class="lang-bash"> login.component.ts
+</code></pre>
+</li>
+<li><p>Inside of the LoginComponent class after the ngOnInit, add the following function.  For now we are just going to output the form values to the Developer Tools console in the browser. </p>
 <pre><code class="lang-TypeScript"> login(formValues) {
      console.log(formValues);
  }
@@ -801,25 +660,245 @@ footer {
 <p> <img src="images/login-submit-console.png" alt="login console output"></p>
 </li>
 </ol>
-<p>At this point we are ready to wire up the login form to actually </p>
 <div class="exercise-end"></div>
 
 
+<h3 id="implement-login-service">Implement Login Service</h3>
+<p>Now that we have our form done, we are going to implement our login service.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>:  Generate Service
+</h4>
+
+<ol>
+<li>Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then &quot;Integrated Terminal&quot;</li>
+<li><p>Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.</p>
+<pre><code class="lang-bash"> ng generate service shared/services/auth --module App
+</code></pre>
+</li>
+<li><p>The generate command will create 2 files and update app.module.ts: </p>
+<p> <img src="images/login-service-generate.png" alt="output of generate"></p>
+<ul>
+<li>spec file (test)</li>
+<li>typescript (service)</li>
+<li>updated app.module.ts to add LoginService as a provider</li>
+</ul>
+</li>
+</ol>
+<p>Before we can make HTTP calls in our AuthService, we need to import the HttpModule into your AppModule</p>
+<ol>
+<li><p>Open the app.module.ts file</p>
+<pre><code class="lang-bash"> app.module.ts
+</code></pre>
+</li>
+<li><p>Add an import statement for the HttpModule that comes from @angular/http</p>
+<pre><code class="lang-TypeScript"> import { HttpModule } from &#39;@angular/http&#39;;
+</code></pre>
+</li>
+<li><p>In the @NgModule imports array add the HttpModule</p>
+<pre><code class="lang-TypeScript"> HttpModule,
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create Class
+</h4>
+
+<p>In the AuthService, in order to hold our user data and get type checking we need to create a TypeScript class with an email and id field.  We are going to leave the password field out of the class as we do not want to store this in memory at all.  </p>
+<ol>
+<li>Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then &quot;Integrated Terminal&quot;</li>
+<li><p>Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.</p>
+<pre><code class="lang-bash"> ng generate class shared/classes/User
+</code></pre>
+</li>
+<li><p>The generate command will the user.ts file in the shared/classes folder: </p>
+<p> <img src="images/user-generate.png" alt="output of generate"></p>
+</li>
+</ol>
+<ol>
+<li><p>Open the src\app\shared\classes\User.ts file</p>
+<pre><code class="lang-bash"> user.ts
+</code></pre>
+</li>
+<li><p>Within the User class, add the following fields.  Note that the  createdAt and updatedAt are automatically added by the API.</p>
+<pre><code class="lang-TypeScript"> email: string;
+ id: string;
+ createdAt: Date;
+ updatedAt: Date;
+</code></pre>
+</li>
+<li><p>Within the User class and before the fields we just added, create a constructor that requires an email and make an id field optional (hint: the <code>?</code> makes the parameter optional)</p>
+<pre><code class="lang-TypeScript"> constructor(email: string, id?: string, createdAt?: Date, updatedAt?: Date){
+     this.email = email;
+     this.id = id;
+     if (createdAt) this.createdAt = createdAt;
+     if (updatedAt) this.updatedAt = updatedAt;
+ }
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Implement Auth Service Login Function
+</h4>
+
+<p>For this tutorial, I have created an API for us to use.  </p>
+<p>The first thing we are going to do is create our login function</p>
+<ol>
+<li><p>Open the src\shared\services\auth.service.ts file</p>
+<pre><code class="lang-bash"> auth.service.ts
+</code></pre>
+</li>
+<li><p>Import the following so that we can make our HTTP calls and get a response back.  </p>
+<pre><code class="lang-TypeScript"> import { Http, Response, RequestOptions } from &#39;@angular/http&#39;;
+ import { Observable } from &#39;rxjs/Rx&#39;;
+</code></pre>
+</li>
+</ol>
+<ol>
+<li><p>In order to use the HTTP module, we need to inject it into our constructor</p>
+<pre><code class="lang-TypeScript"> constructor(private http: Http) {
+ }
+</code></pre>
+</li>
+<li><p>Import the User class that we created earlier</p>
+<pre><code class="lang-TypeScript"> import { User } from &#39;../classes/user&#39;;
+</code></pre>
+</li>
+<li><p>We also want to create a public variable within the AuthClass to hold the output from the API call </p>
+<pre><code class="lang-TypeScript"> public currentUser: User;
+</code></pre>
+</li>
+<li><p>For the API that we are using (SailsJS based), it requires that we set the HTTP option to allow credentials so that the session cookie can be passed back and forth, else it will always think you haven&#39;t logged in.  </p>
+<pre><code class="lang-TypeScript"> private options = new RequestOptions({ withCredentials: true });
+</code></pre>
+</li>
+<li><p>Next we need to create our login function within the AuthService class that will call our API.  Place the login function after the constructor.</p>
+ <div class="alert alert-warning" role="alert">For now we are hard coding the API url into the service.  In the &quot;Environment Configuration&quot; chapter we will change this to pull from a configuration file</div>
+
+<pre><code class="lang-TypeScript"> login(email: string, password: string): Observable&lt;boolean | Response&gt; {
+     let loginInfo = { &quot;email&quot;: email, &quot;password&quot;: password };
+     return this.http.put(&quot;https://dj-sails-todo.azurewebsites.net/user/login&quot;, loginInfo, this.options)
+         .do((res: Response) =&gt; {
+             if (res){
+                 this.currentUser = &lt;User&gt;res.json();
+             }
+         })
+         .catch(error =&gt; {
+             console.log(&#39;login error&#39;, error)
+             return Observable.of(false);
+         });
+ }
+</code></pre>
+<ul>
+<li>This code setups the call to the login API, stores the response in the currentUser variable, and returns back an Observable.  </li>
+<li><p>Note that this code is not called until someone subscribes to the login function which we will be doing next.</p>
+<div class="alert alert-danger" role="alert">The API is setup for username/password validation.  Make sure you do not use your real passwords as this is just a test API and not production secured.</div>
+
+</li>
+</ul>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Call AuthService from LoginComponent
+</h4>
+
+<p>Now that we have our AuthService completed, we need to call it from our LoginComponent.  If we get a user back we will redirect the user to the home page</p>
+<ol>
+<li><p>Open the src\login\login.component.ts file</p>
+<pre><code class="lang-bash"> login.component.ts
+</code></pre>
+</li>
+<li><p>Import the AuthService and Router so that we can make call our LoginService and redirect upon successful login.  </p>
+<pre><code class="lang-TypeScript"> import { AuthService } from &#39;../shared/services/auth.service&#39;;
+ import { Router } from &#39;@angular/router&#39;;
+</code></pre>
+</li>
+<li><p>In order to use the AuthService and Router, we need to inject it into our constructor</p>
+<pre><code class="lang-TypeScript">constructor(private authService: AuthService, private router: Router) { }
+</code></pre>
+</li>
+<li><p>Next we need to update our login function to call the AuthService and redirect if it finds the user.</p>
+<pre><code class="lang-TypeScript">   login(formValues) {
+ this.authService.login(formValues.email, formValues.password)
+   .subscribe(result =&gt; {
+     if (!this.authService.currentUser) {
+       console.log(&#39;user not found&#39;);
+     } else {
+       this.router.navigate([&#39;/&#39;]);
+     }
+   });
+ }
+</code></pre>
+</li>
+<li><p>Navigate to <a href="http://localhost:4200/login">http://localhost:4200/login</a> .</p>
+<ul>
+<li>If you enter an email of foo@foo.com with a password 123456 you should be redirected to the home page</li>
+<li>If you enter a bogus email or password, you will see a &quot;user not found&quot; message in the browser developer tools console.</li>
+</ul>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>:  Show Invalid Login Message
+</h4>
+
+<p>Up to this point, we have been using the console to output when the login failed but we can not expect the user to have the dev tools console open.  Instead we need to show to the user when there is an error.</p>
+<ol>
+<li><p>Open the login.component.ts file</p>
+<pre><code class="lang-bash"> login.component.ts
+</code></pre>
+</li>
+<li><p>Create a new variable inside of the LoginComponent class called invalidLogin, is of type boolean and the default value is false.</p>
+<pre><code class="lang-TypeScript"> invalidLogin: boolean = false;
+</code></pre>
+</li>
+<li><p>Now in the login method replace the console.log line and set the invalidLogin variable to true.  Make sure in the else statement that you set the invalidLogin to false.</p>
+<pre><code class="lang-TypeScript"> this.invalidLogin = true;
+</code></pre>
+<ul>
+<li>We have to use this. to access the variable due to scoping.  </li>
+</ul>
+</li>
+</ol>
+<p>Now we are ready to implement the UI to show the error message.  </p>
+<ol>
+<li><p>Open the login.component.html file</p>
+<pre><code class="lang-bash"> login.component.html
+</code></pre>
+</li>
+<li><p>We want to put our message after the cancel button but inside the <code>&lt;/form&gt;</code> tag</p>
+</li>
+<li><p>Add the following alert message</p>
+<pre><code class="lang-html"> &lt;div *ngIf=&quot;loginInvalid&quot; class=&quot;alert alert-danger&quot;&gt;
+     Invalid Login
+ &lt;/div&gt;
+</code></pre>
+<div class="exercise-end"></div>
+
+</li>
+</ol>
 <h3 id="required-validation">Required Validation</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Add Required Validation
 </h4>
 
-
-<p>For both the email and password fields they are required.  While we could check them in the component TypeScript code, Angular has built in validation by adding the <code>required</code> attribute to each of the inputs.</p>
+<p>A standard requirement for html forms is to have client side validation.  In this section we are going to implement the required field validation for both email and password.  </p>
+<p>Adding required validation is as easy as adding a required attribute to the input field</p>
 <ol>
-<li>Open the login.component.html</li>
-<li><p>Add the <code>required</code> attribute to the email input field like so</p>
-<pre><code class="lang-html"> &lt;input required (ngModel)=&quot;email&quot; name=&quot;email&quot; id=&quot;email&quot;  type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Email...&quot; /&gt;
+<li><p>Open the login.component.html</p>
+<pre><code class="lang-bash"> login.component.html
 </code></pre>
 </li>
-<li><p>Add the <code>required</code> attribute to the password input field</p>
-<pre><code class="lang-html"> &lt;input required (ngModel)=&quot;password&quot; name=&quot;password&quot; id=&quot;password&quot; id=&quot;password&quot; type=&quot;password&quot; class=&quot;form-control&quot; placeholder=&quot;Password...&quot; /&gt;
+<li><p>On the email and password fields add the <code>required</code> attribute</p>
+<pre><code class="lang-html"> required
 </code></pre>
 </li>
 </ol>
@@ -864,10 +943,10 @@ footer {
 </h4>
 
 <p>With the Angular 4 release, they added an email validator.  To add the validator to our email field, we just need to add an <code>email</code> attribute like we did for the <code>required</code> attribute.</p>
-<pre><code class="lang-html">&lt;input email #email=&quot;ngModel&quot; required (ngModel)=&quot;email&quot; name=&quot;email&quot; id=&quot;email&quot; type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Email...&quot; /&gt;
+<pre><code class="lang-html">email
 </code></pre>
 <p>Next we need to add a message like we did for the required validator for when the email validation triggers on an invalid email.  Add the following code below the required message but within the <code>&lt;div&gt;</code> that checks if there are errors.</p>
-<pre><code class="lang-html">&lt;div [hidden]=&quot;!email.errors.email&quot;&gt;
+<pre><code class="lang-html">&lt;div [hidden]=&quot;email.errors.required || !email.errors.email&quot;&gt;
     Must be an email address
 &lt;/div&gt;
 </code></pre>
@@ -875,9 +954,6 @@ footer {
 <ul>
 <li><p>The validation will trigger if you input text into the email field that is not a valid email address.</p>
 <p>  <img src="images/login-email-validation.png" alt="email validation"></p>
-</li>
-<li><p>The validation will also trigger at the same time as required </p>
-<p>  <img src="images/login-email-required-validation.png" alt="required validation"></p>
 </li>
 </ul>
 <div class="exercise-end"></div>
@@ -889,8 +965,8 @@ footer {
 
 <p>The last thing we want to do is to disable the login button until the form is valid.</p>
 <ol>
-<li><p>Find the submit button and add the following attribute to it to disable the button when the login form is invalid</p>
-<pre><code class="lang-html"> &lt;button type=&quot;submit&quot;  [disabled]=&quot;loginForm.invalid&quot; class=&quot;btn btn-primary&quot;&gt;Login&lt;/button&gt;
+<li><p>Find the submit button and add the disabled attribute that makes sure that the loginForm is valid before enabling the button</p>
+<pre><code class="lang-html"> [disabled]=&quot;loginForm.invalid&quot;
 </code></pre>
 </li>
 <li><p>Now when either field is invalid the login button will be disabled and a lighter share of blue</p>
@@ -899,204 +975,158 @@ footer {
 </ol>
 <div class="exercise-end"></div>
 
-<h3 id="implement-login-service">Implement Login Service</h3>
-<p>Now that we have our form done, we are going to implement our login service.</p>
+
+<h3 id="create-create-account-component">Create Create Account Component</h3>
+<p>Up to this point, we have only been able to login to an existing account.  Now we are going to create the signup page.  Creating the signup component is just like the rest of the component that we have created.  We will have an html, scss, spec, and ts file.  We will have a form that calls to a function in the component that calls to a service to process the data.</p>
+<div class="alert alert-danger" role="alert">The create account form is exactly like the login form so there this is just a walk through so you can get the form created with little explanation</div>
+
 <h4 class="exercise-start">
-    <b>Exercise</b>:  Generate Service
+    <b>Exercise</b>: AuthService Signup Function 
 </h4>
 
+<p>We are first going to create the signup function in the AuthService.</p>
 <ol>
-<li>Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then &quot;Integrated Terminal&quot;</li>
-<li><p>Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.</p>
-<pre><code class="lang-bash"> ng generate service shared/services/auth
+<li><p>Open src\app\shared\services\auth.service.ts</p>
+<pre><code class="lang-bash">auth.service.ts
 </code></pre>
 </li>
-<li><p>The generate command will create 2 files: </p>
-<p> <img src="images/login-service-generate.png" alt="output of generate"></p>
-<ul>
-<li>spec file (test)</li>
-<li>typescript (service)</li>
-</ul>
+<li><p>Add RequestOptions to the @angular/http import</p>
 </li>
-</ol>
-<p>You will also notice that there is a warning that the service has not been provided. This means that we need to open up the module that we want to use the service in and add it to the providers list.</p>
-<ol>
-<li>Open src\app\app.module.ts</li>
-<li><p>Import the AuthService</p>
-<pre><code class="lang-TypeScript"> import { AuthService } from &#39;./shared/services/auth.service&#39;;
+<li><p>Add the following method to allow an account to be created</p>
+<pre><code class="lang-TypeScript">signup(email: string, password: string) {
+ let loginInfo = { &quot;email&quot;: email, &quot;password&quot;: password };
+ return this.http.post(this.url, loginInfo, this.options)
+   .do((res: Response) =&gt; {
+     if (res) {
+       this.currentUser = &lt;User&gt;res.json();
+     }
+   })
+   .catch(error =&gt; {
+     console.log(&#39;signup error&#39;, error)
+     return Observable.of(false);
+   });
+}
 </code></pre>
-</li>
-<li><p>Find the @NgModule providers list and add the AuthService</p>
-<pre><code class="lang-TypeScript">   providers: [AuthService],
-</code></pre>
-</li>
-<li><p>Now the AuthService is available to the AppModule and we can use it in our LoginComponent</p>
+<div class="alert alert-info" role="alert">REMINDER: Since we have to pass the password to the API in order to create the account and we are communicating over a non-secure channel, make sure you do not use your real passwords.  With the non-secure connection anyone can easily capture your email and password combo for the todo API.  In production, you would want use an SSL certificate.  As well for development, typically you would have the API locally but since this is an Angular workshop and not an API workshop, a remote API was provided for you.</div>
+
 </li>
 </ol>
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Create Class
+    <b>Exercise</b>: Create Signup Component
 </h4>
 
-<p>In the AuthService, In order to hold our user data and get type checking we need to create a TypeScript class with an email and id field.  We are going to leave the password field out of the class as we do not want to store this in memory at all.  </p>
 <ol>
-<li>Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then &quot;Integrated Terminal&quot;</li>
-<li><p>Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.</p>
-<pre><code class="lang-bash"> ng generate class shared/classes/User
+<li><p>Open terminal and run</p>
+<pre><code class="lang-TypeScript">ng generate component signup
 </code></pre>
 </li>
-<li><p>The generate command will create 2 files: </p>
-<p> <img src="images/user-generate.png" alt="output of generate"></p>
-<ul>
-<li>user.ts </li>
-</ul>
-</li>
-<li><p>Open the src\app\shared\classes\User.ts file</p>
-</li>
-<li><p>Add email, id, createdAt, and updatedAt variables that of type script.  The createdAt and updatedAt are automatically added by the API.</p>
-<pre><code class="lang-TypeScript"> email: string;
- id: string;
- createdAt: Date;
- updatedAt: Date;
+<li><p>Open the app-routing.module.ts file</p>
+<pre><code class="lang-bash">app-routing.module.ts
 </code></pre>
 </li>
-<li><p>Add a constructor that requires an email and make an id field optional (hint: the <code>?</code> make the parameter optional)</p>
-<pre><code class="lang-TypeScript"> constructor(email: string, id?: string, createdAt?: Date, updatedAt?: Date){
-     this.email = email;
-     this.id = id;
-     if (createdAt) this.createdAt = createdAt;
-     if (updatedAt) this.updatedAt = updatedAt;
- }
+<li><p>Add a new route to get to the signup page</p>
+<pre><code class="lang-TypeScript">{ path: &#39;signup&#39;, component: SignupComponent},
 </code></pre>
 </li>
-</ol>
-<div class="exercise-end"></div>
+<li><p>Open the src\app\signup\signup.html file</p>
+<pre><code class="lang-bash">signup.html
+</code></pre>
+</li>
+<li><p>Replace the contents with the following UI and template based form to allow a user to create an account</p>
+<pre><code class="lang-html">&lt;h1&gt;Sign Up&lt;/h1&gt;
+&lt;hr&gt;
+&lt;div&gt;
+ &lt;form #signupForm=&quot;ngForm&quot; (ngSubmit)=&quot;signup(signupForm.value)&quot; autocomplete=&quot;off&quot; novalidate&gt;
+   &lt;div class=&quot;form-group&quot; &gt;
+     &lt;label for=&quot;userName&quot;&gt;Email:&lt;/label&gt;
+     &lt;em *ngIf=&quot;email?.invalid &amp;&amp; (email?.touched  || mouseoverLogin)&quot;&gt;Required&lt;/em&gt;
 
+     &lt;input #email=&quot;ngModel&quot;  (ngModel)=&quot;email&quot; name=&quot;email&quot; id=&quot;email&quot; required email id=&quot;email&quot; type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Email...&quot; /&gt;
+     &lt;div *ngIf=&quot;email.invalid &amp;&amp; (email.dirty || email.touched)&quot;
+           class=&quot;alert alert-danger&quot;&gt;
+           &lt;div [hidden]=&quot;!email.errors.required&quot;&gt;
+             Email is required
+           &lt;/div&gt;
+       &lt;/div&gt;
 
-<h4 class="exercise-start">
-    <b>Exercise</b>: Implement Auth Service Login Function
-</h4>
+   &lt;/div&gt;
+   &lt;div class=&quot;form-group&quot; &gt;
+     &lt;label for=&quot;password&quot;&gt;Password:&lt;/label&gt;
+     &lt;em *ngIf=&quot;password?.invalid &amp;&amp; (password?.touched || mouseoverLogin)&quot;&gt;Required&lt;/em&gt;
+     &lt;input #password=&quot;ngModel&quot; (ngModel)=&quot;password&quot; name=&quot;password&quot; id=&quot;password&quot; required minlength=&quot;6&quot; id=&quot;password&quot; type=&quot;password&quot; class=&quot;form-control&quot;placeholder=&quot;Password...&quot; /&gt;
+       &lt;div *ngIf=&quot;password.invalid &amp;&amp; (password.dirty || password.touched)&quot;
+           class=&quot;alert alert-danger&quot;&gt;
+           &lt;div [hidden]=&quot;!password.errors.required&quot;&gt;
+             Password is required
+           &lt;/div&gt;
+           &lt;div [hidden]=&quot;!password.errors.minlength&quot;&gt;
+             Password must be at least 6 characters long.
+           &lt;/div&gt;
+       &lt;/div&gt;
+   &lt;/div&gt;
 
-<p>Now that we have our API server up and running, it is time to create our Auth service login function that call the API.</p>
-<ol>
-<li>Open the src\shared\services\auth.service.ts file</li>
-<li><p>Import the following so that we can make our HTTP calls and get a response back.  </p>
-<pre><code class="lang-TypeScript"> import { Http, Response, RequestOptions } from &#39;@angular/http&#39;;
- import { Observable } from &#39;rxjs/Rx&#39;;
-</code></pre>
-</li>
-</ol>
-<ol>
-<li><p>In order to use the HTTP module, we need to inject it into our constructor</p>
-<pre><code class="lang-TypeScript"> constructor(private http: Http) {
- }
-</code></pre>
-</li>
-<li><p>Import the User class that we created earlier</p>
-<pre><code class="lang-TypeScript"> import { User } from &#39;../classes/user&#39;;
-</code></pre>
-</li>
-<li><p>We also want to create a public variable within the AuthClass to hold the output from the API call </p>
-<pre><code class="lang-TypeScript"> public currentUser: User;
-</code></pre>
-</li>
-<li><p>For the API that we are using (SailsJS based), it requires that we set the HTTP option to allow credentials so that the session cookie can be passed back and forth, else it will always think you haven&#39;t logged in.  </p>
-<pre><code class="lang-TypeScript"> private options = new RequestOptions({ withCredentials: true });
-</code></pre>
- <div class="alert alert-info" role="alert">For the <a href="http://sailsjs.org">Sails</a> API that we are using, you have to pass in this.options as the last parameter for all of our http calls in order to tell Sails the user session to use.  </div>
-</li>
-<li><p>Next we need to create our login function within the AuthService class that will call our API</p>
-<pre><code class="lang-TypeScript"> login(email: string, password: string): Observable&lt;boolean | Response&gt; {
-     let loginInfo = { &quot;email&quot;: email, &quot;password&quot;: password };
-     return this.http.put(&quot;https://dj-sails-todo.azurewebsites.net/user/login&quot;, loginInfo, this.options)
-         .do((res: Response) =&gt; {
-             if (res){
-                 this.currentUser = &lt;User&gt;res.json();
-             }
-         })
-         .catch(error =&gt; {
-             console.log(&#39;login error&#39;, error)
-             return Observable.of(false);
-         });
- }
-</code></pre>
- <div class="alert alert-info" role="alert">Since we have to pass the password to the API to validate the login, make sure you do not use your real passwords as we are communicating in development over a non-secure http connection so anyone can easily capture your email and password combo for the todo API.  In production, you would want use an SSL certificate.  As well for development, typically you would have the API locally but since this is an Angular workshop and not an API workshop, a remote API was provided for you.</div>
+   &lt;span (mouseenter)=&quot;mouseoverLogin=true&quot; (mouseleave)=&quot;mouseoverLogin=false&quot;&gt;
+     &lt;button type=&quot;submit&quot; [disabled]=&quot;signupForm.invalid&quot; class=&quot;btn btn-primary&quot;&gt;Sign Up&lt;/button&gt;
+   &lt;/span&gt;
+   &lt;button type=&quot;button&quot; (click)=&quot;cancel()&quot; class=&quot;btn btn-default&quot;&gt;Cancel&lt;/button&gt;
+       &lt;span&gt;&lt;a [routerLink]=&quot;[&#39;/login&#39;]&quot;&gt;login to existing account&lt;/a&gt;&lt;/span&gt;
 
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Call AuthService from LoginComponent
-</h4>
-
-<p>Now that we have our AuthService completed, we need to call it from our LoginComponent.  If we get a user back we will redirect the user to the home page</p>
-<ol>
-<li>Open the src\login\login.component.ts file</li>
-<li><p>Import the AuthService so that we can make our HTTP calls and get a response back.  </p>
-<pre><code class="lang-TypeScript"> import { AuthService } from &#39;../shared/services/auth.service&#39;;
- import { Router } from &#39;@angular/router&#39;;
+ &lt;/form&gt;
+ &lt;br /&gt;
+ &lt;div *ngIf=&quot;loginInvalid&quot; class=&quot;alert alert-danger&quot;&gt;Invalid Login Info&lt;/div&gt;
+&lt;/div&gt;
 </code></pre>
 </li>
-<li><p>In order to use the AuthService and Router, we need to inject it into our constructor</p>
+<li><p>Open the src\app\signup\signup.component.ts file</p>
+<pre><code class="lang-bash">signup.component.ts
+</code></pre>
+</li>
+<li><p>Add the following import statements</p>
+<pre><code class="lang-TypeScript">import { AuthService } from &#39;../shared/services/auth.service&#39;;
+import { Router } from &#39;@angular/router&#39;;
+</code></pre>
+</li>
+<li><p>Add a constructor and inject the AuthService and Router</p>
 <pre><code class="lang-TypeScript">constructor(private authService: AuthService, private router: Router) { }
 </code></pre>
 </li>
-<li><p>Next we need to update our login function to call the AuthService and redirect if it finds the user.</p>
-<pre><code class="lang-TypeScript">   login(formValues) {
- this.authService.login(formValues.email, formValues.password)
+<li><p>Create a variable in the SignupComponent class called loginInvalid that is of type string</p>
+<pre><code class="lang-TypeScript">loginInvalid: boolean = false;
+</code></pre>
+</li>
+<li><p>Create the signup function with the following code</p>
+<pre><code class="lang-TypeScript">signup(formValues) {
+ this.authService.signup(formValues.email, formValues.password)
    .subscribe(result =&gt; {
-     if (!this.authService.currentUser) {
-       console.log(&#39;user not found&#39;);
+     if (!result) {
+       this.loginInvalid = true;
      } else {
        this.router.navigate([&#39;/&#39;]);
      }
    });
- }
+}
 </code></pre>
-</li>
-<li><p>Navigate to <a href="http://localhost:4200/login">http://localhost:4200/login</a> .</p>
-<ul>
-<li>If you enter an email of foo@foo.com with a password 123456 you should be redirected to the home page</li>
-<li>If you enter a bogus email or password, you will see a &quot;user not found&quot; message in the browser developer tools console.</li>
-</ul>
 </li>
 </ol>
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>:  Show Invalid Login Message
+    <b>Exercise</b>: Add Link Between Login and Signup
 </h4>
 
-<p>Up to this point, we have been using the console to output when the login failed but we can not expect the user to have the dev tools console open.  Instead we need to show to the user when there is an error.</p>
-<ol>
-<li>Open the login.component.ts file</li>
-<li><p>Create a new variable inside of the LoginComponent class called invalidLogin, is of type boolean and the default value is false.</p>
-<pre><code class="lang-TypeScript"> invalidLogin: boolean = false;
-</code></pre>
-</li>
-<li><p>Now in the login method replace the console.log line and set the invalidLogin variable to true.  Make sure in the else statement that you set the invalidLogin to false.</p>
-<pre><code class="lang-TypeScript"> this.invalidLogin = true;
-</code></pre>
-<ul>
-<li>We have to use this. to access the variable due to scoping.  </li>
-</ul>
-</li>
-</ol>
-<p>Now we are ready to implement the UI to show the error message.  </p>
 <ol>
 <li>Open the login.component.html file</li>
-<li>We want to put our message after the cancel button but inside the <code>&lt;/form&gt;</code> tag</li>
-<li><p>Add the following alert message</p>
-<pre><code class="lang-html"> &lt;div *ngIf=&quot;loginInvalid&quot; class=&quot;alert alert-danger&quot;&gt;
-     Invalid Login
- &lt;/div&gt;
+<li><p>Next to the cancel button add the following HTML to give a link to the create page</p>
+<pre><code class="lang-html">&lt;span&gt;&lt;a [routerLink]=&quot;[&#39;/signup&#39;]&quot;&gt;create account&lt;/a&gt;&lt;/span&gt;
 </code></pre>
-<div class="exercise-end"></div>
+</li>
+<li><p>You should now to be able to create accounts and navigate between the signup and login pages.  Once logged in or account created, you will be redirected to the home page and shown the todo items.</p>
 </li>
 </ol>
+<div class="exercise-end"></div>
+
 
 				</div>
 				<hr>
@@ -2204,145 +2234,6 @@ user: string;
 <div class="exercise-end"></div>
 
 
-<h3 id="create-create-account-component">Create Create Account Component</h3>
-<p>Up to this point, we have only been able to login to an existing account.  Now we are going to create the signup page.  Creating the signup component is just like the rest of the component that we have created.  We will have an html, scss, spec, and ts file.  We will have a form that calls to a function in the component that calls to a service to process the data. Since it is the same the rest of the components and service functions that we have created, there is not much explanation about what we are doing, just a walk through of the steps.</p>
-<h4 class="exercise-start">
-    <b>Exercise</b>: AuthService Signup Function 
-</h4>
-
-<p>We are first going to create the signup function in the AuthService.</p>
-<ol>
-<li>Open src\app\shared\services\auth.service.ts</li>
-<li>Add RequestOptions to the @angular/http import</li>
-<li></li>
-<li><p>Add the following method to allow an account to be created</p>
-<pre><code class="lang-TypeScript">signup(email: string, password: string) {
- let loginInfo = { &quot;email&quot;: email, &quot;password&quot;: password };
- return this.http.post(this.url, loginInfo, this.options)
-   .do((res: Response) =&gt; {
-     if (res) {
-       this.currentUser = &lt;User&gt;res.json();
-     }
-   })
-   .catch(error =&gt; {
-     console.log(&#39;signup error&#39;, error)
-     return Observable.of(false);
-   });
-}
-</code></pre>
-<div class="alert alert-info" role="alert">REMINDER: Since we have to pass the password to the API in order to create the account and we are communicating over a non-secure channel, make sure you do not use your real passwords.  With the non-secure connection anyone can easily capture your email and password combo for the todo API.  In production, you would want use an SSL certificate.  As well for development, typically you would have the API locally but since this is an Angular workshop and not an API workshop, a remote API was provided for you.</div>
-
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Create Signup Component
-</h4>
-
-<ol>
-<li><p>Open terminal and run</p>
-<pre><code class="lang-TypeScript">ng generate component signup
-</code></pre>
-</li>
-<li><p>Open the app-routing.module.ts file</p>
-</li>
-<li><p>Add a new route to get to the signup page</p>
-<pre><code class="lang-TypeScript">{ path: &#39;signup&#39;, component: SignupComponent},
-</code></pre>
-</li>
-<li><p>Open the src\app\signup\signup.html file</p>
-</li>
-<li><p>Replace the contents with the following UI and template based form to allow a user to create an account</p>
-<pre><code class="lang-html">&lt;h1&gt;Sign Up&lt;/h1&gt;
-&lt;hr&gt;
-&lt;div&gt;
- &lt;form #signupForm=&quot;ngForm&quot; (ngSubmit)=&quot;signup(signupForm.value)&quot; autocomplete=&quot;off&quot; novalidate&gt;
-   &lt;div class=&quot;form-group&quot; &gt;
-     &lt;label for=&quot;userName&quot;&gt;Email:&lt;/label&gt;
-     &lt;em *ngIf=&quot;email?.invalid &amp;&amp; (email?.touched  || mouseoverLogin)&quot;&gt;Required&lt;/em&gt;
-
-     &lt;input #email=&quot;ngModel&quot;  (ngModel)=&quot;email&quot; name=&quot;email&quot; id=&quot;email&quot; required email id=&quot;email&quot; type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Email...&quot; /&gt;
-     &lt;div *ngIf=&quot;email.invalid &amp;&amp; (email.dirty || email.touched)&quot;
-           class=&quot;alert alert-danger&quot;&gt;
-           &lt;div [hidden]=&quot;!email.errors.required&quot;&gt;
-             Email is required
-           &lt;/div&gt;
-       &lt;/div&gt;
-
-   &lt;/div&gt;
-   &lt;div class=&quot;form-group&quot; &gt;
-     &lt;label for=&quot;password&quot;&gt;Password:&lt;/label&gt;
-     &lt;em *ngIf=&quot;password?.invalid &amp;&amp; (password?.touched || mouseoverLogin)&quot;&gt;Required&lt;/em&gt;
-     &lt;input #password=&quot;ngModel&quot; (ngModel)=&quot;password&quot; name=&quot;password&quot; id=&quot;password&quot; required minlength=&quot;6&quot; id=&quot;password&quot; type=&quot;password&quot; class=&quot;form-control&quot;placeholder=&quot;Password...&quot; /&gt;
-       &lt;div *ngIf=&quot;password.invalid &amp;&amp; (password.dirty || password.touched)&quot;
-           class=&quot;alert alert-danger&quot;&gt;
-           &lt;div [hidden]=&quot;!password.errors.required&quot;&gt;
-             Password is required
-           &lt;/div&gt;
-           &lt;div [hidden]=&quot;!password.errors.minlength&quot;&gt;
-             Password must be at least 6 characters long.
-           &lt;/div&gt;
-       &lt;/div&gt;
-   &lt;/div&gt;
-
-   &lt;span (mouseenter)=&quot;mouseoverLogin=true&quot; (mouseleave)=&quot;mouseoverLogin=false&quot;&gt;
-     &lt;button type=&quot;submit&quot; [disabled]=&quot;signupForm.invalid&quot; class=&quot;btn btn-primary&quot;&gt;Sign Up&lt;/button&gt;
-   &lt;/span&gt;
-   &lt;button type=&quot;button&quot; (click)=&quot;cancel()&quot; class=&quot;btn btn-default&quot;&gt;Cancel&lt;/button&gt;
-       &lt;span&gt;&lt;a [routerLink]=&quot;[&#39;/login&#39;]&quot;&gt;login to existing account&lt;/a&gt;&lt;/span&gt;
-
- &lt;/form&gt;
- &lt;br /&gt;
- &lt;div *ngIf=&quot;loginInvalid&quot; class=&quot;alert alert-danger&quot;&gt;Invalid Login Info&lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-</li>
-<li><p>Open the src\app\signup\signup.component.ts file</p>
-</li>
-<li><p>Add the following import statements</p>
-<pre><code class="lang-TypeScript">import { AuthService } from &#39;../shared/services/auth.service&#39;;
-import { Router } from &#39;@angular/router&#39;;
-</code></pre>
-</li>
-<li><p>Add a constructor and inject the AuthService and Router</p>
-<pre><code class="lang-TypeScript">constructor(private authService: AuthService, private router: Router) { }
-</code></pre>
-</li>
-<li><p>Create a variable in the SignupComponent class called loginInvalid that is of type string</p>
-<pre><code class="lang-TypeScript">loginInvalid: boolean = false;
-</code></pre>
-</li>
-<li><p>Create the signup function with the following code</p>
-<pre><code class="lang-TypeScript">signup(formValues) {
- this.authService.signup(formValues.email, formValues.password)
-   .subscribe(result =&gt; {
-     if (!result) {
-       this.loginInvalid = true;
-     } else {
-       this.router.navigate([&#39;/&#39;]);
-     }
-   });
-}
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Add Link Between Login and Signup
-</h4>
-
-<ol>
-<li>Open the login.component.html file</li>
-<li><p>Next to the cancel button add the following HTML to give a link to the create page</p>
-<pre><code class="lang-html">&lt;span&gt;&lt;a [routerLink]=&quot;[&#39;/signup&#39;]&quot;&gt;create account&lt;/a&gt;&lt;/span&gt;
-</code></pre>
-</li>
-<li><p>You should now to be able to create accounts and navigate between the signup and login pages.  Once logged in or account created, you will be redirected to the home page and shown the todo items.</p>
-</li>
-</ol>
-<div class="exercise-end"></div>
 
 				</div>
 				<hr>
@@ -2409,6 +2300,232 @@ import { Router } from &#39;@angular/router&#39;;
 <li><p>If you now try to navigate to <a href="http://localhost:4200/unknown">http://localhost:4200/unknown</a> you will be shown the NotFoundComponent </p>
 <p> <img src="images/view-route-unknown.png" alt="Not Found View"></p>
 </li>
+</ol>
+
+				</div>
+				<hr>
+				<div class="chapter">
+					<h2 id="header-and-footer">Header and footer</h2>
+<h3 id="overview">Overview</h3>
+<p>In most web sites we have a header and footer at the top and bottom of the page respectively with our logo, navigation, and important links.  The header will contain our logo and navigation menu while the footer will contain our copyright info. </p>
+<h3 id="goals">Goals</h3>
+<ul>
+<li>Understand how to create a new component</li>
+<li>Understand how to include components inside of other components</li>
+<li>Understand how to utilize Bootstrap </li>
+</ul>
+<h3 id="create-header-component">Create Header Component</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Creating the header component
+</h4>
+
+<p>We can leave ng serve running while we make these changes and open up another Integrate Terminal for the commands below.</p>
+<ol>
+<li>In the VS Code Integrated Terminal, click the + to open a 2nd terminal</li>
+<li><p>Run the ng generate command to create the header component</p>
+<pre><code class="lang-bash"> ng generate component shared/header
+</code></pre>
+</li>
+<li><p>The generate command will create 4 files: </p>
+<p> <img src="images/header-generate.png" alt="output of generate"></p>
+<ul>
+<li>scss (styles)</li>
+<li>html (view)</li>
+<li>spec file (test)</li>
+<li>component (controller)</li>
+<li>add reference to the component in the app.module.ts file.</li>
+</ul>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add the Menu 
+</h4>
+
+<div class="alert alert-warning" role="alert">This is a sample menu that includes a few links and a sub-menu dropdown.  Note that none of the links will work since we have not created any of those other pages or routes.</div>
+
+<ol>
+<li><p>Open the src\app\shared\header.component.html file and replace the contents with the following. </p>
+<pre><code class="lang-html"> &lt;header&gt;
+     &lt;nav class=&quot;navbar navbar-toggleable-md navbar-light bg-faded&quot;&gt;
+         &lt;button class=&quot;navbar-toggler navbar-toggler-right&quot; type=&quot;button&quot; data-toggle=&quot;collapse&quot; data-target=&quot;#navbarSupportedContent&quot;
+         aria-controls=&quot;navbarSupportedContent&quot; aria-expanded=&quot;false&quot; aria-label=&quot;Toggle navigation&quot;&gt;
+         &lt;span class=&quot;navbar-toggler-icon&quot;&gt;&lt;/span&gt;
+     &lt;/button&gt;
+         &lt;a class=&quot;navbar-brand&quot; [routerLink]=&quot;[&#39;/&#39;]&quot;&gt;&lt;img class=&quot;navbar-logo&quot; src=&quot;./assets/todo_logo.png&quot; alt=&quot;Logo&quot;&gt;&lt;/a&gt;
+         &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;navbarSupportedContent&quot;&gt;
+         &lt;ul class=&quot;nav navbar-nav mr-auto&quot;&gt;
+             &lt;li class=&quot;nav-item active&quot;&gt;
+             &lt;a class=&quot;nav-link&quot; [routerLink]=&quot;[&#39;/&#39;]&quot;&gt;All Items&lt;/a&gt;
+             &lt;/li&gt;
+         &lt;/ul&gt;
+         &lt;/div&gt;
+     &lt;/nav&gt;
+ &lt;/header&gt;
+</code></pre>
+</li>
+<li><p>Right-click on the logo below and save it to the src/assets folder of our project</p>
+<p> <img src="images/todo_logo.png" alt="Logo"></p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="display-header">Display Header</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Update Main page
+</h4>
+
+<p>Now that we have created the menu, we need to add it to our rendered view.  </p>
+<ol>
+<li>Open the src\app\app.component.ts file </li>
+<li><p>Import the header component.  Add the import statement on line 2 right below the existing import statement.</p>
+<pre><code class="lang-TypeScript"> import { HeaderComponent } from &#39;./shared/header/header.component&#39;;
+</code></pre>
+</li>
+<li><p>Open the src\app\app.component.html file and replace the contents of this file with the following html.  </p>
+<pre><code class="lang-html"> &lt;app-header&gt;&lt;/app-header&gt;
+ &lt;div class=&quot;jumbotron&quot;&gt;
+     &lt;div class=&quot;container&quot;&gt;
+         &lt;h1&gt;{{title}}&lt;/h1&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+ &lt;div class=&quot;container clearfix&quot;&gt;
+     &lt;router-outlet&gt;&lt;/router-outlet&gt;
+ &lt;/div&gt;
+</code></pre>
+ <div class="alert alert-info" role="alert"><strong>Note:</strong> that the router-outlet tag is how Angular knows where to put the content of each of the views.</div>
+</li>
+<li><p>If you view the web page you should see the header with logo, &quot;All Items&quot; menu and our banner.</p>
+<p><img src="images/header-view.png" alt="App Component with Header View"></p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="create-footer">Create Footer</h3>
+<p>Creating the footer is very similar to creating the header.  The biggest difference is that we have some css styling that we will apply to position the footer at the bottom of the page.  </p>
+<p>The really awesome part of the css we are going to apply is that Angular has the concept of CSS encapsulation so the styling will only apply to the footer component and not to the rest of the site.  This gets automatically implemented for us, just by putting the styling in the footer components scss file instead of using th global style.scss file.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Creating the footer component
+</h4>
+
+
+<ol>
+<li><p>In the Integrated Terminal, run the ng generate command to create the header component</p>
+<pre><code class="lang-bash"> ng generate component shared/footer
+</code></pre>
+</li>
+<li><p>The generate command will create 4 files: </p>
+<p> <img src="images/footer-generate.png" alt="Generate Output"></p>
+<ul>
+<li>scss (styles)</li>
+<li>html (view)</li>
+<li>spec file (test)</li>
+<li>component (controller)</li>
+<li>add reference to the component in the app.module.ts file.</li>
+</ul>
+</li>
+<li><p>Open the src\app\shared\footer\footer.component.html and replace the contents with</p>
+<pre><code> &lt;footer&gt;
+     &lt;div class=&quot;pull-center&quot;&gt;
+         &amp;copy;Angular WS
+     &lt;/div&gt;
+ &lt;/footer&gt;
+</code></pre></li>
+</ol>
+<div class="exercise-end"></div>    
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Styling the Footer
+</h4>
+
+<p>We want to postion the footer at bottom of the page and change the background color.  With Angular 2, we now have the ablity to have css constrained to an individual component like the footer instead of being global for the whole site to use.  We still have the ability to have global css for those styles that should be applied to the whole site by using the src\styles.scss file.  </p>
+<p>Since the footer is in the src\app\shared\footer\footer.component.html file we need to add the footer styles to the src\app\footer\footer.component.scss file and add the following content</p>
+<pre><code class="lang-scss">@import &quot;../../../assets/bootstrap/variables.scss&quot;;
+
+footer {
+    position: fixed;
+    height: 50px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 5px;
+    border-top: 1px solid $gray-light;
+    background-color: $gray-lighter;
+    font-size: 0.8em;
+    color: $dark-blue;
+    div {
+        margin-left: 25px;
+        margin-right: 25px;
+    }
+}
+</code></pre>
+<div class="exercise-end"></div>
+
+<h3 id="display-footer">Display Footer</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Update Main page
+</h4>
+
+<p>Now we are ready to add our footer to the Main page</p>
+<ol>
+<li><p>Open the src\app\app.component.ts file and import the footer component below the HeaderComponent import statement (note: order is not important)</p>
+<pre><code class="lang-TypeScript">import { FooterComponent } from &#39;./shared/footer/footer.component&#39;;
+</code></pre>
+</li>
+<li><p>Open the src\app\app.component.html file and replace the contents of this file with the following html</p>
+<pre><code class="lang-html"> &lt;app-header&gt;&lt;/app-header&gt;
+ &lt;div class=&quot;jumbotron&quot;&gt;
+     &lt;div class=&quot;container&quot;&gt;
+         &lt;h1&gt;{{title}}&lt;/h1&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+ &lt;div class=&quot;container clearfix&quot;&gt;
+     &lt;router-outlet&gt;&lt;/router-outlet&gt;
+ &lt;/div&gt;
+ &lt;app-footer&gt;&lt;/app-footer&gt;
+</code></pre>
+</li>
+<li><p>If you view the web page you should see the footer </p>
+<p><img src="images/footer-view.png" alt="App Works with Footer"></p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Fixing body height
+</h4>
+
+<p>Since we have a static footer, will need to change the body height to account for the footer height.  Without doing this the body content will be hidden for the last 50px of the screen.</p>
+<p>So far we have seen how to use component level css but Angular still has the ability to do global styles that will apply to the whole by adding them into the src\style.scss file.</p>
+<ol>
+<li><p>Open the src\style.scss file and add the following css </p>
+<pre><code class="lang-html"> html {
+     position: relative;
+     height: auto;
+     min-height: 100%;
+ }
+
+ body {
+     position: static;
+     height: auto;
+     margin: 0 0 60px; /* bottom = footer height */
+ }
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h3 id="review">Review</h3>
+<p>In this chapter will learned:</p>
+<ol>
+<li>How to create new components</li>
+<li>How to import and use components within other components</li>
+<li>Learned about component level styles so that they only apply to a single component</li>
+<li>Learned how to do global styles that apply to the whole site</li>
+<li>Learned that if we have a static footer that we need to adjust the body margin height to stop content for being hidden behind the footer.</li>
+<li>Learned that the <code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code> tag is used to tell Angular the location within the html code to render the routed component&#39;s template (html)</li>
 </ol>
 
 				</div>
@@ -2751,11 +2868,9 @@ Note that this will remove the dist directory before build.
 </ol>
 <div class="exercise-end"></div>
 
-
 <h3 id="logout-user">Logout User</h3>
 <p>Before being able to signup for an account, we need the user to be logged out first.</p>
-<h3 id="logout-user">Logout User</h3>
-<p>In order to complete the login process, you also need to create a way for the user to logout.  There are a number of ways that you could implement this such as giving a logout button in the header or showing user info in header with link to profile page with a logout button.</p>
+<p>There are a number of ways that you could implement this such as giving a logout button in the header or showing user info in header with link to profile page with a logout button.</p>
 <p>We are going to implement the logout button in the header.  </p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Create AuthService Logout 
@@ -2839,6 +2954,54 @@ Note that this will remove the dist directory before build.
 				<div class="chapter">
 					<h2 id="thank-you">Thank you</h2>
 <p>I hope that you enjoyed going through this tutorial.  If you have any questions, please hit me up on twitter <a href="https://twitter.com/digitaldrummerj">@digitaldrummerj</a>.  </p>
+
+				</div>
+				<hr>
+				<div class="chapter">
+					<h2 id="tags-for-creating-tutorial">Tags For Creating Tutorial</h2>
+<h3 id="exercises">Exercises</h3>
+<h4 class="exercise-start">
+  <b>Exercise</b>: Title
+</h4>
+
+<p>Details Here</p>
+<div class="exercise-end"></div>
+
+<pre><code class="lang-html">&lt;h4 class=&quot;exercise-start&quot;&gt;
+  &lt;b&gt;Exercise&lt;/b&gt;: 
+&lt;/h4&gt;
+
+&lt;div class=&quot;exercise-end&quot;&gt;&lt;/div&gt;
+</code></pre>
+<h3 id="alerts">Alerts</h3>
+<p>Bootstrap based alerts</p>
+<h4 id="danger">Danger</h4>
+<div class="alert alert-danger" role="alert">
+Danger
+</div>
+
+<pre><code class="lang-html">&lt;div class=&quot;alert alert-danger&quot; role=&quot;alert&quot;&gt;
+
+&lt;/div&gt;
+</code></pre>
+<h4 id="warning">Warning</h4>
+<div class="alert alert-warning" role="alert">
+Warning
+</div>
+
+<pre><code class="lang-html">&lt;div class=&quot;alert alert-warning&quot; role=&quot;alert&quot;&gt;
+
+&lt;/div&gt;
+</code></pre>
+<h4 id="info">Info</h4>
+<div class="alert alert-info" role="alert">
+Info
+</div>
+
+<pre><code class="lang-html">&lt;div class=&quot;alert alert-info&quot; role=&quot;alert&quot;&gt;
+
+&lt;/div&gt;
+</code></pre>
 
 				</div>
 				<hr>

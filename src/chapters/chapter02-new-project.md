@@ -2,6 +2,8 @@
 
 ### Overview
 
+In this chapter we will be creating our project with the Angular CLI.  We will use this project throughout the workshop.
+
 ### Goals
 
 * Understand how to create a new project
@@ -49,6 +51,9 @@ The project that the Angular CLI create for you follows all of the suggested sta
     ng new ngws --style scss --routing
     ```
 
+    **Sample Output:**
+    ![ng new](images/ng-new.png)
+
 1. If you want to see the other ng new options or any Angular CLI command append the --help
 
     ```bash
@@ -59,7 +64,6 @@ The project that the Angular CLI create for you follows all of the suggested sta
 
 
 ### Opening Project in Visual Studio Code
-
 1. Open Visual Studio Code
 1. Click File -> Open Folder...
 1. Navigate to angular-tutorial directory and click Select Folder 

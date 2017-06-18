@@ -93,14 +93,11 @@ Right now when you refresh the page the current user information in the AuthServ
     
 <div class="exercise-end"></div>
 
-
 ### Logout User
 
 Before being able to signup for an account, we need the user to be logged out first.
 
-### Logout User
-
-In order to complete the login process, you also need to create a way for the user to logout.  There are a number of ways that you could implement this such as giving a logout button in the header or showing user info in header with link to profile page with a logout button.
+There are a number of ways that you could implement this such as giving a logout button in the header or showing user info in header with link to profile page with a logout button.
 
 We are going to implement the logout button in the header.  
 

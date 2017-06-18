@@ -11,7 +11,7 @@ To get started, we need to install and configure the following software first.
 
 ### Goals
 
-* Undersstand how to install the Angular Command Line (CLI)
+* Under stand how to install the Angular Command Line (CLI)
 * Setup your machine for the Workshop
 
 ### Windows Showing File Extensions 
@@ -20,7 +20,7 @@ To get started, we need to install and configure the following software first.
 **Windows Only** 
 </div>
 
-**Non-Windows users can [skip to next section](#chapter2.2)**
+**Non-Windows users can [skip to next section](#chapter2.4)**
 
 
 By default Windows is set to not show file extensions for known files which causes files such as .gitconfig and .npmrc to show up as just a period with no file extension which makes it extremely difficult to figure out what the file actually is.  To fix this we need to turn set Windows Explorer to show file extensions.
@@ -57,7 +57,7 @@ Visual Studio Code is Microsoft lightweight cross platform IDE.
 
 NodeJS is used to power the Angular CLI as well as install all of our dependencies.  The Angular CLI requires Node version 6.9 or greater.
 
-1.	Download the latest stable version (LTS) of [NodeJS](http://nodejs.org) which as of this writing is 6.10.2.    
+1.	Download the latest stable version (LTS) of [NodeJS](http://nodejs.org) which as of this writing is 6.11.0.    
 1.	Run the installer and accept all defaults.
 1. Verify that Node installed.  Start a command prompt or terminal window and run: 
 

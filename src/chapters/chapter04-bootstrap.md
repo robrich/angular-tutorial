@@ -31,8 +31,22 @@ For our styling we are going to use [Bootstrap 4](https://v4-alpha.getbootstrap.
 
 First we need to create our own custom Bootstrap style sheet so that we can override the scss variables if we want to with your own colors and styles.
 
-1. In the src\assets folder, create a new folder named bootstrap
-1. In the bootstrap folder, create a file called _variables.scss
+1. In the src\assets folder, create a new folder named **bootstrap**
+
+      <div class="alert alert-info" role="alert">You can create folder right in Visual Studio Code by right-click on the src\assets folder</div>
+
+    ```bash
+    bootstrap
+    ```
+
+1. In the bootstrap folder, create a file called **_variables.scss**
+
+      <div class="alert alert-info" role="alert">You can create file right in Visual Studio Code by right-click on the src\assets folder</div>
+
+    ```bash
+    _variables.scss
+    ```
+
 1. Add the following to the _variables.scss file
 
     ```scss
@@ -70,8 +84,15 @@ First we need to create our own custom Bootstrap style sheet so that we can over
     $brand-inverse:             $gray-dark !default;
     ```
 
-1. In the bootstrap folder, create a file called bootstrap.scss
-1. Add the following contents to the bootstrap.scss file. Note that the list of included files outside of the variables file is the same as the ones in the  node_modules\bootstrap\scss\bootstrap.scss file with a ~bootstrap/scss prefix so that the scss compiler is able to find the included file in the node_modules\bootstrap\scss directory.
+1. In the bootstrap folder, create a file called **bootstrap.scss**
+
+    ```bash
+    bootstrap.scss
+    ```
+
+1. Add the following contents to the bootstrap.scss file. 
+
+      <div class="alert alert-info" role="alert">Note that the list of included files outside of the variables file is the same as the ones in the  node_modules\bootstrap\scss\bootstrap.scss file with a ~bootstrap/scss prefix so that the scss compiler is able to find the included file in the node_modules\bootstrap\scss directory.</div>
 
     ```scss
     @import "variables";
@@ -134,7 +155,14 @@ First we need to create our own custom Bootstrap style sheet so that we can over
 
 Now we need to configure the angular cli to import the bootstrap libraries.  
 
-1. Open the .angular-cli.json file which is the configuration file for our project for the Angular CLI 
+1. Open the **.angular-cli.json** file that is in the root of the project.  This file  is the configuration file for our project for the Angular CLI 
+
+    <div class="alert alert-info" role="alert">In Visual Studio Code you can quickly open a file by using ctrl+p to open the "Go To File" prompt and typing in the file name</div>
+
+    ```bash
+    .angular-cli.json
+    ```
+
 1. Find the apps\styles section and replace the section with:  
 
     ```TypeScript
@@ -143,6 +171,8 @@ Now we need to configure the angular cli to import the bootstrap libraries.
          "styles.scss"
       ],
     ```
+
+      <div class="alert alert-info" role="alert">If the code alignment upon paste is off you can run the "Format Document" command to fix it.  Ctrl+Shift+P and search for "Format Document" or use Alt+Shift+F</div>
 
 <div class="exercise-end"></div>
 
@@ -178,13 +208,16 @@ Now we need to configure the angular cli to import the bootstrap libraries.
 
 ### View Changes
 
-Normally, we would just be able to use the live reload feature of the ng serve command but since we changed the Angular CLI configuration file (.angulal-cli.json), we have to restart the ng serve command for the changes to take effect.  
+<div class="alert alert-danger" role="alert">Since we already had ng serve running, it picked up the html changes but you will notice that there is no styling.  This is because whenever you change the .angular-cli.json file, you need to restart ng serve before they take effect.</div>
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Restart ng serve
 </h4>
 
-1. Go to the terminal that is running the `ng serve` command and do a ctrl+c to stop it.
+1. Go to the integrated terminal in Visual Studio Code that is running the `ng serve` command and do a ctrl+c to stop it.
+
+    > There is a dropdown on the right side of the Visual Studio Code integrated terminal that allows you to change to the other terminals that are currently open for your project
+
 1. Run the `ng serve` command again.
 
     ```bash

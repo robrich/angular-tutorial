@@ -54,20 +54,37 @@ In order to view our Login component we need to tell Angular how to route to it.
 Before we can view our Login component, we need to tell Angular how to route to the component
 
 1. Open the src\app\app-routing.module.ts file
-1. Add the Import statement for the login component on line 3
+
+    ```bash
+    app-routing.module.ts
+    ```
+
+1. You need to import the LoginComponent before we can reference it.  On line 3, add the following statement
 
     ```TypeScript
     import { LoginComponent } from './login/login.component';
     ```
 
-1. Add the LoginComponent route to the list of routes+
+1. In the routes array, we need to add another array item to be able to route to the LoginComponent. Add the following at the end of line 9
 
     ```TypeScript
+    ,
     { path: 'login', children: [], component: LoginComponent }   
     ```
 
     <div class="alert alert-info" role="alert">**Note:** This will cause the LoginComponent to load into the `<router-outlet></router-outlet>` in the src\app\app.component.html when navigate to http://localhost:4200/login .  The router-outlet tag is how Angular knows where to put the rendered content of the routed componente.</div>
 
+1. Your routes should look like the following
+
+    ```TypeScript
+    const routes: Routes = [
+        {
+            path: '',
+            children: []
+        },
+        { path: 'login', children: [], component: LoginComponent }
+    ];
+    ```
 
 1. The Login page should be able to be displayed if you navigate to [http://localhost:4200/login](http://localhost:4200/login)
 
@@ -78,13 +95,18 @@ Before we can view our Login component, we need to tell Angular how to route to 
 
 ### Create Form
 
-Next we are going to create the form without any validation logic at all.  Our form will have 2 input fields:  email and password and 2 buttons: submit and cancel.  
+Next we are going to create the form without any validation logic at all.  Our form will have 2 input fields:  email and password and 2 buttons: submit and cancel.  We will use Bootstrap for the styling and Angular for the validation.
 
 <h4 class="exercise-start">
     <b>Exercise</b>:  Creating the Form
 </h4>
 
 1. Open src\app\login\login.component.html
+
+    ```bash
+    login.component.html
+    ```
+
 1. Replace the existing html with the following
 
     ```html
@@ -111,22 +133,69 @@ Next we are going to create the form without any validation logic at all.  Our f
 
 <div class="exercise-end"></div>
 
-### Add Submit Method
+### Handle Form Submission
 
 In order to submit the form we need to tell Angular that that login form is an ngForm and use the ngSubmit event to tell Angular what to do when the form submit button is clicked.
 
+<h4 class="exercise-start">
+    <b>Exercise</b>:  Import Angular FormsModule
+</h4>
+
+Before we can interact with our form using Angular, we need to import the FormsModule into our application.
+
+1. Open src\app\app.module.ts
+
+    ```bash
+    app.module.ts
+    ```
+
+1. Add an import statement for FormsModule from @angular/forms
+
+    ```TypeScript
+    import { FormsModule } from '@angular/forms';
+    ```
+
+1. Before we can use the imported module, we need to add it to the @NgModule declaration in the imports array.  We are going to add it between the BrowserModule and AppRoutingModule.
+
+    ```TypeScript
+    FormsModule,
+    ```
+
+1. Your @NgModule imports section should now look like:
+
+    ```TypeScript
+    imports: [
+        BrowserModule,
+        FormsModule,
+        AppRoutingModule
+    ],
+
+    ```
+
+<div class="exercise-end"></div>
 
 <h4 class="exercise-start">
     <b>Exercise</b>:  Add login function
 </h4>
 
-1. In the login.component.html file on the `<form>` tag add the following attributes.  
+1. Go back to the login.component.html file
+
+    ```bash
+    login.component.html
+    ```
+
+1. On the `<form>` tag we need to add 2 additional attributes to create a reference variable to the form and handle the form submit.  
 
     ```html
     #loginForm="ngForm" (ngSubmit)="login(loginForm.value)"
     ```
 
-1. On the email field we need to add an attribute tell Angular to implement a 1 way binding of the field.  We use the `(ngModel)` attribute to tell Angular what field in the form values we want to the data to be bound to.
+    * The #loginForm creates a variable called loginForm that reference ngForm.  This will allow us to reference the loginForm in the login.component.ts file. 
+    * The ngSubmit upon form submit event will call the login function in the login.component.ts file and pass the loginForm.value into it.  The loginForm.value holds the values for the form fields.
+
+In order to be able to access all of the form field values by using `loginForm.value` we need tdo add an `(ngModel)="NAME"` attribute onto each field, replacing "NAME" with the name that we want to refer to the field as.
+
+1. On the email input field we need to add an attribute to tell Angular to implement 1 way binding on the field by using the `(ngModel)` attribute
 
     ```html
     (ngModel)="email"
@@ -138,10 +207,15 @@ In order to submit the form we need to tell Angular that that login form is an n
     (ngModel)="password"
     ```
 
-Next we need to implement the login function in the component.
+Now that the basics of the form have been created, we are ready handle the form submit event and implement the login function that `(ngSubmit)` is calling.  
 
 1. Open the login.component.ts file
-1. Inside of the LoginComponent class, add the login function below.  For now we are just going to output the form values to the console. 
+
+    ```bash
+    login.component.ts
+    ```
+
+1. Inside of the LoginComponent class after the ngOnInit, add the following function.  For now we are just going to output the form values to the Developer Tools console in the browser. 
 
     ```TypeScript
     login(formValues) {
@@ -154,10 +228,267 @@ Next we need to implement the login function in the component.
 
     ![login console output](images/login-submit-console.png)
 
-At this point we are ready to wire up the login form to actually 
 
 <div class="exercise-end"></div>
 
+
+### Implement Login Service
+
+Now that we have our form done, we are going to implement our login service.
+
+<h4 class="exercise-start">
+    <b>Exercise</b>:  Generate Service
+</h4>
+
+1. Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then "Integrated Terminal"
+1. Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.
+
+    ```bash
+    ng generate service shared/services/auth --module App
+    ```
+
+1. The generate command will create 2 files and update app.module.ts: 
+
+    ![output of generate](images/login-service-generate.png)
+
+    * spec file (test)
+    * typescript (service)
+    * updated app.module.ts to add LoginService as a provider
+
+Before we can make HTTP calls in our AuthService, we need to import the HttpModule into your AppModule
+
+1. Open the app.module.ts file
+
+    ```bash
+    app.module.ts
+    ```
+
+1. Add an import statement for the HttpModule that comes from @angular/http
+
+    ```TypeScript
+    import { HttpModule } from '@angular/http';
+    ```
+
+1. In the @NgModule imports array add the HttpModule
+
+    ```TypeScript
+    HttpModule,
+    ```
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create Class
+</h4>
+
+In the AuthService, in order to hold our user data and get type checking we need to create a TypeScript class with an email and id field.  We are going to leave the password field out of the class as we do not want to store this in memory at all.  
+
+1. Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then "Integrated Terminal"
+1. Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.
+
+    ```bash
+    ng generate class shared/classes/User
+    ```
+
+1. The generate command will the user.ts file in the shared/classes folder: 
+
+    ![output of generate](images/user-generate.png)
+
+
+1. Open the src\app\shared\classes\User.ts file
+
+    ```bash
+    user.ts
+    ```
+
+1. Within the User class, add the following fields.  Note that the  createdAt and updatedAt are automatically added by the API.
+
+    ```TypeScript
+    email: string;
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    ```
+
+1. Within the User class and before the fields we just added, create a constructor that requires an email and make an id field optional (hint: the `?` makes the parameter optional)
+
+    ```TypeScript
+    constructor(email: string, id?: string, createdAt?: Date, updatedAt?: Date){
+        this.email = email;
+        this.id = id;
+        if (createdAt) this.createdAt = createdAt;
+        if (updatedAt) this.updatedAt = updatedAt;
+    }
+    ```
+
+<div class="exercise-end"></div>
+
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Implement Auth Service Login Function
+</h4>
+
+For this tutorial, I have created an API for us to use.  
+
+The first thing we are going to do is create our login function
+
+1. Open the src\shared\services\auth.service.ts file
+
+    ```bash
+    auth.service.ts
+    ```
+
+1. Import the following so that we can make our HTTP calls and get a response back.  
+
+    ```TypeScript
+    import { Http, Response, RequestOptions } from '@angular/http';
+    import { Observable } from 'rxjs/Rx';
+    ```
+
+
+1. In order to use the HTTP module, we need to inject it into our constructor
+
+    ```TypeScript
+    constructor(private http: Http) {
+    }
+    ```
+
+1. Import the User class that we created earlier
+
+    ```TypeScript
+    import { User } from '../classes/user';
+    ```
+
+1. We also want to create a public variable within the AuthClass to hold the output from the API call 
+
+    ```TypeScript
+    public currentUser: User;
+    ```
+
+1. For the API that we are using (SailsJS based), it requires that we set the HTTP option to allow credentials so that the session cookie can be passed back and forth, else it will always think you haven't logged in.  
+
+    ```TypeScript
+    private options = new RequestOptions({ withCredentials: true });
+    ```
+
+1. Next we need to create our login function within the AuthService class that will call our API.  Place the login function after the constructor.
+
+    <div class="alert alert-warning" role="alert">For now we are hard coding the API url into the service.  In the "Environment Configuration" chapter we will change this to pull from a configuration file</div>
+
+    ```TypeScript
+    login(email: string, password: string): Observable<boolean | Response> {
+        let loginInfo = { "email": email, "password": password };
+        return this.http.put("https://dj-sails-todo.azurewebsites.net/user/login", loginInfo, this.options)
+            .do((res: Response) => {
+                if (res){
+                    this.currentUser = <User>res.json();
+                }
+            })
+            .catch(error => {
+                console.log('login error', error)
+                return Observable.of(false);
+            });
+    }
+    ```
+
+    * This code setups the call to the login API, stores the response in the currentUser variable, and returns back an Observable.  
+    * Note that this code is not called until someone subscribes to the login function which we will be doing next.
+
+    <div class="alert alert-danger" role="alert">The API is setup for username/password validation.  Make sure you do not use your real passwords as this is just a test API and not production secured.</div>
+
+<div class="exercise-end"></div>
+
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Call AuthService from LoginComponent
+</h4>
+
+Now that we have our AuthService completed, we need to call it from our LoginComponent.  If we get a user back we will redirect the user to the home page
+
+1. Open the src\login\login.component.ts file
+
+    ```bash
+    login.component.ts
+    ```
+
+1. Import the AuthService and Router so that we can make call our LoginService and redirect upon successful login.  
+
+    ```TypeScript
+    import { AuthService } from '../shared/services/auth.service';
+    import { Router } from '@angular/router';
+    ```
+
+1. In order to use the AuthService and Router, we need to inject it into our constructor
+
+    ```TypeScript
+   constructor(private authService: AuthService, private router: Router) { }
+    ```
+
+1. Next we need to update our login function to call the AuthService and redirect if it finds the user.
+
+    ```TypeScript
+      login(formValues) {
+    this.authService.login(formValues.email, formValues.password)
+      .subscribe(result => {
+        if (!this.authService.currentUser) {
+          console.log('user not found');
+        } else {
+          this.router.navigate(['/']);
+        }
+      });
+    }
+    ```
+
+1. Navigate to http://localhost:4200/login .
+
+    * If you enter an email of foo@foo.com with a password 123456 you should be redirected to the home page
+    * If you enter a bogus email or password, you will see a "user not found" message in the browser developer tools console.
+    
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>:  Show Invalid Login Message
+</h4>
+
+Up to this point, we have been using the console to output when the login failed but we can not expect the user to have the dev tools console open.  Instead we need to show to the user when there is an error.
+
+1. Open the login.component.ts file
+
+    ```bash
+    login.component.ts
+    ```
+
+1. Create a new variable inside of the LoginComponent class called invalidLogin, is of type boolean and the default value is false.
+
+    ```TypeScript
+    invalidLogin: boolean = false;
+    ```
+
+1. Now in the login method replace the console.log line and set the invalidLogin variable to true.  Make sure in the else statement that you set the invalidLogin to false.
+
+    ```TypeScript
+    this.invalidLogin = true;
+    ```
+
+    * We have to use this. to access the variable due to scoping.  
+
+Now we are ready to implement the UI to show the error message.  
+
+1. Open the login.component.html file
+
+    ```bash
+    login.component.html
+    ```
+
+1. We want to put our message after the cancel button but inside the `</form>` tag
+1. Add the following alert message
+
+    ```html
+    <div *ngIf="loginInvalid" class="alert alert-danger">
+        Invalid Login
+    </div>
+    ```
+<div class="exercise-end"></div>
 
 ### Required Validation
 
@@ -165,20 +496,20 @@ At this point we are ready to wire up the login form to actually
     <b>Exercise</b>: Add Required Validation
 </h4>
 
+A standard requirement for html forms is to have client side validation.  In this section we are going to implement the required field validation for both email and password.  
 
-For both the email and password fields they are required.  While we could check them in the component TypeScript code, Angular has built in validation by adding the `required` attribute to each of the inputs.
+Adding required validation is as easy as adding a required attribute to the input field
 
 1. Open the login.component.html
-1. Add the `required` attribute to the email input field like so
 
-    ```html
-    <input required (ngModel)="email" name="email" id="email"  type="text" class="form-control" placeholder="Email..." />
+    ```bash
+    login.component.html
     ```
-    
-1. Add the `required` attribute to the password input field
+
+1. On the email and password fields add the `required` attribute
 
     ```html
-    <input required (ngModel)="password" name="password" id="password" id="password" type="password" class="form-control" placeholder="Password..." />
+    required
     ```
 
 <div class="exercise-end"></div>
@@ -232,13 +563,13 @@ Next we want to display a message to the user when they have invalid entries in 
 With the Angular 4 release, they added an email validator.  To add the validator to our email field, we just need to add an `email` attribute like we did for the `required` attribute.
 
 ```html
-<input email #email="ngModel" required (ngModel)="email" name="email" id="email" type="text" class="form-control" placeholder="Email..." />
+email
 ``` 
 
 Next we need to add a message like we did for the required validator for when the email validation triggers on an invalid email.  Add the following code below the required message but within the `<div>` that checks if there are errors.
 
 ```html
-<div [hidden]="!email.errors.email">
+<div [hidden]="email.errors.required || !email.errors.email">
     Must be an email address
 </div>
 ```
@@ -248,10 +579,6 @@ Now we are ready to test the email validation.
 * The validation will trigger if you input text into the email field that is not a valid email address.
 
     ![email validation](images/login-email-validation.png)
-
-* The validation will also trigger at the same time as required 
-
-    ![required validation](images/login-email-required-validation.png)
 
 <div class="exercise-end"></div>
 
@@ -263,10 +590,10 @@ Now we are ready to test the email validation.
 
 The last thing we want to do is to disable the login button until the form is valid.
 
-1. Find the submit button and add the following attribute to it to disable the button when the login form is invalid
+1. Find the submit button and add the disabled attribute that makes sure that the loginForm is valid before enabling the button
 
     ```html
-    <button type="submit"  [disabled]="loginForm.invalid" class="btn btn-primary">Login</button>
+    [disabled]="loginForm.invalid"
     ```
 
 1. Now when either field is invalid the login button will be disabled and a lighter share of blue
@@ -276,227 +603,179 @@ The last thing we want to do is to disable the login button until the form is va
 
 <div class="exercise-end"></div>
 
-### Implement Login Service
 
-Now that we have our form done, we are going to implement our login service.
+### Create Create Account Component
+
+Up to this point, we have only been able to login to an existing account.  Now we are going to create the signup page.  Creating the signup component is just like the rest of the component that we have created.  We will have an html, scss, spec, and ts file.  We will have a form that calls to a function in the component that calls to a service to process the data.
+
+<div class="alert alert-danger" role="alert">The create account form is exactly like the login form so there this is just a walk through so you can get the form created with little explanation</div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>:  Generate Service
+    <b>Exercise</b>: AuthService Signup Function 
 </h4>
 
-1. Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then "Integrated Terminal"
-1. Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.
+We are first going to create the signup function in the AuthService.
 
-    ```bash
-    ng generate service shared/services/auth
-    ```
+1. Open src\app\shared\services\auth.service.ts
 
-1. The generate command will create 2 files: 
+  ```bash
+  auth.service.ts
+  ```
 
-    ![output of generate](images/login-service-generate.png)
+1. Add RequestOptions to the @angular/http import
+1. Add the following method to allow an account to be created
 
-    * spec file (test)
-    * typescript (service)
+  ```TypeScript
+  signup(email: string, password: string) {
+    let loginInfo = { "email": email, "password": password };
+    return this.http.post(this.url, loginInfo, this.options)
+      .do((res: Response) => {
+        if (res) {
+          this.currentUser = <User>res.json();
+        }
+      })
+      .catch(error => {
+        console.log('signup error', error)
+        return Observable.of(false);
+      });
+  }
+  ```
 
-You will also notice that there is a warning that the service has not been provided. This means that we need to open up the module that we want to use the service in and add it to the providers list.
-
-1. Open src\app\app.module.ts
-1. Import the AuthService
-
-    ```TypeScript
-    import { AuthService } from './shared/services/auth.service';
-    ```
-
-1. Find the @NgModule providers list and add the AuthService
-
-    ```TypeScript
-      providers: [AuthService],
-    ```    
-
-1. Now the AuthService is available to the AppModule and we can use it in our LoginComponent
+  <div class="alert alert-info" role="alert">REMINDER: Since we have to pass the password to the API in order to create the account and we are communicating over a non-secure channel, make sure you do not use your real passwords.  With the non-secure connection anyone can easily capture your email and password combo for the todo API.  In production, you would want use an SSL certificate.  As well for development, typically you would have the API locally but since this is an Angular workshop and not an API workshop, a remote API was provided for you.</div>
 
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Create Class
+    <b>Exercise</b>: Create Signup Component
 </h4>
+  
+1. Open terminal and run
 
-In the AuthService, In order to hold our user data and get type checking we need to create a TypeScript class with an email and id field.  We are going to leave the password field out of the class as we do not want to store this in memory at all.  
+  ```TypeScript
+  ng generate component signup
+  ```
 
-1. Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then "Integrated Terminal"
-1. Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.
+1. Open the app-routing.module.ts file
 
-    ```bash
-    ng generate class shared/classes/User
-    ```
+  ```bash
+  app-routing.module.ts
+  ```
 
-1. The generate command will create 2 files: 
+1. Add a new route to get to the signup page
 
-    ![output of generate](images/user-generate.png)
+  ```TypeScript
+  { path: 'signup', component: SignupComponent},
+  ```
 
-    * user.ts 
+1. Open the src\app\signup\signup.html file
 
-1. Open the src\app\shared\classes\User.ts file
-1. Add email, id, createdAt, and updatedAt variables that of type script.  The createdAt and updatedAt are automatically added by the API.
+  ```bash
+  signup.html
+  ```
 
-    ```TypeScript
-    email: string;
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    ```
+1. Replace the contents with the following UI and template based form to allow a user to create an account
 
-1. Add a constructor that requires an email and make an id field optional (hint: the `?` make the parameter optional)
+  ```html
+  <h1>Sign Up</h1>
+  <hr>
+  <div>
+    <form #signupForm="ngForm" (ngSubmit)="signup(signupForm.value)" autocomplete="off" novalidate>
+      <div class="form-group" >
+        <label for="userName">Email:</label>
+        <em *ngIf="email?.invalid && (email?.touched  || mouseoverLogin)">Required</em>
+        
+        <input #email="ngModel"  (ngModel)="email" name="email" id="email" required email id="email" type="text" class="form-control" placeholder="Email..." />
+        <div *ngIf="email.invalid && (email.dirty || email.touched)"
+              class="alert alert-danger">
+              <div [hidden]="!email.errors.required">
+                Email is required
+              </div>
+          </div>
+      
+      </div>
+      <div class="form-group" >
+        <label for="password">Password:</label>
+        <em *ngIf="password?.invalid && (password?.touched || mouseoverLogin)">Required</em>
+        <input #password="ngModel" (ngModel)="password" name="password" id="password" required minlength="6" id="password" type="password" class="form-control"placeholder="Password..." />
+          <div *ngIf="password.invalid && (password.dirty || password.touched)"
+              class="alert alert-danger">
+              <div [hidden]="!password.errors.required">
+                Password is required
+              </div>
+              <div [hidden]="!password.errors.minlength">
+                Password must be at least 6 characters long.
+              </div>
+          </div>
+      </div>
+      
+      <span (mouseenter)="mouseoverLogin=true" (mouseleave)="mouseoverLogin=false">
+        <button type="submit" [disabled]="signupForm.invalid" class="btn btn-primary">Sign Up</button>
+      </span>
+      <button type="button" (click)="cancel()" class="btn btn-default">Cancel</button>
+          <span><a [routerLink]="['/login']">login to existing account</a></span>
 
-    ```TypeScript
-    constructor(email: string, id?: string, createdAt?: Date, updatedAt?: Date){
-        this.email = email;
-        this.id = id;
-        if (createdAt) this.createdAt = createdAt;
-        if (updatedAt) this.updatedAt = updatedAt;
-    }
-    ```
+    </form>
+    <br />
+    <div *ngIf="loginInvalid" class="alert alert-danger">Invalid Login Info</div>
+  </div>
 
-<div class="exercise-end"></div>
+  ```
 
+1. Open the src\app\signup\signup.component.ts file
 
-<h4 class="exercise-start">
-    <b>Exercise</b>: Implement Auth Service Login Function
-</h4>
+  ```bash
+  signup.component.ts
+  ```
 
-Now that we have our API server up and running, it is time to create our Auth service login function that call the API.
+1. Add the following import statements
 
-1. Open the src\shared\services\auth.service.ts file
-1. Import the following so that we can make our HTTP calls and get a response back.  
+  ```TypeScript
+  import { AuthService } from '../shared/services/auth.service';
+  import { Router } from '@angular/router';
+  ```
 
-    ```TypeScript
-    import { Http, Response, RequestOptions } from '@angular/http';
-    import { Observable } from 'rxjs/Rx';
-    ```
+1. Add a constructor and inject the AuthService and Router
 
+  ```TypeScript
+  constructor(private authService: AuthService, private router: Router) { }
+  ```
 
-1. In order to use the HTTP module, we need to inject it into our constructor
+1. Create a variable in the SignupComponent class called loginInvalid that is of type string
 
-    ```TypeScript
-    constructor(private http: Http) {
-    }
-    ```
+  ```TypeScript
+  loginInvalid: boolean = false;
+  ```  
 
-1. Import the User class that we created earlier
+1. Create the signup function with the following code
 
-    ```TypeScript
-    import { User } from '../classes/user';
-    ```
-
-1. We also want to create a public variable within the AuthClass to hold the output from the API call 
-
-    ```TypeScript
-    public currentUser: User;
-    ```
-
-1. For the API that we are using (SailsJS based), it requires that we set the HTTP option to allow credentials so that the session cookie can be passed back and forth, else it will always think you haven't logged in.  
-
-    ```TypeScript
-    private options = new RequestOptions({ withCredentials: true });
-    ```
-
-    <div class="alert alert-info" role="alert">For the [Sails](http://sailsjs.org) API that we are using, you have to pass in this.options as the last parameter for all of our http calls in order to tell Sails the user session to use.  </div>
-
-1. Next we need to create our login function within the AuthService class that will call our API
-
-    ```TypeScript
-    login(email: string, password: string): Observable<boolean | Response> {
-        let loginInfo = { "email": email, "password": password };
-        return this.http.put("https://dj-sails-todo.azurewebsites.net/user/login", loginInfo, this.options)
-            .do((res: Response) => {
-                if (res){
-                    this.currentUser = <User>res.json();
-                }
-            })
-            .catch(error => {
-                console.log('login error', error)
-                return Observable.of(false);
-            });
-    }
-    ```
-
-    <div class="alert alert-info" role="alert">Since we have to pass the password to the API to validate the login, make sure you do not use your real passwords as we are communicating in development over a non-secure http connection so anyone can easily capture your email and password combo for the todo API.  In production, you would want use an SSL certificate.  As well for development, typically you would have the API locally but since this is an Angular workshop and not an API workshop, a remote API was provided for you.</div>
-
-<div class="exercise-end"></div>
-
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Call AuthService from LoginComponent
-</h4>
-
-Now that we have our AuthService completed, we need to call it from our LoginComponent.  If we get a user back we will redirect the user to the home page
-
-1. Open the src\login\login.component.ts file
-1. Import the AuthService so that we can make our HTTP calls and get a response back.  
-
-    ```TypeScript
-    import { AuthService } from '../shared/services/auth.service';
-    import { Router } from '@angular/router';
-    ```
-
-1. In order to use the AuthService and Router, we need to inject it into our constructor
-
-    ```TypeScript
-   constructor(private authService: AuthService, private router: Router) { }
-    ```
-
-1. Next we need to update our login function to call the AuthService and redirect if it finds the user.
-
-    ```TypeScript
-      login(formValues) {
-    this.authService.login(formValues.email, formValues.password)
+  ```TypeScript
+  signup(formValues) {
+    this.authService.signup(formValues.email, formValues.password)
       .subscribe(result => {
-        if (!this.authService.currentUser) {
-          console.log('user not found');
+        if (!result) {
+          this.loginInvalid = true;
         } else {
           this.router.navigate(['/']);
         }
       });
-    }
-    ```
+  }
+  ```  
 
-1. Navigate to http://localhost:4200/login .
-
-    * If you enter an email of foo@foo.com with a password 123456 you should be redirected to the home page
-    * If you enter a bogus email or password, you will see a "user not found" message in the browser developer tools console.
-    
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>:  Show Invalid Login Message
+    <b>Exercise</b>: Add Link Between Login and Signup
 </h4>
 
-Up to this point, we have been using the console to output when the login failed but we can not expect the user to have the dev tools console open.  Instead we need to show to the user when there is an error.
-
-1. Open the login.component.ts file
-1. Create a new variable inside of the LoginComponent class called invalidLogin, is of type boolean and the default value is false.
-
-    ```TypeScript
-    invalidLogin: boolean = false;
-    ```
-
-1. Now in the login method replace the console.log line and set the invalidLogin variable to true.  Make sure in the else statement that you set the invalidLogin to false.
-
-    ```TypeScript
-    this.invalidLogin = true;
-    ```
-
-    * We have to use this. to access the variable due to scoping.  
-
-Now we are ready to implement the UI to show the error message.  
-
 1. Open the login.component.html file
-1. We want to put our message after the cancel button but inside the `</form>` tag
-1. Add the following alert message
+1. Next to the cancel button add the following HTML to give a link to the create page
 
-    ```html
-    <div *ngIf="loginInvalid" class="alert alert-danger">
-        Invalid Login
-    </div>
-    ```
+  ```html
+  <span><a [routerLink]="['/signup']">create account</a></span>
+  ```
+
+1. You should now to be able to create accounts and navigate between the signup and login pages.  Once logged in or account created, you will be redirected to the home page and shown the todo items.
+
+
 <div class="exercise-end"></div>
+

@@ -7,7 +7,7 @@ var gulp = require( "gulp" ),
 	webServer = require( "gulp-webserver" );
 
 gulp.task( "default", [ "build", "server" ], function() {
-	gulp.watch( "./src/**/*", [ "build" ]);
+	gulp.watch(["./src/**/*", "./tags.md"], [ "build" ]);
 });
 
 gulp.task( "build", [ "include", "include2", "sass", "scripts" ]);
