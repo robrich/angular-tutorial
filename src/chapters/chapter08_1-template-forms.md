@@ -72,8 +72,6 @@ Before we can view our Login component, we need to tell Angular how to route to 
     { path: 'login', children: [], component: LoginComponent }   
     ```
 
-    <div class="alert alert-info" role="alert">**Note:** This will cause the LoginComponent to load into the `<router-outlet></router-outlet>` in the src\app\app.component.html when navigate to http://localhost:4200/login .  The router-outlet tag is how Angular knows where to put the rendered content of the routed componente.</div>
-
 1. Your routes should look like the following
 
     ```TypeScript
@@ -86,9 +84,11 @@ Before we can view our Login component, we need to tell Angular how to route to 
     ];
     ```
 
-1. The Login page should be able to be displayed if you navigate to [http://localhost:4200/login](http://localhost:4200/login)
+1. The Login page should display when you navigate to [http://localhost:4200/login](http://localhost:4200/login)
 
     ![login initial view](images/login-initial-view.png)
+
+    <div class="alert alert-info" role="alert">**Note:** When you navigate to the login route, the LoginComponent is loaded into the `<router-outlet></router-outlet>` in the html in  src\app\app.component.html.  The router-outlet tag is how Angular knows where to put the rendered content for the route.</div>
 
 <div class="exercise-end"></div>
 
@@ -606,9 +606,11 @@ The last thing we want to do is to disable the login button until the form is va
 
 ### Create Create Account Component
 
-Up to this point, we have only been able to login to an existing account.  Now we are going to create the signup page.  Creating the signup component is just like the rest of the component that we have created.  We will have an html, scss, spec, and ts file.  We will have a form that calls to a function in the component that calls to a service to process the data.
+Up to this point, we have only been able to login to an existing account.  Now we are going to create the signup page.  
 
-<div class="alert alert-danger" role="alert">The create account form is exactly like the login form so there this is just a walk through so you can get the form created with little explanation</div>
+Creating the signup component is just like the rest of the component that we have created.  We will have an html, scss, spec, and ts file.  We will have a form that calls to a function in the component that calls to a service to process the data.
+
+<div class="alert alert-danger" role="alert">Since the signup component creation is exactly like the login component we are just going a quick here is the code walk through</div>
 
 <h4 class="exercise-start">
     <b>Exercise</b>: AuthService Signup Function 
@@ -616,19 +618,13 @@ Up to this point, we have only been able to login to an existing account.  Now w
 
 We are first going to create the signup function in the AuthService.
 
-1. Open src\app\shared\services\auth.service.ts
 
-  ```bash
-  auth.service.ts
-  ```
-
-1. Add RequestOptions to the @angular/http import
 1. Add the following method to allow an account to be created
 
   ```TypeScript
   signup(email: string, password: string) {
     let loginInfo = { "email": email, "password": password };
-    return this.http.post(this.url, loginInfo, this.options)
+    return this.http.post("https://dj-sails-todo.azurewebsites.net/user/", loginInfo, this.options)
       .do((res: Response) => {
         if (res) {
           this.currentUser = <User>res.json();
@@ -641,7 +637,7 @@ We are first going to create the signup function in the AuthService.
   }
   ```
 
-  <div class="alert alert-info" role="alert">REMINDER: Since we have to pass the password to the API in order to create the account and we are communicating over a non-secure channel, make sure you do not use your real passwords.  With the non-secure connection anyone can easily capture your email and password combo for the todo API.  In production, you would want use an SSL certificate.  As well for development, typically you would have the API locally but since this is an Angular workshop and not an API workshop, a remote API was provided for you.</div>
+  <div class="alert alert-danger" role="alert">REMINDER: Since we have to pass the password to the API in order to create the account and we are communicating over a non-secure channel, make sure you do not use your real passwords.</div>
 
 <div class="exercise-end"></div>
 
@@ -655,17 +651,48 @@ We are first going to create the signup function in the AuthService.
   ng generate component signup
   ```
 
-1. Open the app-routing.module.ts file
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Signup Route
+</h4>
+
+1. Open the src\app\app-routing.module.ts file
 
   ```bash
   app-routing.module.ts
   ```
+
+1. Import the signup component
+
+    ```TypeScript
+    import { SignupComponent } from './signup/signup.component';
+    ```
 
 1. Add a new route to get to the signup page
 
   ```TypeScript
   { path: 'signup', component: SignupComponent},
   ```
+
+1. You routes should look like
+
+    ```TypeScript
+    const routes: Routes = [
+        {
+            path: '',
+            children: [],
+        },
+        { path: 'login', children: [], component: LoginComponent },
+        { path: 'signup', component: SignupComponent},
+    ];
+    ```
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create Signup UI
+</h4>
 
 1. Open the src\app\signup\signup.html file
 
@@ -676,49 +703,45 @@ We are first going to create the signup function in the AuthService.
 1. Replace the contents with the following UI and template based form to allow a user to create an account
 
   ```html
-  <h1>Sign Up</h1>
-  <hr>
-  <div>
+    <h1>Sign Up</h1>
+    <hr>
+    <div>
     <form #signupForm="ngForm" (ngSubmit)="signup(signupForm.value)" autocomplete="off" novalidate>
-      <div class="form-group" >
+        <div class="form-group">
         <label for="userName">Email:</label>
-        <em *ngIf="email?.invalid && (email?.touched  || mouseoverLogin)">Required</em>
-        
-        <input #email="ngModel"  (ngModel)="email" name="email" id="email" required email id="email" type="text" class="form-control" placeholder="Email..." />
-        <div *ngIf="email.invalid && (email.dirty || email.touched)"
-              class="alert alert-danger">
-              <div [hidden]="!email.errors.required">
+        <input #email="ngModel" (ngModel)="email" name="email" id="email" required email id="email" type="text" class="form-control" placeholder="Email..." />
+        <div *ngIf="email.errors && (email.dirty || email.touched)" class="alert alert-danger">
+            <div [hidden]="!email.errors.required">
                 Email is required
-              </div>
-          </div>
-      
-      </div>
-      <div class="form-group" >
+            </div>
+            <div [hidden]="email.errors.required || !email.errors.email">
+                Must be an email address
+            </div>
+        </div>
+        </div>
+        <div class="form-group">
         <label for="password">Password:</label>
-        <em *ngIf="password?.invalid && (password?.touched || mouseoverLogin)">Required</em>
-        <input #password="ngModel" (ngModel)="password" name="password" id="password" required minlength="6" id="password" type="password" class="form-control"placeholder="Password..." />
-          <div *ngIf="password.invalid && (password.dirty || password.touched)"
-              class="alert alert-danger">
-              <div [hidden]="!password.errors.required">
+        <input #password="ngModel" (ngModel)="password" name="password" id="password" required minlength="6" id="password" type="password" class="form-control" placeholder="Password..." />
+        <div *ngIf="password.errors && (password.dirty || password.touched)" class="alert alert-danger">
+            <div [hidden]="!password.errors.required">
                 Password is required
-              </div>
-              <div [hidden]="!password.errors.minlength">
+            </div>
+            <div [hidden]="!password.errors.minlength">
                 Password must be at least 6 characters long.
-              </div>
-          </div>
-      </div>
-      
-      <span (mouseenter)="mouseoverLogin=true" (mouseleave)="mouseoverLogin=false">
-        <button type="submit" [disabled]="signupForm.invalid" class="btn btn-primary">Sign Up</button>
-      </span>
-      <button type="button" (click)="cancel()" class="btn btn-default">Cancel</button>
-          <span><a [routerLink]="['/login']">login to existing account</a></span>
+            </div>
+        </div>
+        </div>
+
+        <span (mouseenter)="mouseoverLogin=true" (mouseleave)="mouseoverLogin=false">
+            <button type="submit" [disabled]="signupForm.invalid" class="btn btn-primary">Sign Up</button>
+        </span>
+        <button type="button" (click)="cancel()" class="btn btn-default">Cancel</button>
+        <span><a [routerLink]="['/login']">login to existing account</a></span>
 
     </form>
     <br />
     <div *ngIf="loginInvalid" class="alert alert-danger">Invalid Login Info</div>
-  </div>
-
+    </div>
   ```
 
 1. Open the src\app\signup\signup.component.ts file
@@ -727,39 +750,37 @@ We are first going to create the signup function in the AuthService.
   signup.component.ts
   ```
 
-1. Add the following import statements
+1. Replace the contents of the file with the following
 
   ```TypeScript
-  import { AuthService } from '../shared/services/auth.service';
-  import { Router } from '@angular/router';
-  ```
+    import { Component, OnInit } from '@angular/core';
+    import { AuthService } from '../shared/services/auth.service';
+    import { Router } from '@angular/router';
 
-1. Add a constructor and inject the AuthService and Router
+    @Component({
+        selector: 'app-signup',
+        templateUrl: './signup.component.html',
+        styleUrls: ['./signup.component.scss']
+    })
+    export class SignupComponent implements OnInit {
+        loginInvalid: boolean = false;
+        constructor(private authService: AuthService, private router: Router) { }
 
-  ```TypeScript
-  constructor(private authService: AuthService, private router: Router) { }
-  ```
-
-1. Create a variable in the SignupComponent class called loginInvalid that is of type string
-
-  ```TypeScript
-  loginInvalid: boolean = false;
-  ```  
-
-1. Create the signup function with the following code
-
-  ```TypeScript
-  signup(formValues) {
-    this.authService.signup(formValues.email, formValues.password)
-      .subscribe(result => {
-        if (!result) {
-          this.loginInvalid = true;
-        } else {
-          this.router.navigate(['/']);
+        ngOnInit() {
         }
-      });
-  }
-  ```  
+
+        signup(formValues) {
+            this.authService.signup(formValues.email, formValues.password)
+            .subscribe(result => {
+                if (!result) {
+                this.loginInvalid = true;
+                } else {
+                this.router.navigate(['/']);
+                }
+            });
+        }
+    }
+    ```  
 
 <div class="exercise-end"></div>
 
@@ -768,13 +789,18 @@ We are first going to create the signup function in the AuthService.
 </h4>
 
 1. Open the login.component.html file
+
+    ```bash
+    login.component.html
+    ```
+
 1. Next to the cancel button add the following HTML to give a link to the create page
 
   ```html
   <span><a [routerLink]="['/signup']">create account</a></span>
   ```
 
-1. You should now to be able to create accounts and navigate between the signup and login pages.  Once logged in or account created, you will be redirected to the home page and shown the todo items.
+1. If you go to [http://localhost:4200/signup](http://localhost:4200/signup) you should now to be able to signup and navigate between the signup and login pages.  Once signed up,  you will be redirected to the home page and shown the todo items.
 
 
 <div class="exercise-end"></div>

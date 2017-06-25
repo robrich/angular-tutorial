@@ -2,7 +2,7 @@
 
 ### Overview
 
-In the previous chapter, we took a look at template based forms.  In this chapter will will take a look at reactive based forms.
+In the previous chapter, we took a look at template based forms.  Templates are great for very simple forms that you do not want to unit test at all.  However, if you want to unit test your forms you will need to reuse reactive based forms. 
 
 Reactive forms allow you to define the form fields and validation in the component instead of the template.  You can easily test the form fields and validation logic.  You can also dynamically build the form and validation in the component.
 
@@ -49,13 +49,18 @@ We are going to build the form to enter our Todo items using Reactive forms.
 Before we can view our todo component, we need to tell Angular how to route to the page
 
 1. Open the src\app\app-routing.module.ts file
+
+    ```bash
+    app-routing.module.ts
+    ```
+
 1. Add the Import statement for the todo component on line 3
 
     ```TypeScript
     import { TodoComponent } from './todo/todo.component';
     ```
 
-1. Add the TodoComponent to the home page route as specified by the `path: ''` 
+1. We want to make the Todo compoment the home page.  We can do this by adding a compoment field to the `path: ''` route 
 
     ```TypeScript
     {
@@ -65,12 +70,25 @@ Before we can view our todo component, we need to tell Angular how to route to t
     }   
     ```
 
-    <div class="alert alert-info" role="alert">**Note:** This will cause the TodoComponent to load into the `<router-outlet></router-outlet>` in the src\app\app.component.html.  The router-outlet tag is how Angular knows where to put the rendered content of the routed componente.</div>
+1. You routes should look like
 
+    ```TypeScript
+    const routes: Routes = [
+        {
+            path: '',
+            children: [],
+            component: TodoComponent
+        },
+        { path: 'login', children: [], component: LoginComponent },
+        { path: 'signup', component: SignupComponent},
+    ];
+    ```
 
-1. The todo page should be able to be displayed if you navigate to [http://http://localhost:4200/](http://http://localhost:4200/)
+1. The todo page should display when you to the home, [http://http://localhost:4200/](http://http://localhost:4200/)
 
     ![todo initial view](images/todo-initial-view.png)
+
+    <div class="alert alert-info" role="alert">**Note:** When you navigate to the home page, the TodoCompoment is loaded into the `<router-outlet></router-outlet>` in the html in  src\app\app.component.html.  The router-outlet tag is how Angular knows where to put the rendered content for the route.</div>
 
 <div class="exercise-end"></div>
 
@@ -89,7 +107,12 @@ With reactive forms, we are going to setup the form in your components TypeScrip
 We need to import the ReactiveFormsModule into our AppModule before we can use it.
 
 1. Open the src\app\app.module.ts 
-1. Add ReactiveFormsModule to the @angular/forms import so that it looks like 
+
+    ```bash
+    app.module.ts
+    ```
+
+1. Add the ReactiveFormsModule to the existing  @angular/forms import so that it looks like 
 
     ```TypeScript
     import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -116,12 +139,18 @@ We need to import the ReactiveFormsModule into our AppModule before we can use i
 Now we are ready to add all of the functionality to the component for the UI to interface with. For the todo component it is the src\app\todo\todo.component.ts file.  We need to add the Form.
 
 1. Open the todo\todo.component.ts file
-1. We need to import a few items  
+
+    ```bash
+    todo.component.ts
+    ```
+
+1. When creating Reactive Forms, you will need to import the FormGroup and FormBuilder modules from @angular/forms
 
     ```TypeScript
     import { FormGroup, FormBuilder } from '@angular/forms';
     ```
-1. In the TodoComponent constructor we need to inject FormBuilder so that we can use it to create our form.
+
+1. In order to use the FormBuilder we need to inject it into the TodoComponent's constructor
 
     ```TypeScript
     constructor(private formBuilder: FormBuilder) {}
@@ -133,41 +162,13 @@ Now we are ready to add all of the functionality to the component for the UI to 
     addForm: FormGroup;
     ```
 
-We need to implement an OnInit lifecycle event to configure the Form Builder.    
-
-<div class="alert alert-info" role="alert">
-The OnInit lifecycle event will run before the component has rendered.  
-</div>
-
-1. In the todo.component.ts file, we need to import OnInit for @angular/core
-
-    ```TypeScript
-    import { Component, OnInit } from '@angular/core';
-    ```
-
-1. Then in order to use the OnInit event, we need to add an implements OnInit to the class definition
-
-    ```TypeScript
-    export Class Todocomponent implements OnInit {
-    ```    
-
-1. Last, we need to create the ngOnInit function in the TodoComponent class
-
-    ```TypeScript
-    ngOnInit(): void {
-
-    }
-    ```
-
-1. Inside of the ngOnInit function, we need to build the add form
+1. To configure the form we will use the ngOnInit lifecycle event.  The ngOnInit lifecycle event will run before the component has rendered.  Inside the ngOnit function we need to tell Angular that the addForm is a formBuilder group with 1 field called item with an empty default value.
 
     ```TypeScript
     this.addForm = this.formBuilder.group({
         'item': ''
     });
     ```
-
-    * This creates a form with a form control that is named item and has a default value of blank.
 
 <div class="exercise-end"></div>
 
@@ -178,6 +179,11 @@ The OnInit lifecycle event will run before the component has rendered.
 We are now ready to create our UI. 
 
 1. Open src\app\todo\todo.component.html 
+
+    ```bash
+    todo.component.html
+    ```
+
 1. Replace the existing html with:
 
     ```html
@@ -191,23 +197,58 @@ We are now ready to create our UI.
                     <input type="text" class="form-control form-control-lg" formControlName="item" placeholder="Todo!">
                 </div>
                 <div class="col-sm-2">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Add</button>
+                    <button type="submit" [disabled]="addForm.invalid" class="btn btn-primary btn-lg btn-block">Add</button>
                 </div>
             </div>
         </form>
-        <br>Dirty: {{ addForm.dirty }}
-        <br>Touched: {{ addForm.touched }}
-        <br>Valid: {{ addForm.valid }}
-        <br>Errors: {{ addForm.get('item').errors | json }}
-        <br>Value: {{ addForm.value | json }}
-
+        <div class="container">
+            <h3>Form Status Info</h3>
+            <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Form</th>
+                    <th>Item Field</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Dirty</td>
+                    <td>{{ addForm.dirty }}</td>
+                    <td>{{ addForm.get('item').dirty }}</td>
+                </tr>
+                <tr>
+                    <td>Touched</td>
+                    <td>{{ addForm.touched }}</td>
+                    <td>{{ addForm.get('item').touched }}</td>
+                </tr>
+                <tr>
+                    <td>Valid</td>
+                    <td>{{ addForm.valid }}</td>
+                    <td>{{ addForm.get('item').valid }}</td>
+                </tr>
+                <tr>
+                    <td>Errors</td>
+                    <td>N/A</td>
+                    <td><pre>{{ addForm.get('item').errors | json }}</pre></td>
+                </tr>
+                <tr>
+                    <td>Form Field Values</td>
+                    <td colspan="2"><pre>{{ addForm.value | json }}</pre></td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
     </div>
 
     ```
-
-    * The [formGroup] takes care of binding the addForm that we declared in the todo.component.ts file to the form.
-    * This form is using Bootstrap for the styling with the form-group, form-control, btn, and btn* css classes.
-    * The output at the bottom under the form, is so that you can see the state of the form, form fields values and the errors for the item field.
+    
+    * The [formGroup] binds the addForm in the todo.component.ts to the form.
+    * On the input field, the formControlName corresponds to the `item` field in the `addForm` FormGroup
+    * The form is using Bootstrap for the styling with the form-group, form-control, btn, and btn* css classes.
+    * The form status info section, is debugging information for the form and the item field for us so that we can see the current state, validation errors, and the form field values.
+        * As you type into the item field, the form status info value section will update
+    * The add button is set as disabled until validation passes. 
 
 <div class="exercise-end"></div>
 
@@ -229,7 +270,12 @@ In order to submit the form we need to add an `(ngSubmit)=""`
     ```
 
 1. Open the src\app\todo\todo.component.ts file 
-1. Add the save function
+
+    ```bash
+    todo.component.ts
+    ```
+
+1. Add a function called save that returns a void.  For now inside of the save function we are going to console log the addForm field values.
 
     ```TypeScript
     save() : void {
@@ -237,6 +283,10 @@ In order to submit the form we need to add an `(ngSubmit)=""`
     }
     ```
   <div class="alert alert-info" role="alert">If you completed the previous chapter on Template Forms, you will notice that we did not setup any ngModel tags or pass in the form to the save method.  With Reactive Forms, the formGroup provides the data binding for us.</div>
+
+1. If you do not already have the Chrome Developer Tools open, open them up and click on the console tab
+1. Enter text into the input box on the home page [http://localhost:4200](http://localhost:4200) and click submit.
+1. You should see the form values output to the Chrome Developer Tools console
 
 <div class="exercise-end"></div>
 
@@ -250,94 +300,131 @@ Right now we do not have any validation being done on the form.  To setup valida
 </h4>
 
 1. Open the src\app\todo\todo.component.ts file
-1. Add the Validators import to @angular/forms import
+
+    ```bash
+    todo.component.ts
+    ```
+
+1. To use the Angular form validators, we need to add the Validators module to the @angular/forms import statement like so (note that order of the modules in not important)
 
     ```TypeScript
     import { FormGroup, FormBuilder, Validators } from '@angular/forms';
     ```
 
-1. In the constructor Modify the item field setting by turning the value into an array and adding an array of validators as the 2nd argument.  We are going to use the required and min length validators.
+1. In the ngOnInit function we need add the Validators required and minLength to the item field that we defined earlier.  In order to add the validators, we need to turn the item field value into an array with the 1st position being the default value and the 2nd position as an array of validators.  For the minLength, we are going to require at least 3 characters.
 
     ```TypeScript
     'item': ['', [Validators.required, Validators.minLength(3)]]
     ```
 
-Next we need to output the error messages.  For now, we are going to do it in the html but later we will make it more generic and add it to the component file instead.
+Now that we have validators setup, we need to output an error message to user when the validation fails.  For now, we are going to do it in the html but later we will make it more generic and add it to the component file instead.  
+
+
+1. Open the todo.component.html file
+
+    ```bash
+    todo.component.html
+    ```
 
 1. After the closing form tag in the todo.component.html file add the following 
 
     ```html
-    <div class="alert alert-danger">
-      <span *ngIf="formErrorMessage">{{ formErrorMessage }}</span>
-      <div *ngIf="addForm.get('item').errors">
+    <div class="alert alert-danger" *ngIf="addForm.get('item').errors && (addForm.get('item').dirty || addForm.get('item').touched)">
         <span *ngIf="addForm.get('item').errors.required">
-          Item is required
+            Item is required
         </span>
         <span *ngIf="addForm.get('item').errors.minlength">
-          Item must be 3 characters
+            Item must be at least 3 characters
         </span>
-      </div>
     </div>
     ```
 
-1. If you go to http://localhost:4200/ you should now see that it displays a message when the input field is less than 3 characters or is blank.
+    * By looking at the dirty and touched status, we can ensure that we don't display the error message before the user has had a chance to click on the input field.
+    * By looking at the errors status, we can ensure we only show the messages when there are errors
+    * For each of the messages, we can look at the individual validators to see which one failed and only display that message.
+
+1. If you go to http://localhost:4200/ click on the field and then click off it the required validator will fire.  If you enter less than 3 characters the minLength validator will fire.  
 
 <div class="exercise-end"></div>
 
 ### Easier Validation Messages
 
-We are going to setup a watcher to run when the item input field changes.  This will allow us to examine any errors and output the correct message from within the component instead of having all of the logic within the html code.
+Having the validation messages in the html template gets old really fast.  It is a lot of code to maintain.  With the Reactive Forms, we can create a generic error checker for the whole form and set a value for each of the form fields.
 
 <h4 class="exercise-start">
     <b>Exercise</b>:  Watching for Changes
 </h4>
 
+We are going to create a function that will be called each time the form values change.  Within the function we will loop through all of the fields and check if they are dirty and not valid.  Then we will look up the validation message to use for the form field and validator that failed.
+
 1. Open the src\app\todo\todo.component.ts file
-1. In the ngOnInit function **after the addForm setup**, we need to get a reference to the item input field.  We can do this by using the get function of the form.
 
-    ```TypeScript
-    const itemControl = this.addForm.get('item');
+    ```bash
+    todo.component.ts
     ```
 
-1. Next we need to tell Angular to watch for value changes on the field
+1. We need to create a variable to hold the error message for each of the form fields. In this case we only have 1 form field called item.  We are going to call the variable formErrors.  The default value for the error message is a blank string.  This list will also be used to determine which form fields to inspect for validation errors.
 
     ```TypeScript
-    itemControl.valueChanges.subscribe(value => this.setMessage(itemControl));
+    formErrors = {
+        'item': ''
+    };
     ```
 
-Then we need to create the setMessage function that will examine the item control and any errors if has with validation.
-
-1. Add AbstractControl to the import statement for the @angular/forms like this example (you should already have the 1st 3 in the import list).  The AbstractControl allows us to create a generic setMessage function to check which validation message to display since AbstractControl can refer to any input control.
+1. Next we need to create a variable to hold the validation messages for each of the form fields.  The name of the validation message must match the name of the validation.
 
     ```TypeScript
-    import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+    validationMessages = {
+        'item': {
+        'required': 'Item is required.',
+        'minlength': 'Item must be at least 3 characters'
+        }
+    };
     ```
 
-1. Now we need to create a new function called setMessage that takes in an AbstractControl 
+1. Now that we the look up for the validation error messages and a place to store the form field error we are ready to create our generic function to determine the actual error message.
 
     ```TypeScript
-    setMessage(c: AbstractControl): void {
-        this.formErrorMessage = '';
-        if ((c.touched || c.dirty) && c.errors){
-            this.formErrorMessage = Object.keys(c.errors).map(key => this.validationMessages[key]).join(' ');
+    onValueChanged(data?: any) {
+        if (!this.addForm) { return }
+        const form = this.addForm;
+
+        for (const field in this.formErrors) {
+            // clear previous error message (if any)
+            this.formErrors[field] = '';
+            const control = form.get(field);
+
+            if (control && control.dirty && !control.valid) {
+                const messages = this.validationMessages[field];
+                for (const key in control.errors) {
+                    this.formErrors[field] += messages[key] + ' ';
+                }
+            }
         }
     }
     ```
 
-1. In order for the setMessage function to work, we need to add a variable to the class called formErrorMessage that is of type script
+    * The 1st thing the method does is make sure that our addForm actually has a value.
+    * Then we loop through the formError variable, get the field and check if the form field is invalid
+    * If the form field is invalid, then we look up the validation message for the form field and validator that failed and set the formError for that field.
+
+1. Next we need to subscribe to the addForm valueChanges event and call the onValueChanged function we just created.  We are going to setup the subscribe in the ngOnInit function
 
     ```TypeScript
-    formErrorMessage: string;
+    this.addForm.valueChanges.subscribe(data => this.onValueChanged(data));
     ```
 
-1. We also need to add a json object called validationMessages that will hold that message to display when a validator is invalid.  We need to have 2 messages, required and minlength.
+1. The last thing we are going to is call the onValueChanged function in the ngOnInit function to reset any formErrors back to blank
 
     ```TypeScript
-    private validationMessages = {
-        required: 'Todo item is required',
-        minlength: 'Todo item much be at least 3 characters
-    }
+    this.onValueChanged();
     ```
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Show Error Message in UI
+</h4>
 
 The last thing we need to do is up the UI to display the form error messages.    
 
@@ -345,27 +432,31 @@ The last thing we need to do is up the UI to display the form error messages.
 1. Replace the validation messages that you added in the previous section with the one below.
 
     ```html
-    <div *ngIf="formErrorMessage" class="alert alert-danger">
-      {{ formErrorMessage }}
+    <div *ngIf="formErrors.item" class="alert alert-danger">
+        {{ formErrors.item }}
     </div>
     ```
 
-  <div class="alert alert-info" role="alert">No longer do we have any logic in the html to find the validation controls to check status or what message to even display.</div>
+1. If you navigate to [http://localhost:4200](http://localhost:4200), click on the item form field and enter 1 character it will trigger the minLength validator and will show the minLength validation message.  If you then blank out the field you will see the required message.
 
 <div class="exercise-end"></div>
-
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Add Border On Invalid
 </h4>
 
-You can also add a border around the Bootstrap form-group by adding the has-danger css class when the formErrorMessage has a value.
+You can also add a border around the Bootstrap form-group for the item form field by adding the has-danger css class when the formErrors.item has a value.
 
 1. Open the todo.component.html file
-1. To the form-group div tag, add an ]ngClass]` attribute that checks for formErrorMessage and adds the has-danger when there is a value.
 
     ```html
-    [ngClass]="{'has-danger': formErrorMessage}"
+    todo.component.html
+    ```
+
+1. To the form-group div tag, add an `[ngClass]` attribute that checks that formErrors.item has a value and if so then adds the has-danger css to the div tag
+
+    ```html
+    [ngClass]="{'has-danger': formErrors.item}"
     ```
 
 <div class="exercise-end"></div>
@@ -382,6 +473,11 @@ Angular makes it very easy to implement what they call debounce to wait for the 
 </h4>
 
 1. Open todo.component.ts file
+
+    ```TypeScript
+    todo.component.ts
+    ```
+
 1. Import the rxjs debounceTime
 
     ```TypeScript
@@ -391,7 +487,7 @@ Angular makes it very easy to implement what they call debounce to wait for the 
 1. On the line that you added the `itemControl.valueChanges.subscribe` add the `debounceTime` statement between valueChanges and subscribe like so
 
     ```TypeScript
-    itemControl.valueChanges.debounceTime(1000).subscribe(value => this.setMessage(itemControl));
+    this.addForm.valueChanges.debounceTime(1000).subscribe(data => this.onValueChanged(data));
     ```
 
 1. Now if you test the UI at http://localhost:4200, it will wait 1 second after the last keystroke before checking the input field validation.  You can change the time it waits by increasing or decreasing the value that is passed into the debounceTime function.
@@ -421,17 +517,56 @@ Since TypeScript is a strongly typed language it is best practice to create a cl
 
     ![generate output](images/todo-generate-class.png)
 
-    * todo.ts
 
-1. Open src/app/shared/classes/todo
-1. Add 4 fields to the Todo class
+1. Open src/app/shared/classes/todo.ts
 
-    * id:string -> id number of the todo item
-    * item:string -> the todo item text
-    * createdAt:Date -> The date added
-    * updatedAt: Date -> The date last updated
-    * completed:boolean -> completion state
-    * user -> id of the user that created the todo item
+    ```TypeScript
+    todo.ts
+    ```
+
+1. Add the following 4 fields to the Todo class to hold the information about our todo item
+
+    <table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Field</th>
+            <th>Data Type</th>
+            <th>Purpose</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>id</td>
+            <td>string</td>
+            <td>unique identifier to the item</td>
+        </tr>
+        <tr>
+            <td>item</td>
+            <td>string</td>
+            <td>todo item text<td>
+        </tr>
+        <tr>
+            <td>createdAt</td>
+            <td>Date</td>
+            <td>date added</td>
+        </tr>
+        <tr>
+            <td>updatedAt</td>
+            <td>Date</td>
+            <td>date last updated</td>
+        </tr>
+        <tr>
+            <td>completed</td>
+            <td>boolean</td>
+            <td>completion state</td>
+        </tr>
+        <tr>
+            <td>user</td>
+            <td>string</td>
+            <td>id of the user that created the todo item</td>
+        </tr>
+    </tbody>
+    </table>
 
     ```TypeScript
     id: string;
@@ -442,7 +577,7 @@ Since TypeScript is a strongly typed language it is best practice to create a cl
     user: string;
     ```
 
-1. Add a constructor to initialize the fields.  Item will required while id, completed and createdAt will be optional. The optional fields must be after all of the required fields.  Having the value populated in the constructor will also make it easier to test later on.
+1. To make it easier to create new todo Items and implement unit testing, we are going to add a constructor to initialize the fields.  Item will required while id, completed and createdAt will be optional. The optional fields must be after all of the required fields.
 
     ```TypeScript
     constructor(
@@ -469,32 +604,15 @@ Since TypeScript is a strongly typed language it is best practice to create a cl
 1. Run the ng generate command below to create the todo component
 
     ```bash
-    ng generate service shared/services/Todo
+    ng generate service shared/services/Todo --module App
     ```
 
-1. This will create 2 files:  
+1. This will create 2 files and update the app.module to add the TodoService into the providers list
 
     ![generate output](images/todo-service-generate.png)
 
     * todo.service.ts
     * todo.service.spec.ts
-
-You will also notice that there is a warning that the service has not been provided. This means that we need to open up the module that we want to use the service in and add it to the providers list.
-
-1. Open src\app\app.module.ts
-1. Import the TodoService
-
-    ```TypeScript
-    import { TodoService } from './shared/services/todo.service';
-    ```
-
-1. Find the @NgModule providers list and add the TodoService
-
-    ```TypeScript
-      providers: [AuthService, TodoService],
-    ```    
-
-1. Now the TodoService is available to the AppModule and we can use it in our TodoComponent
 
 <div class="exercise-end"></div>
 
@@ -504,18 +622,17 @@ You will also notice that there is a warning that the service has not been provi
 
 Now that we have the Todo service file created, we need to add our save method that calls our json-server api server and then update the Todo component to call the service.
 
-1. Open the src\app\shared\services\todo.service.ts file
+1. Open src\app\shared\services\todo.service.ts 
+
+    ```bash
+    todo.service.ts
+    ```
+
 1. Import the following so that we can make our HTTP calls and get a response back.  
 
     ```TypeScript
     import { Http, Response, RequestOptions } from '@angular/http';
     import { Observable } from 'rxjs/Rx';
-    ```
-
-1. Import the todo class 
-
-    ```TypeScript
-    import { Todo } from '../classes/todo';
     ```
 
 1. In order to use the HTTP module, we need to inject it into our constructor
@@ -524,7 +641,7 @@ Now that we have the Todo service file created, we need to add our save method t
     constructor(private http: Http) { }
     ```
 
-1. For the API that we are using (SailsJS based), it requires that we set the HTTP option to allow credentials so that the session cookie can be passed back and forth, else it will always think you haven't logged in.  
+1. For the API that we are using (SailsJS based), it requires that we set the HTTP option to allow credentials so that the session cookie can be passed back and forth, else it will always think you haven't logged in.  Add this varaible to the TodoService class.
 
     ```TypeScript
     private options = new RequestOptions({ withCredentials: true });
@@ -532,14 +649,17 @@ Now that we have the Todo service file created, we need to add our save method t
 
     <div class="alert alert-info" role="alert">You will need to pass in this.options as the last parameter for all of our http calls.</div>
 
+1. Before we create our save method we need to import the Todo class so that our data is typed when we pass it from the service the component. 
 
-1. Next we need to create our login function within the AuthService class that will call our API
+    ```TypeScript
+    import { Todo } from '../classes/todo';
+    ```
+
+1. Next we need to create our save function that will call our API, pass in our TodoItem, and return back the results to the component.  
 
     ```TypeScript
     save(item: string): Observable<Todo> {
-        let url = 'https://dj-sails-todo.azurewebsites.net/todo';
-        var todo  = new Todo(item);
-        return this.http.post(url, todo, this.options)
+        return this.http.post('https://dj-sails-todo.azurewebsites.net/todo', new Todo(item), this.options)
         .map((res: Response) => {
             return <Todo>res.json();
         })
@@ -549,33 +669,43 @@ Now that we have the Todo service file created, we need to add our save method t
         });
     }
     ```
-    
-Now we need to call the TodoService save function in the TodoComponent
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Call TodoService Save from TodoCompoment
+</h4>
+        
+Now that we have our Todo service save function created, we need to call it from our Todo component so that we can save our data.
 
 1. Open the src\app\todo\todo.component.ts file
-1. Import the TodoService
+
+    ```bash
+    todo.component.ts
+    ```
+
+1. Before we can call the `TodoService.save` function we have to import the TodoService
 
     ```TypeScript
     import { TodoService } from '../shared/services/todo.service';
     ```
-1. Add the TodoService to the constructor
+
+1. Now that we have the TodoService import we need to inject it into the constructor to make it avaiable to the component.  
 
     ```TypeScript
     constructor(private formBuilder: FormBuilder, private todoService: TodoService) { }
     ```
 
-1. Update our save method to call the `TodoService.save` function and output the result to the console
+1. Update the save method with the following code to call the `TodoService.save` function and output the result to the console
 
     ```TypeScript
-    save(): void {
-        this.todoService.save(this.addForm.value.item)
-        .subscribe(result => {
-            console.log('save result', result);
-        },
-        error => {
-            this.errorMessage = <any>error;
-        });
-    }
+    this.todoService.save(this.addForm.value.item)
+    .subscribe(result => {
+        console.log('save result', result);
+    },
+    error => {
+        this.errorMessage = <any>error;
+    });
     ```
 
 1. We now need to create the errorMessage variable that is of type string in the Todocomponent class
@@ -584,13 +714,32 @@ Now we need to call the TodoService save function in the TodoComponent
     errorMessage: string;
     ```
 
+1. Open the todo.component.html file so that we can add the display of the save error message.
+
+    ```bash
+    todo.component.html
+    ```    
+
 1. Now we need to add an alert section to our todo.component.html to display the error message.  After the `</form>` tag, add the following code
 
     ```TypeScript
     <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-      {{ errorMessage }}
+        <h3>Error Saving</h3>
+        {{ errorMessage }}
     </div>
     ```
+
+1. Testing the error message display requires that we temporary set a value for the errorMessage.  We are going to do this in the ngOnInit just to verify that the error message will display:
+
+    ```TypeScript
+    this.errorMessage = 'testing'
+    ```     
+
+1. Now if you go to [http://localhost:4200](http://localhost:4200) you will see the following display
+
+    ![error message display](images/error-messages-display.png)
+
+1. We can remove the temporary value that we set for the errorMessage.
 
 <div class="exercise-end"></div>
 
@@ -599,37 +748,18 @@ Now we need to call the TodoService save function in the TodoComponent
 Now that we have the ability to save our items, we need to be able to display the current list with options to complete or delete a todo item.
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Html to Display Items
-</h4>
-
-1. Open the src\app\todo\todo.component.html
-1. Since we have our form working, remove the form status troubleshooting entries.
-1. After the error message alert, add the following html to display the list of todo items
-
-    ```html
-    <div class="row" *ngFor="let todoItem of todoList">
-      <div class="col-12 done-{{todoItem.completed}}">
-        {{todoItem.item}} <small>created: {{todoItem.createdAt | date:'short'}}</small>
-      </div>
-    </div>
-    ```
-
-    * the *ngFor will loop through all of the items in the todoList variable that we will be creating next.  
-    * For the date, we are using the built-in date pipe to convert it to a short date that strips out the time part of the date
-    * We are also setup to have a different style when an item is completed.  We will add the styling in a bit.    
-
-<div class="exercise-end"></div>
-
-
-
-<h4 class="exercise-start">
     <b>Exercise</b>: Add TodoService Get All 
 </h4>
 
 Next we need to add a getAll function to our TodoService that does an http get to our API to get all of the todo items.
 
 1. Open the src\app\shared\services\todo.service.ts file
-1. Add the following function to do an http get call against our API
+
+    ```bash
+    todo.service.ts
+    ```
+
+1. Add the following function to make an http get call to our Todo API
 
     ```TypeScript
     getAll(): Observable<Array<Todo>>{
@@ -654,6 +784,11 @@ Next we need to add a getAll function to our TodoService that does an http get t
 Now that we have the TodoService.getAll function created, we are ready to create the getTodoListAll function that will call the TodoService.  We will wire up the getTodoListAll function to be called in ngOnInit so that it will populate the todo list on component load.
 
 1. Open the src\app\todo\todo.component.ts file
+
+    ```bash
+    todo.component.ts
+    ```
+
 1. Import the todo class 
 
     ```TypeScript
@@ -691,12 +826,46 @@ Now that we have the TodoService.getAll function created, we are ready to create
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
+    <b>Exercise</b>: Html to Display Items
+</h4>
+
+1. Open the src\app\todo\todo.component.html
+
+    ```bash
+    todo.component.html
+    ```
+
+1. Since we have our form working, remove the form status table.
+1. After the error message alert, add the following html to display the list of todo items
+
+    ```html
+    <div class="row" *ngFor="let todoItem of todoList">
+      <div class="col-12 done-{{todoItem.completed}}">
+        {{todoItem.item}} <small>created: {{todoItem.createdAt | date:'short'}}</small>
+      </div>
+    </div>
+    ```
+
+    * the *ngFor will loop through all of the items in the todoList variable that we will be creating next.  
+    * For the date, we are using the built-in date pipe to convert it to a short date that strips out the time part of the date
+    * We are also setup to have a different style when an item is completed.  We will add the styling in a bit.    
+
+<div class="exercise-end"></div>
+
+
+<h4 class="exercise-start">
     <b>Exercise</b>: Updating Todo list on save 
 </h4>
 
 Now that we have the Todo list being stored in the todoList variable, when we save a new todo item, we can add it to the todoList array and the todo list will automatically update with the change.
 
-1. In the todo.component.ts file, we need to update the save function to push the save result into the todoList array.
+1. Open todo.component.ts
+
+    ```bash
+    todo.component.ts
+    ```
+
+1. In the todo.component.ts file, we need to update the save function to push the save result into the todoList array. We need to add this code into the subscribe of the `TodoService.save` call. 
 
     ```TypeScript
     this.todoList.push(result);
@@ -714,6 +883,11 @@ Right now the todo list is just a read only view but we need to be able to compl
 
 
 1. Open the src\app\shared\services\todo.service.ts file
+
+    ```bash
+    todo.service.ts
+    ```
+
 1. We are going to create an update method that will take in a Todo item and make an  http put call to our API to update the one record with the new completion state.
 
     ```TypeScript
@@ -734,6 +908,11 @@ Right now the todo list is just a read only view but we need to be able to compl
 Now we need to call the updateTodo service function in our component.
 
 1. Open the todo.component.ts file
+
+    ```bash
+    todo.component.ts
+    ```
+
 1. Create the completeTodo method that the UI will call 
 
     ```TypeScript
@@ -757,10 +936,15 @@ Now we need to call the updateTodo service function in our component.
 The last thing we need to do it do update the UI to have a checkbox icon that will be clicked on to toggle the completion state.
 
 1. Open the todo.component.html file
-1. Inside the ngFor loop, above the existing div add the following icon that uses the Font Awesome library for the icon and is set to take up 1 column of space
+
+    ```bash
+    todo.component.html
+    ```
+
+1. Inside the ngFor loop, above the existing div that is displaying the individual item, add the following icon that uses the Font Awesome library for the icon and is set to take up 1 column of space
 
     ```html
-      <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
+      <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed == true ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
     ```
 
     * We are passing in the todo item that we are wanting to update to the completedTodo function.  This will pass in the whole object so we have access to all of the fields.
@@ -835,7 +1019,7 @@ The html for the display of the Todo list should look like the following:
 
 ```html
 <div class="row todo" *ngFor="let todoItem of todoList">
-    <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
+    <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed == true ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
 
     <div class="col-10 done-{{todoItem.completed}}">{{todoItem.item}} <br /><small>created: {{todoItem.createdAt | date:'short'}}</small></div>
 
