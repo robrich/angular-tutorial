@@ -99,6 +99,17 @@ The Angular CLI has a built-in command for starting up a web server for your pro
     
 <div class="exercise-end"></div>
 
+###  Navigating around Visual Studio Code 
+
+* integrated terminal ctrl+
+* open file ctrl+p
+* save all 
+* switch between files ctrl+tab
+* hide side menu ctrl+b
+* hide mini map 
+* toggle word wrap alt+z
+* format document ctrl+alt+f
+* half screen code and tutorial win key + left arrow for tutorial and select code or  win key + right arrow for code
 
 ### Review
 
