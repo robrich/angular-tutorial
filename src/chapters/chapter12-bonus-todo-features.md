@@ -21,7 +21,12 @@ It would be nice to know how many todo items that the user has and display that 
 </h4>
 
 1. Open the src\app\todo\todo.component.ts file
-1. Create a variable to hold the open count in the TodoCompoment class that is of type number
+
+    ```bash
+    todo.component.ts
+    ```
+    
+1. Create a variable to hold the open count in the TodoComponent class that is of type number
 
     ```TypeScript
     openItemCount: number = 0;

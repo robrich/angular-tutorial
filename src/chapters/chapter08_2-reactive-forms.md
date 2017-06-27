@@ -60,7 +60,7 @@ Before we can view our todo component, we need to tell Angular how to route to t
     import { TodoComponent } from './todo/todo.component';
     ```
 
-1. We want to make the Todo compoment the home page.  We can do this by adding a compoment field to the `path: ''` route 
+1. We want to make the Todo component the home page.  We can do this by adding a component field to the `path: ''` route 
 
     ```TypeScript
     {
@@ -88,7 +88,7 @@ Before we can view our todo component, we need to tell Angular how to route to t
 
     ![todo initial view](images/todo-initial-view.png)
 
-    <div class="alert alert-info" role="alert">**Note:** When you navigate to the home page, the TodoCompoment is loaded into the `<router-outlet></router-outlet>` in the html in  src\app\app.component.html.  The router-outlet tag is how Angular knows where to put the rendered content for the route.</div>
+    <div class="alert alert-info" role="alert">**Note:** When you navigate to the home page, the TodoComponent is loaded into the `<router-outlet></router-outlet>` in the html in  src\app\app.component.html.  The router-outlet tag is how Angular knows where to put the rendered content for the route.</div>
 
 <div class="exercise-end"></div>
 
@@ -617,7 +617,7 @@ Since TypeScript is a strongly typed language it is best practice to create a cl
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Add Todo Service Save
+    <b>Exercise</b>: Save Todo Item
 </h4>
 
 Now that we have the Todo service file created, we need to add our save method that calls our json-server api server and then update the Todo component to call the service.
@@ -673,7 +673,7 @@ Now that we have the Todo service file created, we need to add our save method t
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Call TodoService Save from TodoCompoment
+    <b>Exercise</b>: Display Todo Item
 </h4>
         
 Now that we have our Todo service save function created, we need to call it from our Todo component so that we can save our data.
@@ -745,13 +745,13 @@ Now that we have our Todo service save function created, we need to call it from
 
 ### Displaying Items
 
-Now that we have the ability to save our items, we need to be able to display the current list with options to complete or delete a todo item.
+Now that we have the ability to save our items, we need to be able to display the current list
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Add TodoService Get All 
+    <b>Exercise</b>: Get Todo Items 
 </h4>
 
-Next we need to add a getAll function to our TodoService that does an http get to our API to get all of the todo items.
+First thing we need to do is add a function to the todo service to get the list of todo items.
 
 1. Open the src\app\shared\services\todo.service.ts file
 
@@ -759,29 +759,29 @@ Next we need to add a getAll function to our TodoService that does an http get t
     todo.service.ts
     ```
 
-1. Add the following function to make an http get call to our Todo API
+1. Add the following function to make an http get call to our Todo API and return back an array of Todo items.
 
     ```TypeScript
     getAll(): Observable<Array<Todo>>{
-    let url = "https://dj-sails-todo.azurewebsites.net/todo";
-    return this.http.get(url, this.options)
-      .map((res: Response) => {
-        return <Array<Todo>>res.json();
-      })
-      .catch(error => {
-        console.log('get error', error);
-        return error;
-      });
+        let url = "https://dj-sails-todo.azurewebsites.net/todo";
+        return this.http.get(url, this.options)
+        .map((res: Response) => {
+            return <Array<Todo>>res.json();
+        })
+        .catch(error => {
+            console.log('get error', error);
+            return error;
+        });
     }
     ```
 
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Call TodoService Get All from Component 
+    <b>Exercise</b>: Display Todo Items in the UI
 </h4>
 
-Now that we have the TodoService.getAll function created, we are ready to create the getTodoListAll function that will call the TodoService.  We will wire up the getTodoListAll function to be called in ngOnInit so that it will populate the todo list on component load.
+Now that we have the TodoService.getAll function created, we are ready to call the function from our TodoComponent.  We will make this call in the ngOnInit function so that it will display the list on component render.
 
 1. Open the src\app\todo\todo.component.ts file
 
@@ -852,6 +852,7 @@ Now that we have the TodoService.getAll function created, we are ready to create
 
 <div class="exercise-end"></div>
 
+### Update List on Save
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Updating Todo list on save 
@@ -875,12 +876,13 @@ Now that we have the Todo list being stored in the todoList variable, when we sa
 
 <div class="exercise-end"></div>
 
+### Complete Todo 
+
+Right now the todo list is just a read only view.  However, we need to have the ability to complete a todo item.  We are going to add an icon to the todo list that will toggle the completed state and save the todo item.
+
 <h4 class="exercise-start">
-    <b>Exercise</b>: Complete Todo Item
+    <b>Exercise</b>: Save Updated Todo Item
 </h4>
-
-Right now the todo list is just a read only view but we need to be able to complete the todo items.  We need to add an icon to the todo list that will toggle the completed status and save the new todo item state to the API.
-
 
 1. Open the src\app\shared\services\todo.service.ts file
 
@@ -904,8 +906,15 @@ Right now the todo list is just a read only view but we need to be able to compl
     ```
 
     * For the url we are using string interpolation to create the url.  This is done with the &#96;&#96; tags and the ${}
+    * An HTTP PUT call is used to update a record and requires an ID as part of the URL to figure out which record you are updating
 
-Now we need to call the updateTodo service function in our component.
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Enable Toggle in UI and Save
+</h4>
+
+Now we need to call the updateTodo function that we just created in the TodoService from our UI component.
 
 1. Open the todo.component.ts file
 
@@ -950,10 +959,20 @@ The last thing we need to do it do update the UI to have a checkbox icon that wi
     * We are passing in the todo item that we are wanting to update to the completedTodo function.  This will pass in the whole object so we have access to all of the fields.
     * We are updating the icon used based on the completed field state.  If completed we are using fa-check-square-o.  If not completed, we are using fa-square-o
 
-1. With Bootstrap it is a 12 column grid, so we need to reduce the size of the existing div from col-12 to col-11
+1. With Bootstrap it is a 12 column grid, so we need to reduce the size of the existing div from col-12 to col-11 in order to fit in the complete checkbox
 
+1. The html for the display of the Todo list should look like the following:
+
+    ```html
+    <div class="row todo" *ngFor="let todoItem of todoList">
+        <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed == true ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
+        <div class="col-11 done-{{todoItem.completed}}">{{todoItem.item}} <br /><small>created: {{todoItem.createdAt | date:'short'}}</small></div>
+    </div>
+    ```
 
 <div class="exercise-end"></div>
+
+### Delete Todo
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Delete Todo Item
@@ -982,6 +1001,11 @@ In addition to being able to complete a todo item, we also need to be able to de
 Next we need to create the deleteTodo item function in the component that will call the TodoService.delete function
 
 1. Open the todo.component.ts file
+
+    ```bash
+    todo.component.ts
+    ```
+
 1. Create the deleteTodo function that takes in a todo item and calls the TodoService.delete function
 
     ```TypeScript
@@ -1011,7 +1035,7 @@ The last thing that we need to do is to add the delete icon to the todo list.
     <div class="col-1" (click)="deleteTodo(todoItem)"><i class="fa fa-trash"></i></div>
     ```
 
-1. Since the Bootstrap grid is 12 columns wide, we need to reduce the text div from col-11 to col-10.
+1. Since the Bootstrap grid is 12 columns wide, we need to reduce the text div from col-11 to col-10 to be able to fit in the delete icon.
 
 <div class="alert alert-info" role="alert">The reason that we used the Bootstrap grid is so that everything wrapped correctly with longer todo items and when the screen was smaller.  The Bootstrap grid provides this functionality automatically for you.</div>
 

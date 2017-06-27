@@ -147,10 +147,15 @@ We are going to implement the logout button in the header.
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Add Compoment Logging Out Function
+    <b>Exercise</b>: Add Component Logging Out Function
 </h4>
 
 1. Open header.component.ts
+
+    ```bash
+    header.component.ts
+    ```
+    
 1. Import the AuthService and Router
 
     ```TypeScript

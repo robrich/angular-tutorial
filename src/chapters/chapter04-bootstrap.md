@@ -182,7 +182,13 @@ Now we need to configure the angular cli to import the bootstrap libraries.
     <b>Exercise</b>: Add Banner To Top of Page
 </h4>
 
-1. Open the src\app\app.compoment.html file and replace the contents with:
+1. Open src\app\app.component.html
+
+    ```bash
+    app.component.html
+    ```
+    
+1. Replace the contents with:
 
     ```html
     <div class="jumbotron">

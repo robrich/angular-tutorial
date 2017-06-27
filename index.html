@@ -407,7 +407,11 @@
 </h4>
 
 <ol>
-<li><p>Open the src\app\app.compoment.html file and replace the contents with:</p>
+<li><p>Open src\app\app.component.html</p>
+<pre><code class="lang-bash"> app.component.html
+</code></pre>
+</li>
+<li><p>Replace the contents with:</p>
 <pre><code class="lang-html"> &lt;div class=&quot;jumbotron&quot;&gt;
      &lt;div class=&quot;container&quot;&gt;
          &lt;h1&gt;{{title}}&lt;/h1&gt;
@@ -1214,7 +1218,7 @@
 <pre><code class="lang-TypeScript"> import { TodoComponent } from &#39;./todo/todo.component&#39;;
 </code></pre>
 </li>
-<li><p>We want to make the Todo compoment the home page.  We can do this by adding a compoment field to the <code>path: &#39;&#39;</code> route </p>
+<li><p>We want to make the Todo component the home page.  We can do this by adding a component field to the <code>path: &#39;&#39;</code> route </p>
 <pre><code class="lang-TypeScript"> {
      path: &#39;&#39;,
      children: [],
@@ -1236,7 +1240,7 @@
 </li>
 <li><p>The todo page should display when you to the home, <a href="http://http://localhost:4200/">http://http://localhost:4200/</a></p>
 <p> <img src="images/todo-initial-view.png" alt="todo initial view"></p>
- <div class="alert alert-info" role="alert"><strong>Note:</strong> When you navigate to the home page, the TodoCompoment is loaded into the <code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code> in the html in  src\app\app.component.html.  The router-outlet tag is how Angular knows where to put the rendered content for the route.</div>
+ <div class="alert alert-info" role="alert"><strong>Note:</strong> When you navigate to the home page, the TodoComponent is loaded into the <code>&lt;router-outlet&gt;&lt;/router-outlet&gt;</code> in the html in  src\app\app.component.html.  The router-outlet tag is how Angular knows where to put the rendered content for the route.</div>
 
 </li>
 </ol>
@@ -1697,7 +1701,7 @@
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Add Todo Service Save
+    <b>Exercise</b>: Save Todo Item
 </h4>
 
 <p>Now that we have the Todo service file created, we need to add our save method that calls our json-server api server and then update the Todo component to call the service.</p>
@@ -1741,7 +1745,7 @@
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Call TodoService Save from TodoCompoment
+    <b>Exercise</b>: Display Todo Item
 </h4>
 
 <p>Now that we have our Todo service save function created, we need to call it from our Todo component so that we can save our data.</p>
@@ -1796,28 +1800,28 @@
 <div class="exercise-end"></div>
 
 <h3 id="displaying-items">Displaying Items</h3>
-<p>Now that we have the ability to save our items, we need to be able to display the current list with options to complete or delete a todo item.</p>
+<p>Now that we have the ability to save our items, we need to be able to display the current list</p>
 <h4 class="exercise-start">
-    <b>Exercise</b>: Add TodoService Get All 
+    <b>Exercise</b>: Get Todo Items 
 </h4>
 
-<p>Next we need to add a getAll function to our TodoService that does an http get to our API to get all of the todo items.</p>
+<p>First thing we need to do is add a function to the todo service to get the list of todo items.</p>
 <ol>
 <li><p>Open the src\app\shared\services\todo.service.ts file</p>
 <pre><code class="lang-bash"> todo.service.ts
 </code></pre>
 </li>
-<li><p>Add the following function to make an http get call to our Todo API</p>
+<li><p>Add the following function to make an http get call to our Todo API and return back an array of Todo items.</p>
 <pre><code class="lang-TypeScript"> getAll(): Observable&lt;Array&lt;Todo&gt;&gt;{
- let url = &quot;https://dj-sails-todo.azurewebsites.net/todo&quot;;
- return this.http.get(url, this.options)
-   .map((res: Response) =&gt; {
-     return &lt;Array&lt;Todo&gt;&gt;res.json();
-   })
-   .catch(error =&gt; {
-     console.log(&#39;get error&#39;, error);
-     return error;
-   });
+     let url = &quot;https://dj-sails-todo.azurewebsites.net/todo&quot;;
+     return this.http.get(url, this.options)
+     .map((res: Response) =&gt; {
+         return &lt;Array&lt;Todo&gt;&gt;res.json();
+     })
+     .catch(error =&gt; {
+         console.log(&#39;get error&#39;, error);
+         return error;
+     });
  }
 </code></pre>
 </li>
@@ -1825,10 +1829,10 @@
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Call TodoService Get All from Component 
+    <b>Exercise</b>: Display Todo Items in the UI
 </h4>
 
-<p>Now that we have the TodoService.getAll function created, we are ready to create the getTodoListAll function that will call the TodoService.  We will wire up the getTodoListAll function to be called in ngOnInit so that it will populate the todo list on component load.</p>
+<p>Now that we have the TodoService.getAll function created, we are ready to call the function from our TodoComponent.  We will make this call in the ngOnInit function so that it will display the list on component render.</p>
 <ol>
 <li><p>Open the src\app\todo\todo.component.ts file</p>
 <pre><code class="lang-bash"> todo.component.ts
@@ -1890,7 +1894,7 @@
 </ol>
 <div class="exercise-end"></div>
 
-
+<h3 id="update-list-on-save">Update List on Save</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Updating Todo list on save 
 </h4>
@@ -1910,11 +1914,12 @@
 </ol>
 <div class="exercise-end"></div>
 
+<h3 id="complete-todo">Complete Todo</h3>
+<p>Right now the todo list is just a read only view.  However, we need to have the ability to complete a todo item.  We are going to add an icon to the todo list that will toggle the completed state and save the todo item.</p>
 <h4 class="exercise-start">
-    <b>Exercise</b>: Complete Todo Item
+    <b>Exercise</b>: Save Updated Todo Item
 </h4>
 
-<p>Right now the todo list is just a read only view but we need to be able to complete the todo items.  We need to add an icon to the todo list that will toggle the completed status and save the new todo item state to the API.</p>
 <ol>
 <li><p>Open the src\app\shared\services\todo.service.ts file</p>
 <pre><code class="lang-bash"> todo.service.ts
@@ -1934,10 +1939,17 @@
 </code></pre>
 <ul>
 <li>For the url we are using string interpolation to create the url.  This is done with the &#96;&#96; tags and the ${}</li>
+<li>An HTTP PUT call is used to update a record and requires an ID as part of the URL to figure out which record you are updating</li>
 </ul>
 </li>
 </ol>
-<p>Now we need to call the updateTodo service function in our component.</p>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Enable Toggle in UI and Save
+</h4>
+
+<p>Now we need to call the updateTodo function that we just created in the TodoService from our UI component.</p>
 <ol>
 <li><p>Open the todo.component.ts file</p>
 <pre><code class="lang-bash"> todo.component.ts
@@ -1977,11 +1989,19 @@
 <li>We are updating the icon used based on the completed field state.  If completed we are using fa-check-square-o.  If not completed, we are using fa-square-o</li>
 </ul>
 </li>
-<li><p>With Bootstrap it is a 12 column grid, so we need to reduce the size of the existing div from col-12 to col-11</p>
+<li><p>With Bootstrap it is a 12 column grid, so we need to reduce the size of the existing div from col-12 to col-11 in order to fit in the complete checkbox</p>
+</li>
+<li><p>The html for the display of the Todo list should look like the following:</p>
+<pre><code class="lang-html"> &lt;div class=&quot;row todo&quot; *ngFor=&quot;let todoItem of todoList&quot;&gt;
+     &lt;div class=&quot;col-1&quot; (click)=&quot;completeTodo(todoItem)&quot;&gt;&lt;i [className]=&quot;todoItem.completed == true ? &#39;fa fa-check-square-o&#39; : &#39;fa fa-square-o&#39;&quot;&gt;&lt;/i&gt;&lt;/div&gt;
+     &lt;div class=&quot;col-11 done-{{todoItem.completed}}&quot;&gt;{{todoItem.item}} &lt;br /&gt;&lt;small&gt;created: {{todoItem.createdAt | date:&#39;short&#39;}}&lt;/small&gt;&lt;/div&gt;
+ &lt;/div&gt;
+</code></pre>
 </li>
 </ol>
 <div class="exercise-end"></div>
 
+<h3 id="delete-todo">Delete Todo</h3>
 <h4 class="exercise-start">
     <b>Exercise</b>: Delete Todo Item
 </h4>
@@ -2007,7 +2027,10 @@
 </ol>
 <p>Next we need to create the deleteTodo item function in the component that will call the TodoService.delete function</p>
 <ol>
-<li>Open the todo.component.ts file</li>
+<li><p>Open the todo.component.ts file</p>
+<pre><code class="lang-bash"> todo.component.ts
+</code></pre>
+</li>
 <li><p>Create the deleteTodo function that takes in a todo item and calls the TodoService.delete function</p>
 <pre><code class="lang-TypeScript"> deleteTodo(todo: Todo): void {
      this.todoService.deleteTodo(todo)
@@ -2035,7 +2058,7 @@
 <pre><code class="lang-TypeScript"> &lt;div class=&quot;col-1&quot; (click)=&quot;deleteTodo(todoItem)&quot;&gt;&lt;i class=&quot;fa fa-trash&quot;&gt;&lt;/i&gt;&lt;/div&gt;
 </code></pre>
 </li>
-<li><p>Since the Bootstrap grid is 12 columns wide, we need to reduce the text div from col-11 to col-10.</p>
+<li><p>Since the Bootstrap grid is 12 columns wide, we need to reduce the text div from col-11 to col-10 to be able to fit in the delete icon.</p>
 </li>
 </ol>
 <div class="alert alert-info" role="alert">The reason that we used the Bootstrap grid is so that everything wrapped correctly with longer todo items and when the screen was smaller.  The Bootstrap grid provides this functionality automatically for you.</div>
@@ -2759,8 +2782,11 @@ Note that this will remove the dist directory before build.
 </h4>
 
 <ol>
-<li>Open the src\app\todo\todo.component.ts file</li>
-<li><p>Create a variable to hold the open count in the TodoCompoment class that is of type number</p>
+<li><p>Open the src\app\todo\todo.component.ts file</p>
+<pre><code class="lang-bash"> todo.component.ts
+</code></pre>
+</li>
+<li><p>Create a variable to hold the open count in the TodoComponent class that is of type number</p>
 <pre><code class="lang-TypeScript"> openItemCount: number = 0;
 </code></pre>
 </li>
@@ -3087,11 +3113,14 @@ Note that this will remove the dist directory before build.
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Add Compoment Logging Out Function
+    <b>Exercise</b>: Add Component Logging Out Function
 </h4>
 
 <ol>
-<li>Open header.component.ts</li>
+<li><p>Open header.component.ts</p>
+<pre><code class="lang-bash"> header.component.ts
+</code></pre>
+</li>
 <li><p>Import the AuthService and Router</p>
 <pre><code class="lang-TypeScript"> import { Router } from &#39;@angular/router&#39;;
  import { AuthService } from &#39;../services/auth.service&#39;;
