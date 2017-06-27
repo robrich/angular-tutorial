@@ -747,6 +747,8 @@ Now that we have our Todo service save function created, we need to call it from
 
 1. We can remove the temporary value that we set for the errorMessage.
 
+<div class="alert alert-danger" role="alert">For now, you will need to 1st hit [http://localhost:4200/login](http://localhost:4200/login) before you can successfully save a todo item since they are associated to a user.  After you have logged in, you can save as many items as you would like without hitting login again.  In the next chapter we will implement a login check that will redirect you to login first.</div>
+
 <div class="exercise-end"></div>
 
 ### Displaying Items
@@ -856,6 +858,8 @@ Now that we have the TodoService.getAll function created, we are ready to call t
     * For the date, we are using the built-in date pipe to convert it to a short date that strips out the time part of the date
     * We are also setup to have a different style when an item is completed.  We will add the styling in a bit.    
 
+<div class="alert alert-danger" role="alert">For now, you will need to 1st hit [http://localhost:4200/login](http://localhost:4200/login) before you can successfully pull the list of todo items since they are associated to a user.  In the next chapter we will implement a login check that will redirect you to login first.</div>
+
 <div class="exercise-end"></div>
 
 ### Update List on Save
@@ -959,7 +963,7 @@ The last thing we need to do it do update the UI to have a checkbox icon that wi
 1. Inside the ngFor loop, above the existing div that is displaying the individual item, add the following icon that uses the Font Awesome library for the icon and is set to take up 1 column of space
 
     ```html
-      <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed == true ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
+      <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
     ```
 
     * We are passing in the todo item that we are wanting to update to the completedTodo function.  This will pass in the whole object so we have access to all of the fields.
@@ -967,28 +971,37 @@ The last thing we need to do it do update the UI to have a checkbox icon that wi
 
 1. With Bootstrap it is a 12 column grid, so we need to reduce the size of the existing div from col-12 to col-11 in order to fit in the complete checkbox
 
+    <div class="alert alert-info" role="alert">The reason that we used the Bootstrap grid is so that everything wrapped correctly with longer todo items and when the screen was smaller.  The Bootstrap grid provides this functionality automatically for you.</div>
+
 1. The html for the display of the Todo list should look like the following:
 
     ```html
     <div class="row todo" *ngFor="let todoItem of todoList">
-        <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed == true ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
+        <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed  ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
         <div class="col-11 done-{{todoItem.completed}}">{{todoItem.item}} <br /><small>created: {{todoItem.createdAt | date:'short'}}</small></div>
     </div>
     ```
+
+<div class="alert alert-danger" role="alert">For now, you will need to 1st hit [http://localhost:4200/login](http://localhost:4200/login) before you can successfully update a todo item since they are associated to a user.  After you have logged in, you can update as many items as you would like without hitting login again.  In the next chapter we will implement a login check that will redirect you to login first.</div>
 
 <div class="exercise-end"></div>
 
 ### Delete Todo
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Delete Todo Item
+    <b>Exercise</b>: Delete Todo Item from Data Store
 </h4>
 
 In addition to being able to complete a todo item, we also need to be able to delete one.  We need to add an icon to the todo list that will call a delete function in the component and delete the todo item from our database.
 
 
 1. Open the src\app\shared\services\todo.service.ts file
-1. We are going to create delete method
+
+    ```bash
+    todo.service.ts
+    ```
+
+1. We need to create a delete method that will call our API using http.delete
 
     ```TypeScript
     deleteTodo(todo: Todo): Observable<Response> {
@@ -1001,8 +1014,14 @@ In addition to being able to complete a todo item, we also need to be able to de
     }
     ```
 
-    * We are passing in the todo item that we are wanting to update to the completedTodo function.  This will pass in the whole object so we have access to all of the fields.
+    * We are passing in the todo item id that we are wanting to delete.
     * We are not doing any kind of mapping of the return results since there is none.  It is either successful or not.
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Delete Option to UI
+</h4>
 
 Next we need to create the deleteTodo item function in the component that will call the TodoService.delete function
 
@@ -1012,7 +1031,7 @@ Next we need to create the deleteTodo item function in the component that will c
     todo.component.ts
     ```
 
-1. Create the deleteTodo function that takes in a todo item and calls the TodoService.delete function
+1. We need to create a function that will call the todoService.deleteTodo function and then remove the item from the todoList array that is being used by the UI to display the todo items.
 
     ```TypeScript
     deleteTodo(todo: Todo): void {
@@ -1030,12 +1049,17 @@ Next we need to create the deleteTodo item function in the component that will c
     }
     ```
 
-    * In the results of the deleteTodo service, we are going to remove the todo item from the displayed list since it no longer exist.  We could have also call the TodoService.getAll function but since we already have all of the items and the items are specific to a single user, there is no need to make the extra database call.
+    <div class="alert alert-info" role="alert">Note: We could have also just called the TodoService.getAll function but since we already have all of the items and the items are specific to a single user, there is no need to make the extra database call.</div>
 
 The last thing that we need to do is to add the delete icon to the todo list.
 
 1. Open the todo.component.html file
-1. Add a div after the div displays the todo item text but still inside of the ngFor div.  This new div will hold the delete icon which we will use the fa-trash icon and when clicked it will call the deleteTodo function.  The icon is going to take up 1 column of space in the grid.
+
+    ```bash
+    todo.component.html
+    ```
+
+1. After the div that displays the todo item and date but still inside of the ngFor div, we need to add a div that will hold the delete icon.  We will be using the fa-trash icon.  When the icon is clicked it will call the TodoComponent.deleteTodo function.  The icon is going to take up 1 column of space in the grid.
 
     ```TypeScript
     <div class="col-1" (click)="deleteTodo(todoItem)"><i class="fa fa-trash"></i></div>
@@ -1043,19 +1067,23 @@ The last thing that we need to do is to add the delete icon to the todo list.
 
 1. Since the Bootstrap grid is 12 columns wide, we need to reduce the text div from col-11 to col-10 to be able to fit in the delete icon.
 
-<div class="alert alert-info" role="alert">The reason that we used the Bootstrap grid is so that everything wrapped correctly with longer todo items and when the screen was smaller.  The Bootstrap grid provides this functionality automatically for you.</div>
+    <div class="alert alert-info" role="alert">The reason that we used the Bootstrap grid is so that everything wrapped correctly with longer todo items and when the screen was smaller.  The Bootstrap grid provides this functionality automatically for you.</div>
 
-The html for the display of the Todo list should look like the following:
+1. The html for the display of the Todo list should look like the following:
 
-```html
-<div class="row todo" *ngFor="let todoItem of todoList">
-    <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed == true ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
+    ```html
+    <div class="row todo" *ngFor="let todoItem of todoList">
+        <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed  ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
 
-    <div class="col-10 done-{{todoItem.completed}}">{{todoItem.item}} <br /><small>created: {{todoItem.createdAt | date:'short'}}</small></div>
+        <div class="col-10 done-{{todoItem.completed}}">{{todoItem.item}} <br /><small>created: {{todoItem.createdAt | date:'short'}}</small></div>
 
-    <div class="col-1" (click)="deleteTodo(todoItem)"><i class="fa fa-trash"></i></div>
-</div>
-```
+        <div class="col-1" (click)="deleteTodo(todoItem)"><i class="fa fa-trash"></i></div>
+    </div>
+    ```
+
+1. You can now test the delete functionality.  Warning that it will not ask if you want to delete the item.  It will just delete it.
+
+    <div class="alert alert-danger" role="alert">For now, you will need to 1st hit [http://localhost:4200/login](http://localhost:4200/login) before you can successfully delete a todo item since they are associated to a user.  After you have logged in, you can delete as many items as you would like without hitting login again.  In the next chapter we will implement a login check that will redirect you to login first.</div>
 
 <div class="exercise-end"></div>
 
@@ -1074,6 +1102,11 @@ If we added some padding around each row, a bottom border, made the date smaller
 The first thing we need to do is add in our styles to the Todo component.  Since these styles are strictly for the Todo component we are going to add them into the todo.component.scss instead of the app's style.scss file.
 
 1. Open the src\app\todo\todo.component.scss 
+
+    ```bash
+    todo.component.scss
+    ```
+
 1. Add the following contents to the file.  To ensure we are following our branding, we are importing our scss color variables.
 
     ```scss
@@ -1101,6 +1134,7 @@ The first thing we need to do is add in our styles to the Todo component.  Since
             color: $gray-light;
         }
     }
+
     ```
 
 1. Now if you view the UI it should look like below.  
@@ -1108,9 +1142,9 @@ The first thing we need to do is add in our styles to the Todo component.  Since
     ![unstyled ui](images/todo-styled-final.png)
 
 
+<div class="alert alert-danger" role="alert">For now, you will need to 1st hit [http://localhost:4200/login](http://localhost:4200/login) before you can successfully get the todo item since they are associated to a user.  In the next chapter we will implement a login check that will redirect you to login first.</div>
+
 <div class="exercise-end"></div>
-
-
 
 ### Review
 
@@ -1118,10 +1152,10 @@ We did a lot in this chapter implementing our Reactive form
 
 1. Created a form using the FormBuilder
 1. Added validation to the FormBuilder
-1. Created a value change observable to set the field validation message
-1. Added debounce to wait until the user is done typing before checking the field validation
+1. Created a value change observable to set the field validation messages
+1. Added debounce to wait for a second after the user stops typing before checking the field validation
 1. Show the list of todo list with icons to complete and delete todo items
-1. You used several Angular directives to implement functionality in the UI:
+1. We used several Angular directives to implement functionality in the UI:
 
     * *ngIf - replacement for ng-if.  Only show section if condition is true
     * *ngFor - replacement for ng-repeat.  Loop through a list and do something
@@ -1133,5 +1167,13 @@ We did a lot in this chapter implementing our Reactive form
     * (ngSubmit) - submits a form 
     * [formGroup] - used for reactive forms.  basically dynamic forms that you can control in the controller
     * [disabled] - set the element to disabled when condition is true
+
+#### Possible Enhancements
+
+* Sort the data in the UI by name and completed status so that all of the todo items that are not done are at the top and sorted alphabetically.
+* Add a counter that tracked number of open items
+* Clear the form after add
+
+The walk through for these enhancements is in the bonus chapter for the Additional Todo Features.
 
 <div class="exercise-end"></div>

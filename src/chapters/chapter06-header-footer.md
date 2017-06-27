@@ -244,6 +244,60 @@ So far we have seen how to use component level css but Angular still has the abi
 
 <div class="exercise-end"></div>
 
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Environment Name to Footer
+</h4>
+
+1. Open the src\app\shared\footer\footer.component.ts file 
+
+    ```bash
+    footer.component.ts
+    ```
+
+1. Import the environment into the file on line 2 right below the Angular core import
+
+    ```TypeScript
+    import { environment } from '../../../environments/environment';
+    ```
+
+1. Inside the FooterComponent class we to add a variable to capture the environment name that Angular is running in
+
+    ```TypeScript
+    public env = environment.environmentName;
+    ```        
+
+1. Open the src\app\shared\footer\footer.component.html file
+
+    ```bash
+    footer.component.html
+    ```
+    
+1. Replace the contents with
+
+    ```
+    <footer>
+        <div class="pull-left">
+            &copy;Angular WS
+        </div>
+        <div class="pull-right">
+            env: {{ env }} 
+        </div>      
+    </footer>
+    ```
+
+1.  If you view the web page you should see the footer 
+
+    ![App Works with Footer](images/footer-with-env.png)
+
+    <div class="alert alert-warning" role="alert">Notice that the env:Local in the footer is coming from the environment.local.ts file.  If you stop `ng serve` and run it without using the -e argument, the env value will change to Development
+
+        ![footer development env](images/footer-with-env-dev.png)
+        
+    </div>
+
+<div class="exercise-end"></div>    
+
+
 ### Review
 
 In this chapter will learned:
