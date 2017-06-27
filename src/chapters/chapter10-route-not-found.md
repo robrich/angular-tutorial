@@ -11,45 +11,17 @@ We have not yet implemented a catch all route which will be the route that is us
 There are 2 ways to fix this.  
 
 1. Make the TodoComponent the default so that it will redirect the user to that page.  This is not as nice of a user experience since it does not alert the user that the url they were trying to go to does not exist.
-1. Create a "Not Found" component and redirect the user to that component if none of the other routes match.  This is the preferred method.
-
+1. Create a "Not Found" component and redirect the user to that component if none of the other routes match.  This is the preferred method and the one that we will cover.
 
 ### Goals
 
 * Understand how to deal with an unknown route
-
-### Add Default Route
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Adding Default Route 
-</h4>
-
-<div class="alert alert-danger" role="alert">
-**Note:** Not the preferred method.  
-</div>
-
-1. Open the app.routing.ts file
-1. Add an additional route to the Routes list with a ** for the path and set the component to TodoComponent.  This will tell Angular to use the TodoComponent when it can not determine the route
-
-    ```TypeScript
-    , { path: '**', component: TodoComponent }
-    ```
-
-    <div class="alert alert-warning">
-    Make sure that you make the default route the last route.  Any routes below the ** route will be ignored.
-    </div>
-
-<div class="exercise-end"></div>
 
 ### Create Not Found Component
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Redirecting User to "Not Found" component
 </h4>
-
-<div class="alert alert-success" role="alert">
-**Note:** This is the preferred method.  
-</div>
 
 From a user experience perspective, it is a much experience to redirect the user to a "not found" page instead of redirecting them back to the home page.  Create the route not found page is just like we did with the todo component.    
 
@@ -63,13 +35,19 @@ From a user experience perspective, it is a much experience to redirect the user
 
     ![not found generated file list](images/ng2/notfound-generated.png)
 
-1. In the src\app\app-routing.module.ts file, add an import statement for the NotFoundComponent 
+1. Open src\app\app-routing.module.ts
+
+    ```bash
+    app-routing.module.ts 
+     ```
+     
+1. add an import statement for the NotFoundComponent 
 
     ```TypeScript
     import { NotFoundComponent } from './not-found/not-found.component';
     ```
 
-1. In the app-routing.module.ts file, change the ** route to use the NotFoundComponent
+1. Add the ** route to and set it to use the NotFoundComponent
 
     ```TypeScript
     , { path: '**', component: NotFoundComponent }

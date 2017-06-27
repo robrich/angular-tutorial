@@ -230,7 +230,7 @@ We are now ready to create our UI.
                 <tr>
                     <td>Errors</td>
                     <td>N/A</td>
-                    <td><pre>{{ addForm.get('item').errors | json }}</pre></td>
+         			<td><pre>{{ addForm.get('item').errors | json }}</pre></td>
                 </tr>
                 <tr>
                     <td>Form Field Values</td>
@@ -250,12 +250,11 @@ We are now ready to create our UI.
         * As you type into the item field, the form status info value section will update
     * The add button is set as disabled until validation passes. 
 
+	<div class="alert alert-info" role="alert">If you completed the previous chapter on Template Forms, you will notice that we did not setup any ngModel tags or pass in the form to the save method.  With Reactive Forms, the formGroup provides the data binding for us.</div>
+
 <div class="exercise-end"></div>
 
-
-
 ### Add Submit Method
-
 
 In order to submit the form we need to add an `(ngSubmit)=""`
 
@@ -263,7 +262,13 @@ In order to submit the form we need to add an `(ngSubmit)=""`
     <b>Exercise</b>:  Add ngSubmit
 </h4>
 
-1. In the src\app\todo\todo.component.html file and on the `<form>` tag add the `(ngSubmit)=""` attribute
+1. Open src\app\todo\todo.component.html file
+	
+	    ```bash
+	    todo.component.html
+	        ```
+	        
+1. On the `<form>` tag add the `(ngSubmit)=""` attribute and have it call the save function 
 
     ```html
     (ngSubmit)="save()"
@@ -275,18 +280,17 @@ In order to submit the form we need to add an `(ngSubmit)=""`
     todo.component.ts
     ```
 
-1. Add a function called save that returns a void.  For now inside of the save function we are going to console log the addForm field values.
+1. Add a function called save that returns a void.  Inside of the save function  add a console log that outputs the addForm field value property.
 
     ```TypeScript
     save() : void {
         console.log('form values: ', this.addForm.value);
     }
     ```
-  <div class="alert alert-info" role="alert">If you completed the previous chapter on Template Forms, you will notice that we did not setup any ngModel tags or pass in the form to the save method.  With Reactive Forms, the formGroup provides the data binding for us.</div>
 
 1. If you do not already have the Chrome Developer Tools open, open them up and click on the console tab
 1. Enter text into the input box on the home page [http://localhost:4200](http://localhost:4200) and click submit.
-1. You should see the form values output to the Chrome Developer Tools console
+1. You should see the form value output to the Chrome Developer Tools console
 
 <div class="exercise-end"></div>
 
@@ -305,11 +309,13 @@ Right now we do not have any validation being done on the form.  To setup valida
     todo.component.ts
     ```
 
-1. To use the Angular form validators, we need to add the Validators module to the @angular/forms import statement like so (note that order of the modules in not important)
+1. To use the Angular form validators, we need to add the Validators module to the @angular/forms import statement like so
 
     ```TypeScript
     import { FormGroup, FormBuilder, Validators } from '@angular/forms';
     ```
+    
+    *  note that order of the modules in not important
 
 1. In the ngOnInit function we need add the Validators required and minLength to the item field that we defined earlier.  In order to add the validators, we need to turn the item field value into an array with the 1st position being the default value and the 2nd position as an array of validators.  For the minLength, we are going to require at least 3 characters.
 
