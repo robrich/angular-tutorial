@@ -255,7 +255,7 @@
 				<div class="chapter">
 					<h2 id="bootstrap">Bootstrap</h2>
 <h3 id="overview">Overview</h3>
-<p>For our styling we are going to use <a href="https://v4-alpha.getbootstrap.com/">Bootstrap 4</a> which is still in alpha.  The reason for picking Bootstrap 4 and not Bootstrap 3 is so that you will be able to use the <a href="https://ng-bootstrap.github.io">Angular UI library</a> if you so choose.  We will not be using the Angular UI library in this workshop but it is a great library for component.  If you are a Bootstrap 3 developer, you can see all of the change in the <a href="https://v4-alpha.getbootstrap.com/migration/">Migration Guide</a>. </p>
+<p>For our styling we are going to use <a href="https://v4-alpha.getbootstrap.com/">Bootstrap 4</a> which is still in alpha.  The reason for picking Bootstrap 4 and not Bootstrap 3 is so that we can use <a href="https://ng-bootstrap.github.io">Angular Bootstrap library (ng-bootstrap)</a>.  ng2-bootstrap is written 100% in JavaScript with no need for JQuery or Bootstrap&#39;s JavaScript library to be included.</p>
 <h3 id="goals">Goals</h3>
 <ul>
 <li>Understand how to include Bootstrap 4 into your project</li>
@@ -268,7 +268,25 @@
 <ol>
 <li>In the VS Code Integrated Terminal, click the + to open a 2nd terminal</li>
 <li><p>Run the npm install command for bootstrap and font-awesome</p>
-<pre><code class="lang-bash"> npm install --save bootstrap@next font-awesome
+<pre><code class="lang-bash"> npm install --save bootstrap@next font-awesome @ng-bootstrap/ng-bootstrap
+</code></pre>
+<ul>
+<li>This will install ng-bootstrap along with bootstrap and font-awesome.  Bootstrap is still required for ng-bootstrap to work.  </li>
+</ul>
+</li>
+</ol>
+<p>Before we can use ng-bootstrap we need to add it to the AppModule</p>
+<ol>
+<li><p>Open the src\app\app.module.ts</p>
+<pre><code class="lang-bash"> app.module.ts
+</code></pre>
+</li>
+<li><p>Import the NgbModule from @ng-bootstrap/ng-bootstrap library</p>
+<pre><code class="lang-TypeScript"> import {NgbModule} from &#39;@ng-bootstrap/ng-bootstrap&#39;;
+</code></pre>
+</li>
+<li><p>In the @NgModule imports section add NgbModule.forRoot()</p>
+<pre><code class="lang-TypeScript"> NgbModule.forRoot()
 </code></pre>
 </li>
 </ol>
@@ -279,7 +297,7 @@
     <b>Exercise</b>: Add  Bootstrap to Project
 </h4>
 
-<p>First we need to create our own custom Bootstrap style sheet so that we can override the scss variables if we want to with your own colors and styles.</p>
+<p>First we need to create our own custom Bootstrap stylesheet so that we can override the Bootstrap scss variables to create our own colors and styles using the existing Bootstrap scss variables.  </p>
 <ol>
 <li><p>In the src\assets folder, create a new folder named <strong>bootstrap</strong></p>
    <div class="alert alert-info" role="alert">You can create folder right in Visual Studio Code by right-click on the src\assets folder</div>
@@ -718,46 +736,6 @@
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Create Class
-</h4>
-
-<p>In the AuthService, in order to hold our user data and get type checking we need to create a TypeScript class with an email and id field.  We are going to leave the password field out of the class as we do not want to store this in memory at all.  </p>
-<ol>
-<li>Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then &quot;Integrated Terminal&quot;</li>
-<li><p>Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.</p>
-<pre><code class="lang-bash"> ng generate class shared/classes/User
-</code></pre>
-</li>
-<li><p>The generate command will the user.ts file in the shared/classes folder: </p>
-<p> <img src="images/user-generate.png" alt="output of generate"></p>
-</li>
-</ol>
-<ol>
-<li><p>Open the src\app\shared\classes\User.ts file</p>
-<pre><code class="lang-bash"> user.ts
-</code></pre>
-</li>
-<li><p>Within the User class, add the following fields.  Note that the  createdAt and updatedAt are automatically added by the API.</p>
-<pre><code class="lang-TypeScript"> email: string;
- id: string;
- createdAt: Date;
- updatedAt: Date;
-</code></pre>
-</li>
-<li><p>Within the User class and before the fields we just added, create a constructor that requires an email and make an id field optional (hint: the <code>?</code> makes the parameter optional)</p>
-<pre><code class="lang-TypeScript"> constructor(email: string, id?: string, createdAt?: Date, updatedAt?: Date){
-     this.email = email;
-     this.id = id;
-     if (createdAt) this.createdAt = createdAt;
-     if (updatedAt) this.updatedAt = updatedAt;
- }
-</code></pre>
-</li>
-</ol>
-<div class="exercise-end"></div>
-
-
-<h4 class="exercise-start">
     <b>Exercise</b>: Implement Auth Service Login Function
 </h4>
 
@@ -780,14 +758,8 @@
  }
 </code></pre>
 </li>
-<li><p>Import the User class that we created earlier</p>
-<pre><code class="lang-TypeScript"> import { User } from &#39;../classes/user&#39;;
-</code></pre>
-</li>
-<li><p>We also want to create a public variable within the AuthClass to hold the output from the API call </p>
-<pre><code class="lang-TypeScript"> public currentUser: User;
-</code></pre>
-</li>
+</ol>
+<ol>
 <li><p>For the API that we are using (SailsJS based), it requires that we set the HTTP option to allow credentials so that the session cookie can be passed back and forth, else it will always think you haven&#39;t logged in.  </p>
 <pre><code class="lang-TypeScript"> private options = new RequestOptions({ withCredentials: true });
 </code></pre>
@@ -795,22 +767,24 @@
 <li><p>Next we need to create our login function within the AuthService class that will call our API.  Place the login function after the constructor.</p>
  <div class="alert alert-warning" role="alert">For now we are hard coding the API url into the service.  In the &quot;Environment Configuration&quot; chapter we will change this to pull from a configuration file</div>
 
-<pre><code class="lang-TypeScript"> login(email: string, password: string): Observable&lt;boolean | Response&gt; {
+<pre><code class="lang-TypeScript"> login(email: string, password: string): Observable&lt;boolean&gt; {
      let loginInfo = { &quot;email&quot;: email, &quot;password&quot;: password };
      return this.http.put(&quot;https://dj-sails-todo.azurewebsites.net/user/login&quot;, loginInfo, this.options)
          .do((res: Response) =&gt; {
              if (res){
-                 this.currentUser = &lt;User&gt;res.json();
+                 return Observable.of(true);
              }
+
+             return Observable.of(false);
          })
          .catch(error =&gt; {
-             console.log(&#39;login error&#39;, error)
+             console.log(&#39;login error&#39;, error);
              return Observable.of(false);
          });
  }
 </code></pre>
 <ul>
-<li>This code setups the call to the login API, stores the response in the currentUser variable, and returns back an Observable.  </li>
+<li>This code setups the call to the login API and and returns back an Observable.  </li>
 <li><p>Note that this code is not called until someone subscribes to the login function which we will be doing next.</p>
 <div class="alert alert-danger" role="alert">The API is setup for username/password validation.  Make sure you do not use your real passwords as this is just a test API and not production secured.</div>
 
@@ -841,15 +815,15 @@
 </code></pre>
 </li>
 <li><p>Next we need to update our login function to call the AuthService and redirect if it finds the user.</p>
-<pre><code class="lang-TypeScript">   login(formValues) {
- this.authService.login(formValues.email, formValues.password)
-   .subscribe(result =&gt; {
-     if (!this.authService.currentUser) {
-       console.log(&#39;user not found&#39;);
-     } else {
-       this.router.navigate([&#39;/&#39;]);
-     }
-   });
+<pre><code class="lang-TypeScript"> login(formValues) {
+     this.authService.login(formValues.email, formValues.password)
+         .subscribe(result =&gt; {
+             if (!result) {
+                 console.log(&#39;user not found&#39;);
+             } else {
+                 this.router.navigate([&#39;/&#39;]);
+             }
+     });
  }
 </code></pre>
 </li>
@@ -1003,17 +977,23 @@
 
 <p>We are first going to create the signup function in the AuthService.</p>
 <ol>
+<li><p>Open the src\app\shared\services\auth.service.ts</p>
+<pre><code class="lang-bash"> auth.service.ts
+</code></pre>
+</li>
 <li><p>Add the following method to allow an account to be created</p>
-<pre><code class="lang-TypeScript">signup(email: string, password: string) {
+<pre><code class="lang-TypeScript">signup(email: string, password: string): Observable&lt;boolean&gt; {
  let loginInfo = { &quot;email&quot;: email, &quot;password&quot;: password };
  return this.http.post(&quot;https://dj-sails-todo.azurewebsites.net/user/&quot;, loginInfo, this.options)
    .do((res: Response) =&gt; {
      if (res) {
-       this.currentUser = &lt;User&gt;res.json();
+       return Observable.of(true);
      }
+
+     return Observable.of(false);
    })
    .catch(error =&gt; {
-     console.log(&#39;signup error&#39;, error)
+     console.log(&#39;signup error&#39;, error);
      return Observable.of(false);
    });
 }
@@ -1029,7 +1009,7 @@
 </h4>
 
 <ol>
-<li><p>Open terminal and run</p>
+<li><p>Open terminal and run the ng generate to create the signup component</p>
 <pre><code class="lang-TypeScript">ng generate component signup
 </code></pre>
 </li>
@@ -1143,9 +1123,9 @@
          this.authService.signup(formValues.email, formValues.password)
          .subscribe(result =&gt; {
              if (!result) {
-             this.loginInvalid = true;
+                 this.loginInvalid = true;
              } else {
-             this.router.navigate([&#39;/&#39;]);
+                 this.router.navigate([&#39;/&#39;]);
              }
          });
      }
@@ -2123,7 +2103,10 @@
 <p>Right now the UI looks decent but with a few tweaks it could look much better.  </p>
 <p><img src="images/todo-unstyled.png" alt="todo unstyled"></p>
 <p>If we added some padding around each row, a bottom border, made the date smaller and gray, increased the size of each icon and made the completed items gray with a strike-through, the UI would pop.</p>
-<p>The first thing we need to do is add in our styles to the Todo component.  Since these styles are strictly for the Todo component we are going to add them into the todo.component.scss instead of the app&#39;s style.scss file.</p>
+<p>The first thing we need to do is add in our styles to the Todo component.  Since these styles are strictly for the Todo component we are going to add them into the todo.component.scss instead of the app&#39;s style.scss file.  </p>
+<div class="alert alert-info" role="alert">Angular enables CSS encapsulation so that the styling in each components scss file will only be applied to that component and not the rest of the site.  They do this by adding an attribute to both the html elements and css classes that are rendered. It is done on the fly for you and does not at all change the actual files.</div>
+
+
 <ol>
 <li><p>Open the src\app\todo\todo.component.scss </p>
 <pre><code class="lang-bash"> todo.component.scss
@@ -2251,8 +2234,7 @@
    })
    .catch((error: Response) =&gt; {
      if (error.status !== 403) {
-       console.log(&#39;isAuthenticated error&#39;, error)
-       this.currentUser = null;
+       console.log(&#39;isAuthenticated error&#39;, error);
      }
 
      return Observable.of(false);
@@ -2481,7 +2463,7 @@ environment.local.ts
 <pre><code class="lang-bash"> ng serve -e local
 </code></pre>
 </li>
-<li><p>If the Angular compile was successful, you will now be using the local environment configuration. You will not see any changes at this point since nothing is using those settings.  We will use them in the next exercise in our footer.</p>
+<li><p>If the Angular compile was successful, you will now be using the local environment configuration. Since our API urls are the same between files you will not see any difference at this time.  In the Header and Footer chapter we will add a footer that displays the environment name.</p>
 </li>
 </ol>
 <div class="exercise-end"></div>
@@ -2492,13 +2474,9 @@ environment.local.ts
 				<div class="chapter">
 					<h2 id="implementing-default-route">Implementing Default Route</h2>
 <h3 id="overview">Overview</h3>
-<p>We have not yet implemented a catch all route which will be the route that is used when Angular does not match any other configured routes.  .</p>
+<p>Right now if the user types in a route that Angular does not know about you will get the following error</p>
 <p><img src="images/ng2/no-route-found.png" alt="no route found"></p>
-<p>There are 2 ways to fix this.  </p>
-<ol>
-<li>Make the TodoComponent the default so that it will redirect the user to that page.  This is not as nice of a user experience since it does not alert the user that the url they were trying to go to does not exist.</li>
-<li>Create a &quot;Not Found&quot; component and redirect the user to that component if none of the other routes match.  This is the preferred method and the one that we will cover.</li>
-</ol>
+<p>I prefer to solve this problem by creating a &quot;Not Found&quot; component and then redirecting the user to this component if they try to navigate to a route that does not exist.</p>
 <h3 id="goals">Goals</h3>
 <ul>
 <li>Understand how to deal with an unknown route</li>
@@ -2508,9 +2486,8 @@ environment.local.ts
     <b>Exercise</b>: Redirecting User to &quot;Not Found&quot; component
 </h4>
 
-<p>From a user experience perspective, it is a much experience to redirect the user to a &quot;not found&quot; page instead of redirecting them back to the home page.  Create the route not found page is just like we did with the todo component.    </p>
 <ol>
-<li><p>Run the Angular Cli generate command to create the notFound component</p>
+<li><p>Open the integrated terminal and generate the notFound component </p>
 <pre><code class="lang-bash"> ng generate component notFound
 </code></pre>
 </li>
@@ -2526,13 +2503,28 @@ environment.local.ts
 </code></pre>
 </li>
 <li><p>Add the ** route to and set it to use the NotFoundComponent</p>
-<pre><code class="lang-TypeScript"> , { path: &#39;**&#39;, component: NotFoundComponent }
+<pre><code class="lang-TypeScript"> { path: &#39;**&#39;, component: NotFoundComponent }
+</code></pre>
+</li>
+<li><p>Your routes should look like so</p>
+<pre><code class="lang-TypeScript"> const routes: Routes = [
+     {
+         path: &#39;&#39;,
+         children: [],
+         component: TodoComponent,
+         canActivate: [IsLoggedInGuard]
+     },
+     { path: &#39;login&#39;, children: [], component: LoginComponent },
+     { path: &#39;signup&#39;, component: SignupComponent },
+     { path: &#39;**&#39;, component: NotFoundComponent }
+ ];
 </code></pre>
 </li>
 <li><p>If you now try to navigate to <a href="http://localhost:4200/unknown">http://localhost:4200/unknown</a> you will be shown the NotFoundComponent </p>
 <p> <img src="images/view-route-unknown.png" alt="Not Found View"></p>
 </li>
 </ol>
+<p>The only thing left for you to do is to design what you want your not found page to actually say.  </p>
 
 				</div>
 
@@ -2554,8 +2546,7 @@ environment.local.ts
 
 <p>We can leave ng serve running while we make these changes and open up another Integrate Terminal for the commands below.</p>
 <ol>
-<li>In the VS Code Integrated Terminal, click the + to open a 2nd terminal</li>
-<li><p>Run the ng generate command to create the header component</p>
+<li><p>Open the VSCode Integrated Terminal and run the ng generate command to create the header component in the shared folder</p>
 <pre><code class="lang-bash"> ng generate component shared/header
 </code></pre>
 </li>
@@ -2566,7 +2557,7 @@ environment.local.ts
 <li>html (view)</li>
 <li>spec file (test)</li>
 <li>component (controller)</li>
-<li>add reference to the component in the app.module.ts file.</li>
+<li>added a reference to the component in the app.module.ts file.</li>
 </ul>
 </li>
 </ol>
@@ -2576,10 +2567,12 @@ environment.local.ts
     <b>Exercise</b>: Add the Menu 
 </h4>
 
-<div class="alert alert-warning" role="alert">This is a sample menu that includes a few links and a sub-menu dropdown.  Note that none of the links will work since we have not created any of those other pages or routes.</div>
-
 <ol>
-<li><p>Open the src\app\shared\header.component.html file and replace the contents with the following. </p>
+<li><p>Open the src\app\shared\header.component.html file</p>
+<pre><code class="lang-bash"> header.component.html
+</code></pre>
+</li>
+<li><p>Replace the contents with the following. </p>
 <pre><code class="lang-html"> &lt;header&gt;
      &lt;nav class=&quot;navbar navbar-toggleable-md navbar-light bg-faded&quot;&gt;
          &lt;button class=&quot;navbar-toggler navbar-toggler-right&quot; type=&quot;button&quot; data-toggle=&quot;collapse&quot; data-target=&quot;#navbarSupportedContent&quot;
@@ -2590,7 +2583,16 @@ environment.local.ts
          &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;navbarSupportedContent&quot;&gt;
          &lt;ul class=&quot;nav navbar-nav mr-auto&quot;&gt;
              &lt;li class=&quot;nav-item active&quot;&gt;
-             &lt;a class=&quot;nav-link&quot; [routerLink]=&quot;[&#39;/&#39;]&quot;&gt;All Items&lt;/a&gt;
+                 &lt;a class=&quot;nav-link&quot; [routerLink]=&quot;[&#39;/&#39;]&quot;&gt;All Items&lt;/a&gt;
+             &lt;/li&gt;
+             &lt;li class=&quot;nav-item active&quot;&gt;
+                 &lt;a class=&quot;nav-link&quot; [routerLink]=&quot;[&#39;/unknown&#39;]&quot;&gt;&quot;Unknown&quot;&lt;/a&gt;
+             &lt;/li&gt;
+             &lt;li class=&quot;nav-item active&quot;&gt;
+                 &lt;a class=&quot;nav-link&quot; [routerLink]=&quot;[&#39;/login&#39;]&quot;&gt;Login&lt;/a&gt;
+             &lt;/li&gt;
+             &lt;li class=&quot;nav-item active&quot;&gt;
+                 &lt;a class=&quot;nav-link&quot; [routerLink]=&quot;[&#39;/signup&#39;]&quot;&gt;Signup&lt;/a&gt;
              &lt;/li&gt;
          &lt;/ul&gt;
          &lt;/div&gt;
@@ -2609,35 +2611,35 @@ environment.local.ts
     <b>Exercise</b>: Update Main page
 </h4>
 
-<p>Now that we have created the menu, we need to add it to our rendered view.  </p>
+<p>Now that we have created the menu, we need to add it to the app component so that it shows on every page. </p>
+<p>One of the really cool things that we can do with components is include them inside of other components.  This makes it very easy to create reusable components.  </p>
 <ol>
-<li>Open the src\app\app.component.ts file </li>
+<li><p>Open the src\app\app.component.ts file </p>
+<pre><code class="lang-bash">app.component.ts
+</code></pre>
+</li>
 <li><p>Import the header component.  Add the import statement on line 2 right below the existing import statement.</p>
 <pre><code class="lang-TypeScript"> import { HeaderComponent } from &#39;./shared/header/header.component&#39;;
 </code></pre>
 </li>
-<li><p>Open the src\app\app.component.html file and replace the contents of this file with the following html.  </p>
-<pre><code class="lang-html"> &lt;app-header&gt;&lt;/app-header&gt;
- &lt;div class=&quot;jumbotron&quot;&gt;
-     &lt;div class=&quot;container&quot;&gt;
-         &lt;h1&gt;{{title}}&lt;/h1&gt;
-     &lt;/div&gt;
- &lt;/div&gt;
- &lt;div class=&quot;container clearfix&quot;&gt;
-     &lt;router-outlet&gt;&lt;/router-outlet&gt;
- &lt;/div&gt;
+<li><p>Open the src\app\app.component.html file</p>
+<pre><code class="lang-bash"> app.component.html
 </code></pre>
- <div class="alert alert-info" role="alert"><strong>Note:</strong> that the router-outlet tag is how Angular knows where to put the content of each of the views.</div>
 </li>
-<li><p>If you view the web page you should see the header with logo, &quot;All Items&quot; menu and our banner.</p>
+<li><p>Add the app-header to the top of the html code</p>
+<pre><code class="lang-html">&lt;app-header&gt;&lt;/app-header&gt;
+</code></pre>
+</li>
+<li><p>If you view the web page you should see the header with logo, the menu and our banner.  To make it easy to navigate between the routes we have created, we added all of them to the menu.  Normally you would only add the ones that a user should directly get to by clicking on a link.</p>
 <p><img src="images/header-view.png" alt="App Component with Header View"></p>
+<div class="alert alert-info" role="alert">  To make it easy to navigate between the routes we have created, we added all of them to the menu.  Normally you would only add the ones that a user should directly get to by clicking on a link.</div>
+
 </li>
 </ol>
 <div class="exercise-end"></div>
 
 <h3 id="create-footer">Create Footer</h3>
-<p>Creating the footer is very similar to creating the header.  The biggest difference is that we have some css styling that we will apply to position the footer at the bottom of the page.  </p>
-<p>The really awesome part of the css we are going to apply is that Angular has the concept of CSS encapsulation so the styling will only apply to the footer component and not to the rest of the site.  This gets automatically implemented for us, just by putting the styling in the footer components scss file instead of using th global style.scss file.</p>
+<p>Creating the footer is very similar to creating the header.  The biggest difference is that we have some css styling that we will apply to position the footer at the bottom of the page and shrink the body height so that text does not get stuck behind the footer.</p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Creating the footer component
 </h4>
@@ -2658,9 +2660,22 @@ environment.local.ts
 <li>add reference to the component in the app.module.ts file.</li>
 </ul>
 </li>
-<li><p>Open the src\app\shared\footer\footer.component.html and replace the contents with</p>
+</ol>
+<div class="exercise-end"></div>    
+
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Footer UI
+</h4>
+
+<ol>
+<li><p>Open src\app\shared\footer\footer.component.html</p>
+<pre><code class="lang-bash"> footer.component.html
+</code></pre>
+</li>
+<li><p>Replace the contents with</p>
 <pre><code> &lt;footer&gt;
-     &lt;div class=&quot;pull-center&quot;&gt;
+     &lt;div class=&quot;pull-left&quot;&gt;
          &amp;copy;Angular WS
      &lt;/div&gt;
  &lt;/footer&gt;
@@ -2672,27 +2687,34 @@ environment.local.ts
     <b>Exercise</b>: Styling the Footer
 </h4>
 
-<p>We want to postion the footer at bottom of the page and change the background color.  With Angular 2, we now have the ablity to have css constrained to an individual component like the footer instead of being global for the whole site to use.  We still have the ability to have global css for those styles that should be applied to the whole site by using the src\styles.scss file.  </p>
-<p>Since the footer is in the src\app\shared\footer\footer.component.html file we need to add the footer styles to the src\app\footer\footer.component.scss file and add the following content</p>
-<pre><code class="lang-scss">@import &quot;../../../assets/bootstrap/variables.scss&quot;;
-
-footer {
-    position: fixed;
-    height: 50px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 10px 5px;
-    border-top: 1px solid $gray-light;
-    background-color: $gray-lighter;
-    font-size: 0.8em;
-    color: $dark-blue;
-    div {
-        margin-left: 25px;
-        margin-right: 25px;
-    }
-}
+<p>We want to postion the footer at bottom of the page and change the background color.  </p>
+<ol>
+<li><p>Open src\app\footer\footer.component.scss file</p>
+<pre><code class="lang-bash"> footer.component.scss
 </code></pre>
+</li>
+<li><p>Add the following to make the footer at the bottom of the page with a height of 50px, a gray background and some padding around the div</p>
+<pre><code class="lang-scss"> @import &quot;../../../assets/bootstrap/variables.scss&quot;;
+
+ footer {
+     position: fixed;
+     height: 50px;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     padding: 10px 5px;
+     border-top: 1px solid $gray-light;
+     background-color: $gray-lighter;
+     font-size: 0.8em;
+     color: $dark-blue;
+     div {
+         margin-left: 25px;
+         margin-right: 25px;
+     }
+ }
+</code></pre>
+</li>
+</ol>
 <div class="exercise-end"></div>
 
 <h3 id="display-footer">Display Footer</h3>
@@ -2702,21 +2724,20 @@ footer {
 
 <p>Now we are ready to add our footer to the Main page</p>
 <ol>
-<li><p>Open the src\app\app.component.ts file and import the footer component below the HeaderComponent import statement (note: order is not important)</p>
+<li><p>Open the src\app\app.component.ts file</p>
+<pre><code class="lang-bash">app.component.ts
+</code></pre>
+</li>
+<li><p>We need to import the FooterComponent before we can use it on the Main Page which is our AppComponent</p>
 <pre><code class="lang-TypeScript">import { FooterComponent } from &#39;./shared/footer/footer.component&#39;;
 </code></pre>
 </li>
-<li><p>Open the src\app\app.component.html file and replace the contents of this file with the following html</p>
-<pre><code class="lang-html"> &lt;app-header&gt;&lt;/app-header&gt;
- &lt;div class=&quot;jumbotron&quot;&gt;
-     &lt;div class=&quot;container&quot;&gt;
-         &lt;h1&gt;{{title}}&lt;/h1&gt;
-     &lt;/div&gt;
- &lt;/div&gt;
- &lt;div class=&quot;container clearfix&quot;&gt;
-     &lt;router-outlet&gt;&lt;/router-outlet&gt;
- &lt;/div&gt;
- &lt;app-footer&gt;&lt;/app-footer&gt;
+<li><p>Now we can add the <code>&lt;app-footer&gt;</code> tag in the src\app\app.component.html</p>
+<pre><code class="lang-bash">app.component.html
+</code></pre>
+</li>
+<li><p>Add the <code>&lt;app-footer&gt;</code> at the bottom of the html</p>
+<pre><code class="lang-html"> &lt;app-footer&gt;&lt;/app-footer&gt;
 </code></pre>
 </li>
 <li><p>If you view the web page you should see the footer </p>
@@ -2730,10 +2751,14 @@ footer {
     <b>Exercise</b>: Fixing body height
 </h4>
 
-<p>Since we have a static footer, will need to change the body height to account for the footer height.  Without doing this the body content will be hidden for the last 50px of the screen.</p>
-<p>So far we have seen how to use component level css but Angular still has the ability to do global styles that will apply to the whole by adding them into the src\style.scss file.</p>
+<p>Since we have a static footer, will need to change the body height to account for the footer height.  Without doing this the body content will be hidden for the last 50px of the screen like it is currently doing if you have any todo items in your list.</p>
+<p>Up to this point, we have only been dealing with component level styles.  For the body height, we want it to apply to the whole site.  We can do this by putting the styling in the src\style.scss file</p>
 <ol>
-<li><p>Open the src\style.scss file and add the following css </p>
+<li><p>Open the src\style.scss file</p>
+<pre><code class="lang-bash"> style.scss
+</code></pre>
+</li>
+<li><p>Add the following css code to adjust the body height.  We are going an extra 10 pixels in height to give a little bit of padding around the text in the footer.</p>
 <pre><code class="lang-html"> html {
      position: relative;
      height: auto;
@@ -2754,6 +2779,7 @@ footer {
     <b>Exercise</b>: Add Environment Name to Footer
 </h4>
 
+<p>Earlier we created an environment name variable in the different Angular environment files.  Wouldn&#39;t it be nice if we displayed which environment we were in within the footer.</p>
 <ol>
 <li><p>Open the src\app\shared\footer\footer.component.ts file </p>
 <pre><code class="lang-bash"> footer.component.ts
@@ -2767,23 +2793,21 @@ footer {
 <pre><code class="lang-TypeScript"> public env = environment.environmentName;
 </code></pre>
 </li>
+</ol>
+<p>Now we can display the env variable in our footer&#39;s html</p>
+<ol>
 <li><p>Open the src\app\shared\footer\footer.component.html file</p>
 <pre><code class="lang-bash"> footer.component.html
 </code></pre>
 </li>
-<li><p>Replace the contents with</p>
-<pre><code> &lt;footer&gt;
-     &lt;div class=&quot;pull-left&quot;&gt;
-         &amp;copy;Angular WS
-     &lt;/div&gt;
-     &lt;div class=&quot;pull-right&quot;&gt;
-         env: {{ env }} 
-     &lt;/div&gt;      
- &lt;/footer&gt;
+<li><p>After the &quot;Angular WS&quot; div but instead the footer tag add the following to display the env value</p>
+<pre><code> &lt;div class=&quot;pull-right&quot;&gt;
+     env: {{ env }}
+ &lt;/div&gt;
 </code></pre></li>
 <li><p>If you view the web page you should see the footer </p>
 <p><img src="images/footer-with-env.png" alt="App Works with Footer"></p>
-<div class="alert alert-warning" role="alert">Notice that the env:Local in the footer is coming from the environment.local.ts file.  If you stop <code>ng serve</code> and run it without using the -e argument, the env value will change to Development
+<div class="alert alert-warning" role="alert">Notice that the env:Local in the footer is coming from the environment.local.ts file.  If you stop <code>ng serve</code> and run it without using the <code>-e local</code> argument, the env value will change to Development
 
     <img src="images/footer-with-env-dev.png" alt="footer development env">
 
@@ -2791,8 +2815,7 @@ footer {
 
 </li>
 </ol>
-<div class="exercise-end"></div>    
-
+<div class="exercise-end"></div>  
 
 <h3 id="review">Review</h3>
 <p>In this chapter will learned:</p>
@@ -2851,18 +2874,25 @@ Note that this will remove the dist directory before build.
 				<div class="chapter">
 					<h2 id="bonus-additional-todo-features">Bonus: Additional Todo Features</h2>
 <h3 id="overview">Overview</h3>
-<p>Right now the Todo UI is fully functional but there is some nice usability things that could be immplemented.  </p>
+<p>Right now the Todo UI is fully functional but there is some nice usability enhancements we could implement.  For example:   </p>
 <ul>
 <li>The todo list is sorted by when it was created, it would be much nicer to sort alphabetically and by completion status.  </li>
-<li>There is no way to see a count of how many items you have open.  The form also </li>
-<li>The add form is not cleared out on successful save</li>
+<li>There is no way to see a count of how many items you have open.</li>
+<li>The add form is not cleared out on successful save.</li>
 </ul>
 <h3 id="goals">Goals</h3>
 <ul>
-<li>Show how to implement additional usability features such as running open item count, sorting in the UI and resetting the form. </li>
+<li>Show how to sort on the client side</li>
+<li>Show how to reset a form</li>
+<li>Show how to a filtered an array and display the count of filtered items</li>
 </ul>
 <h3 id="displaying-open-item-count">Displaying Open Item Count</h3>
-<p>It would be nice to know how many todo items that the user has and display that in the UI.  You will need to make sure to update the open number when pulling, updating, and deleting todo items.</p>
+<p>It would be nice to know how many todo items that the user has and display that in the UI.  </p>
+<p>Requirements:</p>
+<ul>
+<li>Display a count a open todo items without querying the API</li>
+<li>Update the count when getting, updating and deleting the todo item list. </li>
+</ul>
 <h4 class="exercise-start">
     <b>Exercise</b>: Calculating Open Items
 </h4>
@@ -2872,11 +2902,11 @@ Note that this will remove the dist directory before build.
 <pre><code class="lang-bash"> todo.component.ts
 </code></pre>
 </li>
-<li><p>Create a variable to hold the open count in the TodoComponent class that is of type number</p>
+<li><p>Create a variable to hold the open count in the TodoComponent class that is of type number with a default value of 0</p>
 <pre><code class="lang-TypeScript"> openItemCount: number = 0;
 </code></pre>
 </li>
-<li><p>Add the following function to get the count of open todo items by using the filter function to look for items where the completed value is false.</p>
+<li><p>Create a function called calculateOpenItems that filters the todoList to only show when the completed status is false and get the length.</p>
 <pre><code class="lang-TypeScript"> calculateOpenItems(): void {
      this.openItemCount = this.todoList.filter(item =&gt; item.completed === false).length;
  }
@@ -2886,111 +2916,27 @@ Note that this will remove the dist directory before build.
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Updating Open Item Count on Fetch
+    <b>Exercise</b>: Calculate Item Count When Pulling Items
 </h4>
 
 <ol>
-<li><p>In the getTodoListAll function, add a call to the calculateOpenItems function after setting the todoList variable to data.  </p>
-<pre><code class="lang-TypeScript"> getTodoListAll(): void {
-     this.todoService.getAll()
-     .subscribe(
-     data =&gt; {
-         this.todoList = data;
-         this.calculateOpenItems();
-     },
-     error =&gt; {
-         this.errorMessage = &lt;any&gt;error;
-     });
- }
+<li><p>In src\app\todo\todo.component.ts that we already have open, find the getTodoListAll function and add a call to the calculateOpenItems function after setting the todoList variable but still within the <code>data</code> function.  </p>
+<pre><code class="lang-TypeScript"> this.calculateOpenItems();
 </code></pre>
 </li>
 </ol>
-<div class="exercise-end"></div>
-
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Update Open Item Count on Add
-</h4>
-
-<ol>
-<li><p>In the todo.component.ts file increment the openItemCount in the save function</p>
-<pre><code class="lang-TypeScript"> save(): void {
-     this.todoService.save(this.addForm.value.item)
-         .subscribe(result =&gt; {
-             console.log(&#39;save result&#39;, result);
-             this.todoList.push(result);
-             this.openItemCount++;
-         },
-         error =&gt; {
-             this.errorMessage = &lt;any&gt;error;
-         });
- }
-</code></pre>
-</li>
-</ol>
-<div class="alert alert-info" role="alert">Since we are just adding a new record and are not pulling a new todo list array from the service, we can just increment the openItemCount variable.</div>
-
-
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Update Open Item on Complete 
-</h4>
-
-<p>When we toggle the completion status of a Todo item we also need to update the openItemCount value.</p>
-<p>In the completeTodo, upon returning the data from the TodoService.updateTodo call, we need to update the openItemCount. To do this, we will call the calculateOpenItems function.</p>
-<p>The reason that we did not just subtract from the openItemCount is that we are able to toggle completion status so sometime you will need to add and other times you will need to subtract.  Instead of having to create this logic, we can just call the calculateOpenItems function to do the work for us.</p>
-<ol>
-<li>In the todo.component.ts file, find the completeTodo function and add the call to calculateOpenItems in the returned data</li>
-</ol>
-<pre><code class="lang-TypeScript">completeTodo(todo: Todo): void {
-    todo.completed = !todo.completed;
-    this.todoService.updateTodo(todo)
-        .subscribe(
-        data =&gt; {
-         this.calculateOpenItems();
-        },
-        error =&gt; {
-            todo.completed = !todo.completed;
-            this.errorMessage = &lt;any&gt;error;
-            console.log(&#39;complete error&#39;, this.errorMessage);
-        });
-}
-</code></pre>
-<div class="exercise-end"></div>
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Update Open Item on Delete
-</h4>
-
-<p>The last thing we need to do is to re-calculate the openItemCount when an item is deleted.  We don&#39;t just decrement since a user can delete a completed it and there is no sense in adding in additional logic since the calculateOpenItems already has the logic.</p>
-<ol>
-<li>In the todo.component.ts file, find the deleteTodo function and add the call to the calculateOpenItems function after removing the deleted item from the todoList.</li>
-</ol>
-<pre><code class="lang-TypeScript">deleteTodo(todo: Todo): void {
-    this.todoService.deleteTodo(todo)
-        .subscribe(
-        data =&gt; {
-            let index = this.todoList.indexOf(todo);
-            this.todoList.splice(index, 1);
-            this.calculateOpenItems();
-        },
-        error =&gt; {
-            todo.completed = !todo.completed;
-            this.errorMessage = &lt;any&gt;error;
-            console.log(&#39;complete error&#39;, this.errorMessage);
-        });
-}
-</code></pre>
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Add Open Item Count to UI
 </h4>
 
-<p>The last thing we need to do is add the open item count to the UI.  It should automatically update as items are added, updated, and deleted.</p>
+<p>Now that we have the todo open item count being calculating on component render, we are going to add it to the UI.  For now it will only be updated on component render.</p>
 <ol>
-<li>Open the todo.component.html file</li>
+<li><p>Open the src\app\todo\todo.component.html file</p>
+<pre><code class="lang-bash"> todo.component.html
+</code></pre>
+</li>
 <li><p>Inside of the page-header div after the &quot;Todo List&quot; title, add the following html</p>
 <pre><code class="lang-html"> &lt;p class=&quot;lead&quot;&gt;You&#39;ve got &lt;em&gt;{{openItemCount}}&lt;/em&gt; things to do&lt;/p&gt;
 </code></pre>
@@ -3001,63 +2947,204 @@ Note that this will remove the dist directory before build.
 </ol>
 <div class="exercise-end"></div>
 
-<h3 id="sort-in-the-ui">Sort in the UI</h3>
-<p>Right now the data from the API comes back unsorted.  It is ordered based on the order that they were added.  Instead it would be much better if we sorted the todo items based on the text and completion status.  The completed items should be at the bottom.  As well the sort should be case insensitive.  </p>
-<p>With ES6 and TypeScript we can use a map and reduce function to accomplish this task. </p>
+
+
 <h4 class="exercise-start">
-    <b>Exercise</b>: Sorting in the Client
+    <b>Exercise</b>: Update Open Item Count on Add
 </h4>
 
 <ol>
-<li>Open the todo.component.ts file</li>
-<li><p>Add the following code to create a generic array sort function</p>
-<pre><code class="lang-TypeScript"> fieldSorter(fields, ignoreCase) {
-     return (a, b) =&gt; fields.map(o =&gt; {
-         let dir = 1;
-         if (o[0] === &#39;-&#39;) { dir = -1; o = o.substring(1); }
-         if (ignoreCase === true &amp;&amp; typeof a[o] === &#39;string&#39; &amp;&amp; typeof b[o] === &#39;string&#39;) {
-         a[0] = a[o].toLocaleLowerCase();
-         b[o] = b[o].toLocaleLowerCase();
+<li><p>Open src\app\todo\todo.component.ts </p>
+<pre><code class="lang-bash"> todo.component.ts
+</code></pre>
+</li>
+<li><p>Find the save method and increment the openItemCount after we push the new item into the todoList array</p>
+<pre><code class="lang-TypeScript"> this.openItemCount++;
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Update Open Item on Complete 
+</h4>
+
+<p>When we toggle the completion status of a Todo item we also need to update the openItemCount value.  We want to make this update after successfully calling the TodoService.updateTodo service function.  Since it is a toggle we need to have a little bit of logic to figure out if the item was originally completed or not.  </p>
+<ol>
+<li><p>In the todo.component.ts file</p>
+<pre><code class="lang-bash"> todo.component.ts
+</code></pre>
+</li>
+<li><p>Find the completeTodo function and add the logic below in the subscribe data.  This logics reads if the todo item is completed then decrement the openItemCount else increment the openItemCount;</p>
+<pre><code class="lang-TypeScript"> todo.completed ? this.openItemCount-- : this.openItemCount++;
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Update Open Item on Delete
+</h4>
+
+<p>The last thing we need to do is to re-calculate the openItemCount when an item is deleted.  We don&#39;t just decrement since a user can delete a completed it and there is no sense in adding in additional logic since the calculateOpenItems already has the logic.</p>
+<ol>
+<li><p>In the src\app\todo\todo.component.ts file</p>
+<pre><code class="lang-bash">todo.component.ts
+</code></pre>
+</li>
+<li><p>Find the deleteTodo function and add logic to decrement the openItemCount if the todo item being deleted was not completed.  You will want to put this call after the splice that removes the item from the todo list</p>
+<pre><code class="lang-TypeScript"> if (todo.completed === false) this.openItemCount--;
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<p>Now when you fetch, add, complete or delete a todo item the open item count will be updated accordingly.  </p>
+<h3 id="sort-in-the-ui">Sort in the UI</h3>
+<p>Right now the data from the API is unsorted which makes the list hard to read.  It would be better sort alphabetically with the uncompleted items at the top.  </p>
+<h4 id="requirements">Requirements</h4>
+<ul>
+<li>Sort by multiple fields</li>
+<li>Sort is case insensitive</li>
+<li>Sort for text fields can be done either ascending or descending </li>
+<li>Sort should be generic and able to be used on any array</li>
+<li>Completed items are at the bottom of the list</li>
+<li>Each item is sorted by its text after sorting by the completed status</li>
+<li>The sort is done on the client side and not in the API</li>
+<li>Sorting is done when fetching, adding, and completing</li>
+<li>Sorting does not need to be updated when deleting since the list is already sorted and we are just removing an item</li>
+</ul>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Creating Generic Function
+</h4>
+
+<ol>
+<li>Open the Integrated Terminal</li>
+<li><p>Use ng to generate a new class called FieldSorter in the shared/classes folder</p>
+<pre><code class="lang-bash"> ng generate class shared/classes/FieldSorter
+</code></pre>
+</li>
+<li><p>Open the src/app/shared/classes/field-sorter.ts file</p>
+<pre><code class="lang-bash"> field-sorter.ts
+</code></pre>
+</li>
+<li><p>To the FieldSorter class add the sort class below.  </p>
+<pre><code class="lang-TypeScript"> // made static in order to not have to new up the class to use
+ public static sort(fieldNames: Array&lt;string&gt;, ignoreCase: boolean) {
+     return (item1: object, item2: object) =&gt; fieldNames.map((field: string) =&gt; {
+         // A-Z sorting
+         let direction: number = 1;
+
+         // if field starts with - then Z-A sorting
+         // strip off the - sign from field name
+         if (field.substring(0, 1) === &#39;-&#39;) {
+             direction = -1;
+             field = field.substring(1);
          }
 
-         return a[o] &gt; b[o] ? dir : a[o] &lt; b[o] ? -(dir) : 0;
-     }).reduce((p, n) =&gt; p ? p : n, 0);
+         // capture values so as not to change the original array field value
+         // important when doing case insensitive searches else items would display in lowercase
+         let item1Value = item1[field], item2Value = item2[field];
+
+         // if ignoring case and field value is a type of string then call toLocaleLowerCase on both fields.  Used toLocaleLowerCase to accord for culture based sorting
+         if (ignoreCase === true) {
+             if (typeof item1Value === &#39;string&#39;) item1Value = item1Value.toLocaleLowerCase();
+             if (typeof item2Value === &#39;string&#39;) item2Value = item2Value.toLocaleLowerCase();
+         }
+
+         // item1 is higher = 1, lower = -1, equal = 0
+         return item1Value &gt; item2Value ? direction : item1Value &lt; item2Value ? -(direction) : 0;
+     }).reduce((item1SortValue: number, item2SortValue: number) =&gt; {
+         // values will be 1 or 0 based on the map function output.
+         // if item1SortValue is 1 and item2SortValue is 0 then item1 goes 1st
+         // if item1SortValue is 0 and item2SortValue is 1 then item2 goes 1st
+         // if both are equal then item2 will go 1st
+         return item1SortValue ? item1SortValue : item2SortValue
+     }, 0);
  }
 </code></pre>
 <ul>
-<li><p>We can even have it sort if needed in decending order by appending on a - sign to the field name.</p>
-<div class="alert alert-info" role="alert">The fieldSorter function is generic and can be reused on any array sort call.</div>
-
-
-</li>
+<li>We are using the map and reduce functions to accomplish our sorting task </li>
+<li>It is a static function so that you do not have to new up the class in order to use it  </li>
+<li>Parameters are an array of fieldNames that corresponds to a field in the array you are sorting and a boolean to decide if case is ignored</li>
+<li>If you start a field name with a minus sign if will sort it descending</li>
 </ul>
 </li>
 </ol>
+<div class="exercise-end"></div>
+
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Sorting to UI
+</h4>
+
+<p>Now that we have our generic sorting method, we can create a function to do the actual sorting that can be called in the save, getTodoListAll, and completedTodo.  </p>
 <ol>
-<li><p>Now that we have our generic sorting method, we can create a function to do the actual sorting that can be called in the save, completedTodo and deleteTodo functions</p>
+<li><p>Open src\app\todo\todo.component.ts</p>
+<pre><code class="lang-bash"> todo.component.ts
+</code></pre>
+</li>
+<li><p>Add the following function to call the FieldSorter.sort and sort first by completed status and then by name.  </p>
 <pre><code class="lang-TypeScript"> sortItems(): void {
      this.todoList.sort(this.fieldSorter([&#39;completed&#39;, &#39;name&#39;], true));
  }
 </code></pre>
 </li>
-<li><p>The last thing we need to do is to call the sortItems function in the save, completeTodo and getTodoListAll functions.  Make sure to place the call after any updates to the todoList have occurred</p>
+<li><p>In the save, completeTodo and getTodoListAll functions after we have updated the todoList array, call the sortItems function</p>
 <pre><code> this.sortItems();
-</code></pre><ul>
-<li>We do not need to call the sort in the deleteTodo since the list will already be sorted and we are only removing a single item.</li>
-</ul>
-</li>
-<li><p>Now when you use interact with the UI the list will stay sorted by name and complete state.  The sort is also case insensitive and the open items should be on the top of the list.</p>
-<p> <img src="images/todo-sorted.png" alt="sorted output"></p>
+</code></pre></li>
+<li><p>Now when you fetch, add, and update todo items the list will stay sorted by completed status and then by item text.  The sort is also case insensitive.
+ <img src="images/todo-sorted.png" alt="sorted output"></p>
 </li>
 </ol>
 <div class="exercise-end"></div>
 
 
 <h3 id="reset-form-after-save">Reset Form After Save</h3>
-<p>Right now after you add a new todo item, the form does not clear out the input box.  Then when you go to clear it out, the required field validator will be fired.</p>
-<p>Instead, we can clear out the form on a successful save call by calling <code>this.addForm.reset();</code></p>
-<pre><code class="lang-TypeScript">this.addForm.reset();
+<p>Right now after you add a new todo item, the form does not clear out the input box.  This is really annoying as a user since you would not be entering the same todo item multiple times.  Since we only have 1 field we could set the field value to a blank string in the save method but that would not reset state.  Instead we want to call the reset function that is part of the FormGroup that we defined addForm as.   </p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Sorting to UI
+</h4>
+
+<ol>
+<li><p>Open src\app\todo\todo.component.ts</p>
+<pre><code class="lang-bash"> todo.component.ts
 </code></pre>
+</li>
+<li><p>Find the save function and in the result section add the form reset call</p>
+<pre><code class="lang-TypeScript"> this.addForm.reset();
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+
+<h3 id="confirm-before-deleting">Confirm Before Deleting</h3>
+<p>Right now when you delete an item it does not ask you at all for a confirmation.  This is a bad user experience as they could accidentally delete something important.</p>
+<p>There are 3 ways that we could accomplish the confirmation:</p>
+<ol>
+<li>Create a custom dialog component that we can customize the look and feel of.</li>
+<li>Use an component that someone else built like <a href="https://github.com/mattlewis92/angular-confirmation-popover#installation">https://github.com/mattlewis92/angular-confirmation-popover#installation</a></li>
+<li>Use the built-in browser confirmation dialog.  With this option we do not have any control of the look and feel, only the title and message.</li>
+</ol>
+<p>For the sake of this workshop, we are going to go with option #3.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Add Delete Confirmation
+</h4>
+
+<ol>
+<li><p>Open src\app\todo\todo.component.ts</p>
+<pre><code class="lang-bash"> todo.component.ts
+</code></pre>
+</li>
+<li><p>Find the deleteTodo function and wrap the contents of the function in the confirm call below.  Since TypeScript is just a super set of JavaScript we are able to use the confirm JavaScript syntax.</p>
+<pre><code class="lang-TypeScript"> if (confirm(&quot;Are you sure you want to delete?&quot;)) {
+     // delete call goes here
+ }
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
 
 				</div>
 
@@ -3072,6 +3159,45 @@ Note that this will remove the dist directory before build.
 <h3 id="caching-user">Caching User</h3>
 <p>Right now when you refresh the page the current user information in the AuthService is lost.  We can cache the data using cookies.  To implement the cookie storage we are going to use the ngx-cookie library.</p>
 <h4 class="exercise-start">
+    <b>Exercise</b>: Create Class
+</h4>
+
+<p>In the AuthService, in order to hold our user data and get type checking we need to create a TypeScript class with an email and id field.  We are going to leave the password field out of the class as we do not want to store this in memory at all.  </p>
+<ol>
+<li>Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then &quot;Integrated Terminal&quot;</li>
+<li><p>Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.</p>
+<pre><code class="lang-bash"> ng generate class shared/classes/User
+</code></pre>
+</li>
+<li><p>The generate command will the user.ts file in the shared/classes folder: </p>
+<p> <img src="images/user-generate.png" alt="output of generate"></p>
+</li>
+</ol>
+<ol>
+<li><p>Open the src\app\shared\classes\User.ts file</p>
+<pre><code class="lang-bash"> user.ts
+</code></pre>
+</li>
+<li><p>Within the User class, add the following fields.  Note that the  createdAt and updatedAt are automatically added by the API.</p>
+<pre><code class="lang-TypeScript"> email: string;
+ id: string;
+ createdAt: Date;
+ updatedAt: Date;
+</code></pre>
+</li>
+<li><p>Within the User class and before the fields we just added, create a constructor that requires an email and make an id field optional (hint: the <code>?</code> makes the parameter optional)</p>
+<pre><code class="lang-TypeScript"> constructor(email: string, id?: string, createdAt?: Date, updatedAt?: Date){
+     this.email = email;
+     this.id = id;
+     if (createdAt) this.createdAt = createdAt;
+     if (updatedAt) this.updatedAt = updatedAt;
+ }
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
   <b>Exercise</b>: Install ngx-cookie
 </h4>
 
@@ -3081,20 +3207,15 @@ Note that this will remove the dist directory before build.
 </code></pre>
 </li>
 <li><p>Open src\app\app.module.ts</p>
+<pre><code class="lang-bash"> app.module.ts
+</code></pre>
 </li>
 <li><p>Import the ngx-cookie library</p>
 <pre><code class="lang-TypeScript"> import { CookieModule } from &#39;ngx-cookie&#39;;
 </code></pre>
 </li>
 <li><p>Add the ngx-cookie library to the @Ngmodule imports sections</p>
-<pre><code class="lang-TypeScript"> imports: [
-     BrowserModule,
-     FormsModule,
-     ReactiveFormsModule,
-     HttpModule,
-     AppRoutingModule,
-     CookieModule.forRoot()
- ],
+<pre><code class="lang-TypeScript"> CookieModule.forRoot()
 </code></pre>
 <div class="exercise-end"></div>
 
@@ -3105,8 +3226,27 @@ Note that this will remove the dist directory before build.
 </h4>
 
 <ol>
-<li>Open the auth.service.ts file</li>
-<li><p>Add the following functions to get/set the cookie</p>
+<li><p>Open the auth.service.ts file</p>
+<pre><code class="lang-bash"> auth.service.ts
+</code></pre>
+</li>
+<li><p>Import the User class that we created earlier</p>
+<pre><code class="lang-TypeScript"> import { User } from &#39;../classes/user&#39;;
+</code></pre>
+</li>
+<li><p>Import the CookieService from ngx-cookie</p>
+<pre><code class="lang-TypeScript"> import { CookieService } from &#39;ngx-cookie&#39;;
+</code></pre>
+</li>
+<li><p>Update the constructor to inject the CookieService</p>
+<pre><code class="lang-TypeScript"> constructor(private http: Http, private cookieService: CookieService) {}
+</code></pre>
+</li>
+<li><p>Add a class level variable to store the name of the cookie and set it to currentUser</p>
+<pre><code class="lang-TypeScript"> private cookieKey: string = &quot;currentUser&quot;;
+</code></pre>
+</li>
+<li><p>Add the following functions to get/set the cookie to the AuthService class</p>
 <pre><code class="lang-TypeScript"> getUser(): User {
      return &lt;User&gt;this.cookieService.getObject(this.cookieKey)
  }
@@ -3127,26 +3267,53 @@ Note that this will remove the dist directory before build.
     <b>Exercise</b>: Setting Cookie
 </h4>
 
-
 <ol>
-<li><p>In the login and signup functions, inside the do statement remove the existing code that is setting the this.currentUser variable and replace it with the following.  </p>
-<pre><code class="lang-TypeScript"> if (res) {
-       this.setUser(&lt;User&gt;res.json());
- }
+<li><p>In the auth.service.ts file, in the login, signup, and isAuthenticated functions, add a call to setUser before the return Observable.of(true) statement</p>
+<pre><code class="lang-TypeScript"> this.setUser(&lt;User&gt;res.json());
 </code></pre>
 </li>
-<li><p>In the login and isAuthenticated functions, in the catch section, add a call to clearUser </p>
+<li><p>In the login and isAuthenticated functions, before the Observable.of(false) in both the result and catch section add to clearUser since the login was invalid and we want to clear out any existing user cookie</p>
 <pre><code class="lang-TypeScript"> this.clearUser();
 </code></pre>
-</li>
-<li><p>In the isAuthenticated function, in the map section, if res is false call clearUser</p>
-<pre><code class="lang-TypeScript"> this.clearUser();
-</code></pre>
-</li>
-<li><p>You can remote the class variable currentUser as it will no longer be used.</p>
 </li>
 </ol>
 <div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Display logged in user
+</h4>
+
+<ol>
+<li><p>Open header.component.ts</p>
+<pre><code class="lang-bash"> header.component.ts
+</code></pre>
+</li>
+<li><p>Import the AuthService so that we can call the getUser function</p>
+<pre><code class="lang-TypeScript"> import { AuthService } from &#39;../services/auth.service&#39;;
+</code></pre>
+</li>
+<li><p>Add the AuthService to the constructor</p>
+<pre><code class="lang-TypeScript"> constructor(private authService: AuthService) { }
+</code></pre>
+</li>
+<li><p>Open the src\app\shared\header\header.component.html</p>
+<pre><code class="lang-bash"> header.component.html
+</code></pre>
+</li>
+<li><p>Inside of the <code>&lt;div class=&quot;collapse navbar-collapse&quot;....</code> tag add the following after the closing <code>&lt;/ul&gt;</code></p>
+<pre><code class="lang-html"> &lt;ul class=&quot;nav navbar-nav&quot;&gt;
+     &lt;li class=&quot;nav-item&quot;&gt;
+         &lt;span class=&quot;nav-link&quot;&gt;Welcome {{(authService.getUser())?.email}}&lt;/span&gt;
+     &lt;/li&gt;
+ &lt;/ul&gt;
+</code></pre>
+<ul>
+<li>This code will display a Welcome along with the email if it is populated.  </li>
+</ul>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
 
 <h3 id="logout-user">Logout User</h3>
 <p>Before being able to signup for an account, we need the user to be logged out first.</p>
@@ -3157,13 +3324,17 @@ Note that this will remove the dist directory before build.
 </h4>
 
 <ol>
-<li>open the auth.service.ts file</li>
+<li><p>Open the auth.service.ts file</p>
+<pre><code class="lang-bash"> auth.service.ts
+</code></pre>
+</li>
 <li><p>Add the logout function below that will call the API logout function and clear out the cookie</p>
 <pre><code class="lang-TypeScript"> logout(): Observable&lt;boolean&gt; {
      return this.http.get(`${this.url}/logout`, this.options)
      .map((res: Response) =&gt; {
+       this.clearUser();
+
        if (res.ok) {
-         this.clearUser();
          return Observable.of(true);
        }
 
@@ -3183,17 +3354,13 @@ Note that this will remove the dist directory before build.
 </h4>
 
 <ol>
-<li>Open the src\app\shared\header\header.component.html</li>
-<li><p>Inside of the <code>&lt;div class=&quot;collapse navbar-collapse&quot;....</code> tag add the following after the closing <code>&lt;/ul&gt;</code></p>
-<pre><code class="lang-html"> &lt;ul class=&quot;nav navbar-nav&quot;&gt;
-     &lt;li class=&quot;nav-item&quot;&gt;
-         &lt;span class=&quot;nav-link&quot;&gt;Welcome {{(authService.getUser())?.email}}  &lt;a [hidden]=&quot;!authService.getUser()&quot; (click)=&quot;logout()&quot;&gt; | Logout&lt;/a&gt;&lt;/span&gt;
-     &lt;/li&gt;
- &lt;/ul&gt;
+<li><p>Open the src\app\shared\header\header.component.html</p>
+<pre><code class="lang-bash"> header.component.html
 </code></pre>
-<ul>
-<li>This code will display a Welcome along with the email if it is populated.  </li>
-</ul>
+</li>
+<li><p>After the &quot;Welcome&quot; span tag add the following link tag to call the logout service.  Also, only show the button if the user is logged in.</p>
+<pre><code class="lang-html"> &lt;a [hidden]=&quot;!authService.getUser()&quot; (click)=&quot;logout()&quot;&gt; | Logout&lt;/a&gt;
+</code></pre>
 </li>
 </ol>
 <div class="exercise-end"></div>
@@ -3209,11 +3376,9 @@ Note that this will remove the dist directory before build.
 </li>
 <li><p>Import the AuthService and Router</p>
 <pre><code class="lang-TypeScript"> import { Router } from &#39;@angular/router&#39;;
- import { AuthService } from &#39;../services/auth.service&#39;;
- `
 </code></pre>
 </li>
-<li><p>Add the AuthService and Router to the constructor</p>
+<li><p>Add the Router to the constructor</p>
 <pre><code class="lang-TypeScript"> constructor(private authService: AuthService, private router: Router) { }
 </code></pre>
 </li>

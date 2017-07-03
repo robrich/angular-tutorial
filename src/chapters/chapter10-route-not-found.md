@@ -2,16 +2,11 @@
 
 ### Overview
 
-
-We have not yet implemented a catch all route which will be the route that is used when Angular does not match any other configured routes.  .
+Right now if the user types in a route that Angular does not know about you will get the following error
 
 ![no route found](images/ng2/no-route-found.png)
 
-
-There are 2 ways to fix this.  
-
-1. Make the TodoComponent the default so that it will redirect the user to that page.  This is not as nice of a user experience since it does not alert the user that the url they were trying to go to does not exist.
-1. Create a "Not Found" component and redirect the user to that component if none of the other routes match.  This is the preferred method and the one that we will cover.
+I prefer to solve this problem by creating a "Not Found" component and then redirecting the user to this component if they try to navigate to a route that does not exist.
 
 ### Goals
 
@@ -23,9 +18,7 @@ There are 2 ways to fix this.
     <b>Exercise</b>: Redirecting User to "Not Found" component
 </h4>
 
-From a user experience perspective, it is a much experience to redirect the user to a "not found" page instead of redirecting them back to the home page.  Create the route not found page is just like we did with the todo component.    
-
-1. Run the Angular Cli generate command to create the notFound component
+1. Open the integrated terminal and generate the notFound component 
 
     ```bash
     ng generate component notFound
@@ -50,10 +43,27 @@ From a user experience perspective, it is a much experience to redirect the user
 1. Add the ** route to and set it to use the NotFoundComponent
 
     ```TypeScript
-    , { path: '**', component: NotFoundComponent }
+    { path: '**', component: NotFoundComponent }
     ```
 
+1. Your routes should look like so
+
+    ```TypeScript
+    const routes: Routes = [
+        {
+            path: '',
+            children: [],
+            component: TodoComponent,
+            canActivate: [IsLoggedInGuard]
+        },
+        { path: 'login', children: [], component: LoginComponent },
+        { path: 'signup', component: SignupComponent },
+        { path: '**', component: NotFoundComponent }
+    ];
+    ```
+    
 1. If you now try to navigate to [http://localhost:4200/unknown](http://localhost:4200/unknown) you will be shown the NotFoundComponent 
 
     ![Not Found View](images/view-route-unknown.png)
     
+The only thing left for you to do is to design what you want your not found page to actually say.  

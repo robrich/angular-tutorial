@@ -61,8 +61,7 @@ We need to make a call to the API to check if the user is logged into the API or
       })
       .catch((error: Response) => {
         if (error.status !== 403) {
-          console.log('isAuthenticated error', error)
-          this.currentUser = null;
+          console.log('isAuthenticated error', error);
         }
 
         return Observable.of(false);

@@ -170,6 +170,6 @@ If you want to run the local configuration we need to pass in the environment co
     ng serve -e local
     ```
 
-1. If the Angular compile was successful, you will now be using the local environment configuration. You will not see any changes at this point since nothing is using those settings.  We will use them in the next exercise in our footer.
+1. If the Angular compile was successful, you will now be using the local environment configuration. Since our API urls are the same between files you will not see any difference at this time.  In the Header and Footer chapter we will add a footer that displays the environment name.
 
 <div class="exercise-end"></div>

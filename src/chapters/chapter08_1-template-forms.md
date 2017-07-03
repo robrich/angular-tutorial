@@ -278,53 +278,6 @@ Before we can make HTTP calls in our AuthService, we need to import the HttpModu
 <div class="exercise-end"></div>
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Create Class
-</h4>
-
-In the AuthService, in order to hold our user data and get type checking we need to create a TypeScript class with an email and id field.  We are going to leave the password field out of the class as we do not want to store this in memory at all.  
-
-1. Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then "Integrated Terminal"
-1. Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.
-
-    ```bash
-    ng generate class shared/classes/User
-    ```
-
-1. The generate command will the user.ts file in the shared/classes folder: 
-
-    ![output of generate](images/user-generate.png)
-
-
-1. Open the src\app\shared\classes\User.ts file
-
-    ```bash
-    user.ts
-    ```
-
-1. Within the User class, add the following fields.  Note that the  createdAt and updatedAt are automatically added by the API.
-
-    ```TypeScript
-    email: string;
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
-    ```
-
-1. Within the User class and before the fields we just added, create a constructor that requires an email and make an id field optional (hint: the `?` makes the parameter optional)
-
-    ```TypeScript
-    constructor(email: string, id?: string, createdAt?: Date, updatedAt?: Date){
-        this.email = email;
-        this.id = id;
-        if (createdAt) this.createdAt = createdAt;
-        if (updatedAt) this.updatedAt = updatedAt;
-    }
-    ```
-
-<div class="exercise-end"></div>
-
-
-<h4 class="exercise-start">
     <b>Exercise</b>: Implement Auth Service Login Function
 </h4>
 
@@ -353,17 +306,6 @@ The first thing we are going to do is create our login function
     }
     ```
 
-1. Import the User class that we created earlier
-
-    ```TypeScript
-    import { User } from '../classes/user';
-    ```
-
-1. We also want to create a public variable within the AuthClass to hold the output from the API call 
-
-    ```TypeScript
-    public currentUser: User;
-    ```
 
 1. For the API that we are using (SailsJS based), it requires that we set the HTTP option to allow credentials so that the session cookie can be passed back and forth, else it will always think you haven't logged in.  
 
@@ -376,22 +318,24 @@ The first thing we are going to do is create our login function
     <div class="alert alert-warning" role="alert">For now we are hard coding the API url into the service.  In the "Environment Configuration" chapter we will change this to pull from a configuration file</div>
 
     ```TypeScript
-    login(email: string, password: string): Observable<boolean | Response> {
+    login(email: string, password: string): Observable<boolean> {
         let loginInfo = { "email": email, "password": password };
         return this.http.put("https://dj-sails-todo.azurewebsites.net/user/login", loginInfo, this.options)
             .do((res: Response) => {
                 if (res){
-                    this.currentUser = <User>res.json();
+                    return Observable.of(true);
                 }
+
+                return Observable.of(false);
             })
             .catch(error => {
-                console.log('login error', error)
+                console.log('login error', error);
                 return Observable.of(false);
             });
     }
     ```
 
-    * This code setups the call to the login API, stores the response in the currentUser variable, and returns back an Observable.  
+    * This code setups the call to the login API and and returns back an Observable.  
     * Note that this code is not called until someone subscribes to the login function which we will be doing next.
 
     <div class="alert alert-danger" role="alert">The API is setup for username/password validation.  Make sure you do not use your real passwords as this is just a test API and not production secured.</div>
@@ -427,15 +371,15 @@ Now that we have our AuthService completed, we need to call it from our LoginCom
 1. Next we need to update our login function to call the AuthService and redirect if it finds the user.
 
     ```TypeScript
-      login(formValues) {
-    this.authService.login(formValues.email, formValues.password)
-      .subscribe(result => {
-        if (!this.authService.currentUser) {
-          console.log('user not found');
-        } else {
-          this.router.navigate(['/']);
-        }
-      });
+    login(formValues) {
+        this.authService.login(formValues.email, formValues.password)
+            .subscribe(result => {
+                if (!result) {
+                    console.log('user not found');
+                } else {
+                    this.router.navigate(['/']);
+                }
+        });
     }
     ```
 
@@ -618,20 +562,27 @@ Creating the signup component is just like the rest of the component that we hav
 
 We are first going to create the signup function in the AuthService.
 
+1. Open the src\app\shared\services\auth.service.ts
+
+    ```bash
+    auth.service.ts
+    ```
 
 1. Add the following method to allow an account to be created
 
   ```TypeScript
-  signup(email: string, password: string) {
+  signup(email: string, password: string): Observable<boolean> {
     let loginInfo = { "email": email, "password": password };
     return this.http.post("https://dj-sails-todo.azurewebsites.net/user/", loginInfo, this.options)
       .do((res: Response) => {
         if (res) {
-          this.currentUser = <User>res.json();
+          return Observable.of(true);
         }
+
+        return Observable.of(false);
       })
       .catch(error => {
-        console.log('signup error', error)
+        console.log('signup error', error);
         return Observable.of(false);
       });
   }
@@ -645,7 +596,7 @@ We are first going to create the signup function in the AuthService.
     <b>Exercise</b>: Create Signup Component
 </h4>
   
-1. Open terminal and run
+1. Open terminal and run the ng generate to create the signup component
 
   ```TypeScript
   ng generate component signup
@@ -773,9 +724,9 @@ We are first going to create the signup function in the AuthService.
             this.authService.signup(formValues.email, formValues.password)
             .subscribe(result => {
                 if (!result) {
-                this.loginInvalid = true;
+                    this.loginInvalid = true;
                 } else {
-                this.router.navigate(['/']);
+                    this.router.navigate(['/']);
                 }
             });
         }

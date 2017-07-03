@@ -11,6 +11,52 @@
 Right now when you refresh the page the current user information in the AuthService is lost.  We can cache the data using cookies.  To implement the cookie storage we are going to use the ngx-cookie library.
 
 <h4 class="exercise-start">
+    <b>Exercise</b>: Create Class
+</h4>
+
+In the AuthService, in order to hold our user data and get type checking we need to create a TypeScript class with an email and id field.  We are going to leave the password field out of the class as we do not want to store this in memory at all.  
+
+1. Within VS Code, open up the integrated terminal (ctrl+`) or view menu and then "Integrated Terminal"
+1. Run the ng generate command below to create the Authorization service.  I like to store my services under a shared\services folder.
+
+    ```bash
+    ng generate class shared/classes/User
+    ```
+
+1. The generate command will the user.ts file in the shared/classes folder: 
+
+    ![output of generate](images/user-generate.png)
+
+
+1. Open the src\app\shared\classes\User.ts file
+
+    ```bash
+    user.ts
+    ```
+
+1. Within the User class, add the following fields.  Note that the  createdAt and updatedAt are automatically added by the API.
+
+    ```TypeScript
+    email: string;
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    ```
+
+1. Within the User class and before the fields we just added, create a constructor that requires an email and make an id field optional (hint: the `?` makes the parameter optional)
+
+    ```TypeScript
+    constructor(email: string, id?: string, createdAt?: Date, updatedAt?: Date){
+        this.email = email;
+        this.id = id;
+        if (createdAt) this.createdAt = createdAt;
+        if (updatedAt) this.updatedAt = updatedAt;
+    }
+    ```
+
+<div class="exercise-end"></div>
+
+<h4 class="exercise-start">
   <b>Exercise</b>: Install ngx-cookie
 </h4>
 
@@ -21,6 +67,11 @@ Right now when you refresh the page the current user information in the AuthServ
   ```
 
 1. Open src\app\app.module.ts
+
+    ```bash
+    app.module.ts
+    ```
+
 1. Import the ngx-cookie library
 
     ```TypeScript
@@ -30,14 +81,7 @@ Right now when you refresh the page the current user information in the AuthServ
 1. Add the ngx-cookie library to the @Ngmodule imports sections
 
     ```TypeScript
-    imports: [
-        BrowserModule,
-        FormsModule,
-        ReactiveFormsModule,
-        HttpModule,
-        AppRoutingModule,
-        CookieModule.forRoot()
-    ],
+    CookieModule.forRoot()
     ```
 <div class="exercise-end"></div>
 
@@ -46,7 +90,36 @@ Right now when you refresh the page the current user information in the AuthServ
 </h4>
 
 1. Open the auth.service.ts file
-1. Add the following functions to get/set the cookie
+
+    ```bash
+    auth.service.ts
+    ```
+
+1. Import the User class that we created earlier
+
+    ```TypeScript
+    import { User } from '../classes/user';
+    ```
+
+1. Import the CookieService from ngx-cookie
+
+    ```TypeScript
+    import { CookieService } from 'ngx-cookie';
+    ```
+
+1. Update the constructor to inject the CookieService
+
+    ```TypeScript
+    constructor(private http: Http, private cookieService: CookieService) {}
+    ```
+
+1. Add a class level variable to store the name of the cookie and set it to currentUser
+
+    ```TypeScript
+    private cookieKey: string = "currentUser";
+    ```
+
+1. Add the following functions to get/set the cookie to the AuthService class
 
     ```TypeScript
     getUser(): User {
@@ -68,30 +141,62 @@ Right now when you refresh the page the current user information in the AuthServ
     <b>Exercise</b>: Setting Cookie
 </h4>
 
-
-1. In the login and signup functions, inside the do statement remove the existing code that is setting the this.currentUser variable and replace it with the following.  
+1. In the auth.service.ts file, in the login, signup, and isAuthenticated functions, add a call to setUser before the return Observable.of(true) statement
 
     ```TypeScript
-    if (res) {
-          this.setUser(<User>res.json());
-    }
+    this.setUser(<User>res.json());
     ```
 
-1. In the login and isAuthenticated functions, in the catch section, add a call to clearUser 
+1. In the login and isAuthenticated functions, before the Observable.of(false) in both the result and catch section add to clearUser since the login was invalid and we want to clear out any existing user cookie
 
     ```TypeScript
     this.clearUser();
     ```
-
-1. In the isAuthenticated function, in the map section, if res is false call clearUser
-
-    ```TypeScript
-    this.clearUser();
-    ```
-
-1. You can remote the class variable currentUser as it will no longer be used.
     
 <div class="exercise-end"></div>
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Display logged in user
+</h4>
+
+1. Open header.component.ts
+
+    ```bash
+    header.component.ts
+    ```
+    
+1. Import the AuthService so that we can call the getUser function
+
+    ```TypeScript
+    import { AuthService } from '../services/auth.service';
+    ```
+
+1. Add the AuthService to the constructor
+
+    ```TypeScript
+    constructor(private authService: AuthService) { }
+    ```
+
+1. Open the src\app\shared\header\header.component.html
+
+    ```bash
+    header.component.html
+    ```
+
+1. Inside of the `<div class="collapse navbar-collapse"....` tag add the following after the closing `</ul>`
+
+    ```html
+    <ul class="nav navbar-nav">
+        <li class="nav-item">
+            <span class="nav-link">Welcome {{(authService.getUser())?.email}}</span>
+        </li>
+    </ul>
+    ```
+
+    * This code will display a Welcome along with the email if it is populated.  
+
+<div class="exercise-end"></div>
+
 
 ### Logout User
 
@@ -105,15 +210,21 @@ We are going to implement the logout button in the header.
     <b>Exercise</b>: Create AuthService Logout 
 </h4>
 
-1. open the auth.service.ts file
+1. Open the auth.service.ts file
+
+    ```bash
+    auth.service.ts
+    ```
+
 1. Add the logout function below that will call the API logout function and clear out the cookie
 
   ```TypeScript
     logout(): Observable<boolean> {
         return this.http.get(`${this.url}/logout`, this.options)
         .map((res: Response) => {
+          this.clearUser();
+
           if (res.ok) {
-            this.clearUser();
             return Observable.of(true);
           }
 
@@ -132,17 +243,16 @@ We are going to implement the logout button in the header.
 </h4>
 
 1. Open the src\app\shared\header\header.component.html
-1. Inside of the `<div class="collapse navbar-collapse"....` tag add the following after the closing `</ul>`
 
-    ```html
-    <ul class="nav navbar-nav">
-        <li class="nav-item">
-            <span class="nav-link">Welcome {{(authService.getUser())?.email}}  <a [hidden]="!authService.getUser()" (click)="logout()"> | Logout</a></span>
-        </li>
-    </ul>
+    ```bash
+    header.component.html
     ```
 
-    * This code will display a Welcome along with the email if it is populated.  
+1. After the "Welcome" span tag add the following link tag to call the logout service.  Also, only show the button if the user is logged in.
+
+    ```html
+    <a [hidden]="!authService.getUser()" (click)="logout()"> | Logout</a>
+    ```
 
 <div class="exercise-end"></div>
 
@@ -160,10 +270,9 @@ We are going to implement the logout button in the header.
 
     ```TypeScript
     import { Router } from '@angular/router';
-    import { AuthService } from '../services/auth.service';
-    ````
+    ```
 
-1. Add the AuthService and Router to the constructor
+1. Add the Router to the constructor
 
     ```TypeScript
     constructor(private authService: AuthService, private router: Router) { }

@@ -18,8 +18,7 @@ In most web sites we have a header and footer at the top and bottom of the page 
 
 We can leave ng serve running while we make these changes and open up another Integrate Terminal for the commands below.
 
-1. In the VS Code Integrated Terminal, click the + to open a 2nd terminal
-1. Run the ng generate command to create the header component
+1. Open the VSCode Integrated Terminal and run the ng generate command to create the header component in the shared folder
 
     ```bash
     ng generate component shared/header
@@ -33,7 +32,7 @@ We can leave ng serve running while we make these changes and open up another In
     * html (view)
     * spec file (test)
     * component (controller)
-    * add reference to the component in the app.module.ts file.
+    * added a reference to the component in the app.module.ts file.
 
 <div class="exercise-end"></div>
 
@@ -41,9 +40,13 @@ We can leave ng serve running while we make these changes and open up another In
     <b>Exercise</b>: Add the Menu 
 </h4>
 
-<div class="alert alert-warning" role="alert">This is a sample menu that includes a few links and a sub-menu dropdown.  Note that none of the links will work since we have not created any of those other pages or routes.</div>
+1. Open the src\app\shared\header.component.html file
 
-1. Open the src\app\shared\header.component.html file and replace the contents with the following. 
+    ```bash
+    header.component.html
+    ```
+
+1. Replace the contents with the following. 
 
     ```html
     <header>
@@ -56,7 +59,16 @@ We can leave ng serve running while we make these changes and open up another In
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="nav navbar-nav mr-auto">
                 <li class="nav-item active">
-                <a class="nav-link" [routerLink]="['/']">All Items</a>
+                    <a class="nav-link" [routerLink]="['/']">All Items</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" [routerLink]="['/unknown']">"Unknown"</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" [routerLink]="['/login']">Login</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" [routerLink]="['/signup']">Signup</a>
                 </li>
             </ul>
             </div>
@@ -76,44 +88,46 @@ We can leave ng serve running while we make these changes and open up another In
     <b>Exercise</b>: Update Main page
 </h4>
 
-Now that we have created the menu, we need to add it to our rendered view.  
+Now that we have created the menu, we need to add it to the app component so that it shows on every page. 
+
+One of the really cool things that we can do with components is include them inside of other components.  This makes it very easy to create reusable components.  
+
 
 1.  Open the src\app\app.component.ts file 
+
+    ```bash
+    app.component.ts
+    ```
+
 1. Import the header component.  Add the import statement on line 2 right below the existing import statement.
 
     ```TypeScript
     import { HeaderComponent } from './shared/header/header.component';
     ```    
 
-1. Open the src\app\app.component.html file and replace the contents of this file with the following html.  
+1. Open the src\app\app.component.html file
+
+    ```bash
+    app.component.html
+    ```
+
+1.  Add the app-header to the top of the html code
 
     ```html
     <app-header></app-header>
-    <div class="jumbotron">
-        <div class="container">
-            <h1>{{title}}</h1>
-        </div>
-    </div>
-    <div class="container clearfix">
-        <router-outlet></router-outlet>
-    </div>
     ```
 
-    <div class="alert alert-info" role="alert">**Note:** that the router-outlet tag is how Angular knows where to put the content of each of the views.</div>
-
-1.  If you view the web page you should see the header with logo, "All Items" menu and our banner.
+1.  If you view the web page you should see the header with logo, the menu and our banner.  To make it easy to navigate between the routes we have created, we added all of them to the menu.  Normally you would only add the ones that a user should directly get to by clicking on a link.
 
     ![App Component with Header View](images/header-view.png)
 
+    <div class="alert alert-info" role="alert">  To make it easy to navigate between the routes we have created, we added all of them to the menu.  Normally you would only add the ones that a user should directly get to by clicking on a link.</div>
 
 <div class="exercise-end"></div>
 
 ### Create Footer
 
-Creating the footer is very similar to creating the header.  The biggest difference is that we have some css styling that we will apply to position the footer at the bottom of the page.  
-
-The really awesome part of the css we are going to apply is that Angular has the concept of CSS encapsulation so the styling will only apply to the footer component and not to the rest of the site.  This gets automatically implemented for us, just by putting the styling in the footer components scss file instead of using th global style.scss file.
-
+Creating the footer is very similar to creating the header.  The biggest difference is that we have some css styling that we will apply to position the footer at the bottom of the page and shrink the body height so that text does not get stuck behind the footer.
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Creating the footer component
@@ -136,11 +150,24 @@ The really awesome part of the css we are going to apply is that Angular has the
     * component (controller)
     * add reference to the component in the app.module.ts file.
 
-1. Open the src\app\shared\footer\footer.component.html and replace the contents with
+<div class="exercise-end"></div>    
+
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Footer UI
+</h4>
+
+1. Open src\app\shared\footer\footer.component.html
+
+    ```bash
+    footer.component.html
+    ```
+
+1. Replace the contents with
 
     ```
     <footer>
-        <div class="pull-center">
+        <div class="pull-left">
             &copy;Angular WS
         </div>
     </footer>
@@ -152,31 +179,36 @@ The really awesome part of the css we are going to apply is that Angular has the
     <b>Exercise</b>: Styling the Footer
 </h4>
 
-We want to postion the footer at bottom of the page and change the background color.  With Angular 2, we now have the ablity to have css constrained to an individual component like the footer instead of being global for the whole site to use.  We still have the ability to have global css for those styles that should be applied to the whole site by using the src\styles.scss file.  
+We want to postion the footer at bottom of the page and change the background color.  
 
+1. Open src\app\footer\footer.component.scss file
 
-Since the footer is in the src\app\shared\footer\footer.component.html file we need to add the footer styles to the src\app\footer\footer.component.scss file and add the following content
+    ```bash
+    footer.component.scss
+    ```
 
-```scss
-@import "../../../assets/bootstrap/variables.scss";
+1. Add the following to make the footer at the bottom of the page with a height of 50px, a gray background and some padding around the div
 
-footer {
-    position: fixed;
-    height: 50px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 10px 5px;
-    border-top: 1px solid $gray-light;
-    background-color: $gray-lighter;
-    font-size: 0.8em;
-    color: $dark-blue;
-    div {
-        margin-left: 25px;
-        margin-right: 25px;
+    ```scss
+    @import "../../../assets/bootstrap/variables.scss";
+
+    footer {
+        position: fixed;
+        height: 50px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px 5px;
+        border-top: 1px solid $gray-light;
+        background-color: $gray-lighter;
+        font-size: 0.8em;
+        color: $dark-blue;
+        div {
+            margin-left: 25px;
+            margin-right: 25px;
+        }
     }
-}
-```
+    ```
 
 <div class="exercise-end"></div>
 
@@ -189,26 +221,28 @@ footer {
 Now we are ready to add our footer to the Main page
 
 
-1.  Open the src\app\app.component.ts file and import the footer component below the HeaderComponent import statement (note: order is not important)
+1.  Open the src\app\app.component.ts file
+
+    ```bash
+    app.component.ts
+    ```
+
+1.  We need to import the FooterComponent before we can use it on the Main Page which is our AppComponent
 
     ```TypeScript
     import { FooterComponent } from './shared/footer/footer.component';
     ```    
 
-1. Open the src\app\app.component.html file and replace the contents of this file with the following html
+1.  Now we can add the `<app-footer>` tag in the src\app\app.component.html
+
+    ```bash
+    app.component.html
+    ```
+
+1. Add the `<app-footer>` at the bottom of the html
 
     ```html
-    <app-header></app-header>
-    <div class="jumbotron">
-        <div class="container">
-            <h1>{{title}}</h1>
-        </div>
-    </div>
-    <div class="container clearfix">
-        <router-outlet></router-outlet>
-    </div>
     <app-footer></app-footer>
-
     ```
 
 1.  If you view the web page you should see the footer 
@@ -222,11 +256,18 @@ Now we are ready to add our footer to the Main page
     <b>Exercise</b>: Fixing body height
 </h4>
 
-Since we have a static footer, will need to change the body height to account for the footer height.  Without doing this the body content will be hidden for the last 50px of the screen.
+Since we have a static footer, will need to change the body height to account for the footer height.  Without doing this the body content will be hidden for the last 50px of the screen like it is currently doing if you have any todo items in your list.
 
-So far we have seen how to use component level css but Angular still has the ability to do global styles that will apply to the whole by adding them into the src\style.scss file.
+Up to this point, we have only been dealing with component level styles.  For the body height, we want it to apply to the whole site.  We can do this by putting the styling in the src\style.scss file
 
-1. Open the src\style.scss file and add the following css 
+
+1. Open the src\style.scss file
+
+    ```bash
+    style.scss
+    ```
+
+1. Add the following css code to adjust the body height.  We are going an extra 10 pixels in height to give a little bit of padding around the text in the footer.
 
     ```html
     html {
@@ -243,10 +284,12 @@ So far we have seen how to use component level css but Angular still has the abi
     ```
 
 <div class="exercise-end"></div>
-
+  
 <h4 class="exercise-start">
     <b>Exercise</b>: Add Environment Name to Footer
 </h4>
+
+Earlier we created an environment name variable in the different Angular environment files.  Wouldn't it be nice if we displayed which environment we were in within the footer.
 
 1. Open the src\app\shared\footer\footer.component.ts file 
 
@@ -266,37 +309,33 @@ So far we have seen how to use component level css but Angular still has the abi
     public env = environment.environmentName;
     ```        
 
+Now we can display the env variable in our footer's html
+
 1. Open the src\app\shared\footer\footer.component.html file
 
     ```bash
     footer.component.html
     ```
     
-1. Replace the contents with
+1. After the "Angular WS" div but instead the footer tag add the following to display the env value
 
     ```
-    <footer>
-        <div class="pull-left">
-            &copy;Angular WS
-        </div>
-        <div class="pull-right">
-            env: {{ env }} 
-        </div>      
-    </footer>
+    <div class="pull-right">
+        env: {{ env }}
+    </div>
     ```
 
 1.  If you view the web page you should see the footer 
 
     ![App Works with Footer](images/footer-with-env.png)
 
-    <div class="alert alert-warning" role="alert">Notice that the env:Local in the footer is coming from the environment.local.ts file.  If you stop `ng serve` and run it without using the -e argument, the env value will change to Development
+    <div class="alert alert-warning" role="alert">Notice that the env:Local in the footer is coming from the environment.local.ts file.  If you stop `ng serve` and run it without using the `-e local ` argument, the env value will change to Development
 
         ![footer development env](images/footer-with-env-dev.png)
         
     </div>
 
-<div class="exercise-end"></div>    
-
+<div class="exercise-end"></div>  
 
 ### Review
 

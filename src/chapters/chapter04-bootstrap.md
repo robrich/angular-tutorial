@@ -2,7 +2,7 @@
 
 ### Overview
 
-For our styling we are going to use [Bootstrap 4](https://v4-alpha.getbootstrap.com/) which is still in alpha.  The reason for picking Bootstrap 4 and not Bootstrap 3 is so that you will be able to use the [Angular UI library](https://ng-bootstrap.github.io) if you so choose.  We will not be using the Angular UI library in this workshop but it is a great library for component.  If you are a Bootstrap 3 developer, you can see all of the change in the [Migration Guide](https://v4-alpha.getbootstrap.com/migration/). 
+For our styling we are going to use [Bootstrap 4](https://v4-alpha.getbootstrap.com/) which is still in alpha.  The reason for picking Bootstrap 4 and not Bootstrap 3 is so that we can use [Angular Bootstrap library (ng-bootstrap)](https://ng-bootstrap.github.io).  ng2-bootstrap is written 100% in JavaScript with no need for JQuery or Bootstrap's JavaScript library to be included.
 
 ### Goals
 
@@ -18,9 +18,31 @@ For our styling we are going to use [Bootstrap 4](https://v4-alpha.getbootstrap.
 1. Run the npm install command for bootstrap and font-awesome
 
     ```bash
-    npm install --save bootstrap@next font-awesome
+    npm install --save bootstrap@next font-awesome @ng-bootstrap/ng-bootstrap
     ```
 
+    * This will install ng-bootstrap along with bootstrap and font-awesome.  Bootstrap is still required for ng-bootstrap to work.  
+
+Before we can use ng-bootstrap we need to add it to the AppModule
+
+1. Open the src\app\app.module.ts
+
+    ```bash
+    app.module.ts
+    ```
+
+1. Import the NgbModule from @ng-bootstrap/ng-bootstrap library
+
+    ```TypeScript
+    import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+    ```
+
+1. In the @NgModule imports section add NgbModule.forRoot()
+
+    ```TypeScript
+    NgbModule.forRoot()
+    ```
+    
 <div class="exercise-end"></div>
 
 ### Add Bootstrap to Project
@@ -29,7 +51,7 @@ For our styling we are going to use [Bootstrap 4](https://v4-alpha.getbootstrap.
     <b>Exercise</b>: Add  Bootstrap to Project
 </h4>
 
-First we need to create our own custom Bootstrap style sheet so that we can override the scss variables if we want to with your own colors and styles.
+First we need to create our own custom Bootstrap stylesheet so that we can override the Bootstrap scss variables to create our own colors and styles using the existing Bootstrap scss variables.  
 
 1. In the src\assets folder, create a new folder named **bootstrap**
 

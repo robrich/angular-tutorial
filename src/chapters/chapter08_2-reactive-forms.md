@@ -1099,7 +1099,10 @@ Right now the UI looks decent but with a few tweaks it could look much better.
 
 If we added some padding around each row, a bottom border, made the date smaller and gray, increased the size of each icon and made the completed items gray with a strike-through, the UI would pop.
 
-The first thing we need to do is add in our styles to the Todo component.  Since these styles are strictly for the Todo component we are going to add them into the todo.component.scss instead of the app's style.scss file.
+The first thing we need to do is add in our styles to the Todo component.  Since these styles are strictly for the Todo component we are going to add them into the todo.component.scss instead of the app's style.scss file.  
+
+<div class="alert alert-info" role="alert">Angular enables CSS encapsulation so that the styling in each components scss file will only be applied to that component and not the rest of the site.  They do this by adding an attribute to both the html elements and css classes that are rendered. It is done on the fly for you and does not at all change the actual files.</div>
+
 
 1. Open the src\app\todo\todo.component.scss 
 
