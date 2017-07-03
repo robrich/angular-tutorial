@@ -61,9 +61,15 @@ NodeJS is used to power the Angular CLI as well as install all of our dependenci
 1.	Run the installer and accept all defaults.
 1. Verify that Node installed.  Start a command prompt or terminal window and run: 
 
-    ```bash
-    node -v
-    ```
+<h4 class="exercise-start">
+    <b>Exercise</b>: Verify Node Install
+</h4>
+
+```bash
+node -v
+```
+
+<div class="exercise-end"></div>
 
 ### Angular CLI Install
 
