@@ -125,6 +125,61 @@ One of the really cool things that we can do with components is include them ins
 
 <div class="exercise-end"></div>
 
+<h4 class="exercise-start">
+    <b>Exercise</b>: Make Menu Responsive
+</h4>
+
+Since we are not including JQuery in our application, when the Bootstrap menu the collapse button does not open up the menu.  To make the menu open we are going to use the Collapse component from the ng-bootstrap library.
+
+1. Open src\app\shared\header\header.component.ts
+
+    ```bash
+    header.component.ts
+    ```
+
+1. Create a variable named isCollapsed that is a boolean and set to false.  This will be used tdo hold if the menu is collapsed or not.
+
+    ```TypeScript
+    isCollapsed: boolean = true;
+    ```
+
+1. Create a function to toggle the menu named toggleMenu that sets isCollapsed set to the opposite of its current value
+
+    ```TypeScript
+    toggleMenu() {
+        this.isCollapsed = !this.isCollapsed;
+    }
+    ```
+
+1. Open up the src\app\shared\header\header.component.html
+
+    ```bash
+    header.component.html
+    ```
+
+1. To the button add a click event call to the toggleMenu function
+
+    ```html
+    (click)="toggleMenu()"
+    ```
+
+1. To each link with a nav-link class add a click event that calls toggleMenu
+
+    ```html
+    (click)="toggleMenu()"
+    ```
+
+1. Onto the div with the collapse class you need to add an `[ngbCollapse]` tag that is set to the isCollapsed variable
+
+    ```html
+    [ngbCollapse]="isCollapsed"
+    ```
+
+1. Now if you shrink the browser small enough the collapsed menu will show up.  When you click on the menu icon or any of the links within the menu it will toggle the collapse state of the menu.
+
+
+<div class="exercise-end"></div>
+
 ### Create Footer
 
 Creating the footer is very similar to creating the header.  The biggest difference is that we have some css styling that we will apply to position the footer at the bottom of the page and shrink the body height so that text does not get stuck behind the footer.

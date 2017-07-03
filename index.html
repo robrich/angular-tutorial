@@ -2638,6 +2638,47 @@ environment.local.ts
 </ol>
 <div class="exercise-end"></div>
 
+<h4 class="exercise-start">
+    <b>Exercise</b>: Make Menu Responsive
+</h4>
+
+<p>Since we are not including JQuery in our application, when the Bootstrap menu the collapse button does not open up the menu.  To make the menu open we are going to use the Collapse component from the ng-bootstrap library.</p>
+<ol>
+<li><p>Open src\app\shared\header\header.component.ts</p>
+<pre><code class="lang-bash"> header.component.ts
+</code></pre>
+</li>
+<li><p>Create a variable named isCollapsed that is a boolean and set to false.  This will be used tdo hold if the menu is collapsed or not.</p>
+<pre><code class="lang-TypeScript"> isCollapsed: boolean = true;
+</code></pre>
+</li>
+<li><p>Create a function to toggle the menu named toggleMenu that sets isCollapsed set to the opposite of its current value</p>
+<pre><code class="lang-TypeScript"> toggleMenu() {
+     this.isCollapsed = !this.isCollapsed;
+ }
+</code></pre>
+</li>
+<li><p>Open up the src\app\shared\header\header.component.html</p>
+<pre><code class="lang-bash"> header.component.html
+</code></pre>
+</li>
+<li><p>To the button add a click event call to the toggleMenu function</p>
+<pre><code class="lang-html"> (click)=&quot;toggleMenu()&quot;
+</code></pre>
+</li>
+<li><p>To each link with a nav-link class add a click event that calls toggleMenu</p>
+<pre><code class="lang-html"> (click)=&quot;toggleMenu()&quot;
+</code></pre>
+</li>
+<li><p>Onto the div with the collapse class you need to add an <code>[ngbCollapse]</code> tag that is set to the isCollapsed variable</p>
+<pre><code class="lang-html"> [ngbCollapse]=&quot;isCollapsed&quot;
+</code></pre>
+</li>
+<li><p>Now if you shrink the browser small enough the collapsed menu will show up.  When you click on the menu icon or any of the links within the menu it will toggle the collapse state of the menu.</p>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
 <h3 id="create-footer">Create Footer</h3>
 <p>Creating the footer is very similar to creating the header.  The biggest difference is that we have some css styling that we will apply to position the footer at the bottom of the page and shrink the body height so that text does not get stuck behind the footer.</p>
 <h4 class="exercise-start">
