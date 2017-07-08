@@ -6,6 +6,34 @@
 * Understand how to create a cookie with user information in it
 * Understand how to logout the user 
 
+### Code from Previous Chapter
+
+<div class="alert alert-danger" role="alert">Skip this section if you completed the previous chapter</div>
+
+If you have not completed the previous chapter you can get the completed code by downloading the code from Github.
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Downloading Code 
+</h4>
+
+1. Downloading and extracting the zip file into your projects folder (c:\projects or ~/projects) at [https://github.com/digitaldrummerj/angular-tutorial-code/archive/chapter-additional-todo.zip](https://github.com/digitaldrummerj/angular-tutorial-code/archive/chapter-additional-todo.zip) 
+1. After you get the code, run npm install to get all of the NPM dependencies.
+
+    ```bash
+    npm install
+    ```
+
+1. Open Visual Studio Code
+1. In Visual Studio Code, go under the File menu, select Open folder and navigate to the folder that you unzipped the files into
+1. If you have ng serve running in a different editor, make sure to stop it from running.
+1. Open the Integrated Terminal in Visual Studio Code (ctrl + `)  and run ng serve
+
+    ```bash
+    ng serve
+    ```
+
+<div class="exercise-end"></div>
+
 ### Caching User
 
 Right now when you refresh the page the current user information in the AuthService is lost.  We can cache the data using cookies.  To implement the cookie storage we are going to use the ngx-cookie library.
