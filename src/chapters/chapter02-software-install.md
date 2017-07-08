@@ -4,14 +4,14 @@
 
 To get started, we need to install and configure the following software first.
 
-* Windows, Mac, or Linux computer
-* Visual Studio Code (can use any text editor but workshop tested with Visual Studio Code)
-* Node 6.9+
-* Angular CLI 1.0.0+
+* Supported Platforms: Windows, Mac, or Linux computer
+* Editor: Visual Studio Code (can use any text editor but workshop tested with Visual Studio Code)
+* Software:
+    * Node 6.9+
+    * Angular CLI
 
 ### Goals
 
-* Under stand how to install the Angular Command Line (CLI)
 * Setup your machine for the Workshop
 
 ### Windows Showing File Extensions 
@@ -22,13 +22,11 @@ To get started, we need to install and configure the following software first.
 
 **Non-Windows users can [skip to next section](#chapter2.4)**
 
-
 By default Windows is set to not show file extensions for known files which causes files such as .gitconfig and .npmrc to show up as just a period with no file extension which makes it extremely difficult to figure out what the file actually is.  To fix this we need to turn set Windows Explorer to show file extensions.
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Turn On Windows Showing File Extensions
-  </h4>
-
+</h4>
 
 1. Open Windows Explorer
 1. Click on the View Tab and select Options
@@ -52,13 +50,12 @@ Visual Studio Code is Microsoft lightweight cross platform IDE.
 1. Download Visual Studio Code at [https://code.visualstudio.com/](https://code.visualstudio.com/)
 1. Once the download finishes, launch the installer except all of the defaults.
 
-
 ### Node.js
 
 NodeJS is used to power the Angular CLI as well as install all of our dependencies.  The Angular CLI requires Node version 6.9 or greater.
 
-1.	Download the latest stable version (LTS) of [NodeJS](http://nodejs.org) which as of this writing is 6.11.0.    
-1.	Run the installer and accept all defaults.
+1. Download the latest stable version (LTS) of [NodeJS](http://nodejs.org) which as of this writing is 6.11.0.    
+1. Run the installer and accept all defaults.
 1. Verify that Node installed.  Start a command prompt or terminal window and run: 
 
 <h4 class="exercise-start">
@@ -82,6 +79,8 @@ While you do not have to use the Angular CLI, it is highly recommended, will inc
 <h4 class="exercise-start">
     <b>Exercise</b>: Install Angular CLI
 </h4>
+
+<div class="alert alert-info" role="alert">This workshop has been tested against Angular CLI 1.2.0</div>
 
 1. Open a command prompt or terminal and run the following command
 

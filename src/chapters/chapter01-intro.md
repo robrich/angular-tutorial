@@ -2,7 +2,7 @@
 
 Welcome to the Up and Running with Angular Workshop.  Angular 2 was released in September 2016 and was a full re-write of the framework.  With the re-write a lot has changed.   In this workshop, you will learn how to build an Angular UI from the ground up.  
 
-<div class="alert alert-danger" role="alert">This workshop has been written for and tested with Angular 4.1</div>
+<div class="alert alert-danger" role="alert">This workshop has been tested against Angular 4.2.3</div>
 
 ### Goal
 
@@ -30,11 +30,7 @@ Release Schedule:
 
 ### Coming from Angular 1
 
-Third, if you are coming from an Angular 1 background, it is best if you do not try to compare the concepts between Angular 1 and Angular 2+.  You will be able to learn Angular Just treat Angular 2 as a whole new framework  
-
-### Materials
-
-[Completed Source Code](https://github.com/digitaldrummerj/angular2-tutorial/tree/code)
+Third, if you are coming from an AngularJS background, it is best if you do not try to compare the concepts between AngularJS and Angular.  Just treat Angular as a whole new framework.  
 
 ### Using This Tutorial
 

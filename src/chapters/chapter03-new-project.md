@@ -101,15 +101,50 @@ The Angular CLI has a built-in command for starting up a web server for your pro
 
 ###  Navigating around Visual Studio Code 
 
-* integrated terminal ctrl+
-* open file ctrl+p
-* save all 
-* switch between files ctrl+tab
-* hide side menu ctrl+b
-* hide mini map 
-* toggle word wrap alt+z
-* format document ctrl+alt+f
-* half screen code and tutorial win key + left arrow for tutorial and select code or  win key + right arrow for code
+Being able to effectively use your editor is key to being a super productive developer.  With Visual Studio Code, there are several shortcut keys that will help you out.
+
+| Purpose | Key |
+| ---- | ---- |
+| Integrated Terminal | ctrl+` |
+| Open File | ctrl+p |
+| Switch Between Files | ctrl+tab |
+| Switch Between Files Reverse | ctrl+shift+tab |
+| Hide Side Menu | ctrl+b |
+| Toggle Word Wrap for File  | alt+z |
+| Format Document | ctrl+alt+f | 
+
+<div class="alert alert-info" role="alert"> I also split my screen in half with the tutorial on one side and the editor on the other side.  On Windows you can do this by using the win key + left arrow for the one you want on the left and then select the other for the right when windows prompts you.  You can also use win key + right arrow to make a Windows use half the screen on the right.</div>
+
+### Visual Studio Settings
+
+In Visual Studio Code, you will notice that there is a map looking thing showing in the upper right corner.  This is called the mini map and it is a layout of your source code file.  I typically hide the mini map to give myself more editing space.  
+
+
+<h4 class="exercise-start">
+  <b>Exercise</b>: Hide Mini Map
+</h4>
+
+To hide the mini map go into the Preferences -> Settings (File -> Preferences -> Settings on Windows) and add the following setting
+
+```bash
+"editor.minimap.enabled": false,
+```
+
+<div class="exercise-end"></div>
+
+
+
+<h4 class="exercise-start">
+  <b>Exercise</b>: Turn On Word Wrap
+</h4>
+
+I also like to always have word wrap turned on.  You can turn this on in the same preferences file as you used for turning off the mini map above.
+
+```bash
+"editor.wrappingIndent": "same",
+```
+
+<div class="exercise-end"></div>
 
 ### Review
 

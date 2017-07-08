@@ -31,7 +31,7 @@
 				<div class="chapter">
 					<h2 id="overview">Overview</h2>
 <p>Welcome to the Up and Running with Angular Workshop.  Angular 2 was released in September 2016 and was a full re-write of the framework.  With the re-write a lot has changed.   In this workshop, you will learn how to build an Angular UI from the ground up.  </p>
-<div class="alert alert-danger" role="alert">This workshop has been written for and tested with Angular 4.1</div>
+<div class="alert alert-danger" role="alert">This workshop has been tested against Angular 4.2.3</div>
 
 <h3 id="goal">Goal</h3>
 <p>The goal of this tutorial is to walk you through creating an application with the common features that a web application would have (headers, footers, forms, calls to API services, authentication, etc).  </p>
@@ -49,9 +49,7 @@
 <li>Patch: Every week</li>
 </ul>
 <h3 id="coming-from-angular-1">Coming from Angular 1</h3>
-<p>Third, if you are coming from an Angular 1 background, it is best if you do not try to compare the concepts between Angular 1 and Angular 2+.  You will be able to learn Angular Just treat Angular 2 as a whole new framework  </p>
-<h3 id="materials">Materials</h3>
-<p><a href="https://github.com/digitaldrummerj/angular2-tutorial/tree/code">Completed Source Code</a></p>
+<p>Third, if you are coming from an AngularJS background, it is best if you do not try to compare the concepts between AngularJS and Angular.  Just treat Angular as a whole new framework.  </p>
 <h3 id="using-this-tutorial">Using This Tutorial</h3>
 <h4 id="collapse-chapter-list">Collapse Chapter List</h4>
 <p>If you click on the hamburger icon in the header (left icon with the 3 lines), it will toggle the view of the chapters so that you have more room to view the tutorial.</p>
@@ -68,14 +66,16 @@
 <h3 id="overview">Overview</h3>
 <p>To get started, we need to install and configure the following software first.</p>
 <ul>
-<li>Windows, Mac, or Linux computer</li>
-<li>Visual Studio Code (can use any text editor but workshop tested with Visual Studio Code)</li>
+<li>Supported Platforms: Windows, Mac, or Linux computer</li>
+<li>Editor: Visual Studio Code (can use any text editor but workshop tested with Visual Studio Code)</li>
+<li>Software:<ul>
 <li>Node 6.9+</li>
-<li>Angular CLI 1.0.0+</li>
+<li>Angular CLI</li>
+</ul>
+</li>
 </ul>
 <h3 id="goals">Goals</h3>
 <ul>
-<li>Under stand how to install the Angular Command Line (CLI)</li>
 <li>Setup your machine for the Workshop</li>
 </ul>
 <h3 id="windows-showing-file-extensions">Windows Showing File Extensions</h3>
@@ -87,8 +87,7 @@
 <p>By default Windows is set to not show file extensions for known files which causes files such as .gitconfig and .npmrc to show up as just a period with no file extension which makes it extremely difficult to figure out what the file actually is.  To fix this we need to turn set Windows Explorer to show file extensions.</p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Turn On Windows Showing File Extensions
-  </h4>
-
+</h4>
 
 <ol>
 <li>Open Windows Explorer</li>
@@ -134,6 +133,8 @@
 <h4 class="exercise-start">
     <b>Exercise</b>: Install Angular CLI
 </h4>
+
+<div class="alert alert-info" role="alert">This workshop has been tested against Angular CLI 1.2.0</div>
 
 <ol>
 <li><p>Open a command prompt or terminal and run the following command</p>
@@ -235,17 +236,69 @@
 <div class="exercise-end"></div>
 
 <h3 id="navigating-around-visual-studio-code">Navigating around Visual Studio Code</h3>
-<ul>
-<li>integrated terminal ctrl+</li>
-<li>open file ctrl+p</li>
-<li>save all </li>
-<li>switch between files ctrl+tab</li>
-<li>hide side menu ctrl+b</li>
-<li>hide mini map </li>
-<li>toggle word wrap alt+z</li>
-<li>format document ctrl+alt+f</li>
-<li>half screen code and tutorial win key + left arrow for tutorial and select code or  win key + right arrow for code</li>
-</ul>
+<p>Being able to effectively use your editor is key to being a super productive developer.  With Visual Studio Code, there are several shortcut keys that will help you out.</p>
+<table>
+<thead>
+<tr>
+<th>Purpose</th>
+<th>Key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Integrated Terminal</td>
+<td>ctrl+`</td>
+</tr>
+<tr>
+<td>Open File</td>
+<td>ctrl+p</td>
+</tr>
+<tr>
+<td>Switch Between Files</td>
+<td>ctrl+tab</td>
+</tr>
+<tr>
+<td>Switch Between Files Reverse</td>
+<td>ctrl+shift+tab</td>
+</tr>
+<tr>
+<td>Hide Side Menu</td>
+<td>ctrl+b</td>
+</tr>
+<tr>
+<td>Toggle Word Wrap for File</td>
+<td>alt+z</td>
+</tr>
+<tr>
+<td>Format Document</td>
+<td>ctrl+alt+f</td>
+</tr>
+</tbody>
+</table>
+<div class="alert alert-info" role="alert"> I also split my screen in half with the tutorial on one side and the editor on the other side.  On Windows you can do this by using the win key + left arrow for the one you want on the left and then select the other for the right when windows prompts you.  You can also use win key + right arrow to make a Windows use half the screen on the right.</div>
+
+<h3 id="visual-studio-settings">Visual Studio Settings</h3>
+<p>In Visual Studio Code, you will notice that there is a map looking thing showing in the upper right corner.  This is called the mini map and it is a layout of your source code file.  I typically hide the mini map to give myself more editing space.  </p>
+<h4 class="exercise-start">
+  <b>Exercise</b>: Hide Mini Map
+</h4>
+
+<p>To hide the mini map go into the Preferences -&gt; Settings (File -&gt; Preferences -&gt; Settings on Windows) and add the following setting</p>
+<pre><code class="lang-bash">&quot;editor.minimap.enabled&quot;: false,
+</code></pre>
+<div class="exercise-end"></div>
+
+
+
+<h4 class="exercise-start">
+  <b>Exercise</b>: Turn On Word Wrap
+</h4>
+
+<p>I also like to always have word wrap turned on.  You can turn this on in the same preferences file as you used for turning off the mini map above.</p>
+<pre><code class="lang-bash">&quot;editor.wrappingIndent&quot;: &quot;same&quot;,
+</code></pre>
+<div class="exercise-end"></div>
+
 <h3 id="review">Review</h3>
 <p>In this chapter we learned 3 things</p>
 <ol>
@@ -3452,7 +3505,7 @@ Note that this will remove the dist directory before build.
 				</div>
 
 				<hr>
-				<div class="chapter">
+				<!--<div class="chapter">
 					<h2 id="tags-for-creating-tutorial">Tags For Creating Tutorial</h2>
 <h3 id="exercises">Exercises</h3>
 <h4 class="exercise-start">
@@ -3499,7 +3552,7 @@ Info
 </code></pre>
 
 				</div>
-				<hr>
+				<hr>-->
 			</div>
 		</div>
 	</div>
