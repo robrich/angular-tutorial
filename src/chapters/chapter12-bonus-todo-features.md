@@ -271,7 +271,7 @@ Now that we have our generic sorting method, we can create a function to do the 
 
     ```TypeScript
     sortItems(): void {
-        this.todoList.sort(this.fieldSorter(['completed', 'name'], true));
+        this.todoList.sort(FieldSorter.sort(['completed', 'name'], true));
     }
     ```
 
