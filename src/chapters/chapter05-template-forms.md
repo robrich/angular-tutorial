@@ -673,10 +673,10 @@ We are first going to create the signup function in the AuthService.
     <b>Exercise</b>: Create Signup UI
 </h4>
 
-1. Open the src\app\signup\signup.html file
+1. Open the src\app\signup\signup.component.html file
 
   ```bash
-  signup.html
+  signup.component.html
   ```
 
 1. Replace the contents with the following UI and template based form to allow a user to create an account
