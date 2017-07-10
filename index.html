@@ -2104,7 +2104,7 @@
  <div class="alert alert-info" role="alert">The reason that we used the Bootstrap grid is so that everything wrapped correctly with longer todo items and when the screen was smaller.  The Bootstrap grid provides this functionality automatically for you.</div>
 </li>
 <li><p>The html for the display of the Todo list should look like the following:</p>
-<pre><code class="lang-html"> &lt;div class=&quot;row todo&quot; *ngFor=&quot;let todoItem of todoList&quot;&gt;
+<pre><code class="lang-html"> &lt;div class=&quot;row&quot; id=&quot;todo&quot; *ngFor=&quot;let todoItem of todoList&quot;&gt;
      &lt;div class=&quot;col-1&quot; (click)=&quot;completeTodo(todoItem)&quot;&gt;&lt;i [className]=&quot;todoItem.completed  ? &#39;fa fa-check-square-o&#39; : &#39;fa fa-square-o&#39;&quot;&gt;&lt;/i&gt;&lt;/div&gt;
      &lt;div class=&quot;col-11 done-{{todoItem.completed}}&quot;&gt;{{todoItem.item}} &lt;br /&gt;&lt;small&gt;created: {{todoItem.createdAt | date:&#39;short&#39;}}&lt;/small&gt;&lt;/div&gt;
  &lt;/div&gt;
@@ -2337,7 +2337,7 @@
 
 <ol>
 <li><p>Open terminal and generate the guard </p>
-<pre><code class="lang-bash">ng generate guard shared/guards/IsLoggedIn --module AppModule
+<pre><code class="lang-bash">ng generate guard shared/guards/IsLoggedIn --module App
 </code></pre>
 <p><img src="images/isloggedin-generate.png" alt="generate output"></p>
 </li>
