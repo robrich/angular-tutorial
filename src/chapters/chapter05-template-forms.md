@@ -148,7 +148,7 @@ Next we are going to create the form without any validation logic at all.  Our f
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input name="password" id="password" id="password" type="password" class="form-control" placeholder="Password..." />
+                <input name="password" id="password" type="password" class="form-control" placeholder="Password..." />
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
             <button type="button" class="btn btn-default">Cancel</button>
@@ -313,7 +313,7 @@ For this tutorial, I have created an API for us to use.
 
 The first thing we are going to do is create our login function
 
-1. Open the src\shared\services\auth.service.ts file
+1. Open the src\app\shared\services\auth.service.ts file
 
     ```bash
     auth.service.ts
