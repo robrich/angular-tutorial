@@ -3358,7 +3358,7 @@ Note that this will remove the dist directory before build.
 </li>
 <li><p>Add the following function to call the FieldSorter.sort and sort first by completed status and then by name.  </p>
 <pre><code class="lang-TypeScript"> sortItems(): void {
-     this.todoList.sort(FieldSorter.sort([&#39;completed&#39;, &#39;name&#39;], true));
+     this.todoList.sort(FieldSorter.sort([&#39;completed&#39;, &#39;item&#39;], true));
  }
 </code></pre>
 </li>
