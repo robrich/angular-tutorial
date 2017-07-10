@@ -684,7 +684,7 @@
          &lt;/div&gt;
          &lt;div class=&quot;form-group&quot;&gt;
              &lt;label for=&quot;password&quot;&gt;Password:&lt;/label&gt;
-             &lt;input name=&quot;password&quot; id=&quot;password&quot; id=&quot;password&quot; type=&quot;password&quot; class=&quot;form-control&quot; placeholder=&quot;Password...&quot; /&gt;
+             &lt;input name=&quot;password&quot; id=&quot;password&quot; type=&quot;password&quot; class=&quot;form-control&quot; placeholder=&quot;Password...&quot; /&gt;
          &lt;/div&gt;
          &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Login&lt;/button&gt;
          &lt;button type=&quot;button&quot; class=&quot;btn btn-default&quot;&gt;Cancel&lt;/button&gt;
@@ -825,7 +825,7 @@
 <p>For this tutorial, I have created an API for us to use.  </p>
 <p>The first thing we are going to do is create our login function</p>
 <ol>
-<li><p>Open the src\shared\services\auth.service.ts file</p>
+<li><p>Open the src\app\shared\services\auth.service.ts file</p>
 <pre><code class="lang-bash"> auth.service.ts
 </code></pre>
 </li>
@@ -1135,8 +1135,8 @@
 </h4>
 
 <ol>
-<li><p>Open the src\app\signup\signup.html file</p>
-<pre><code class="lang-bash">signup.html
+<li><p>Open the src\app\signup\signup.component.html file</p>
+<pre><code class="lang-bash">signup.component.html
 </code></pre>
 </li>
 <li><p>Replace the contents with the following UI and template based form to allow a user to create an account</p>
@@ -1776,7 +1776,7 @@
      completed?: boolean,
      createdAt?: Date,
      updatedAt?: Date) {
-     id = id ? id : &#39;&#39;;
+     this.id = id;
      this.item = item;
      this.completed = completed ? completed: false;
      this.createdAt = createdAt ? createdAt: new Date();
