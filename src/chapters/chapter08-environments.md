@@ -83,7 +83,6 @@ The other environment that is typically created is for local development on your
 
 1. Create the file src\environments\environment.local.ts file by right-clicking on the src\environments directory and selecting new file
 
-
     ```bash
     environment.local.ts
     ```
