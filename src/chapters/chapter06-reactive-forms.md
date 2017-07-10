@@ -1004,7 +1004,7 @@ The last thing we need to do it do update the UI to have a checkbox icon that wi
 1. The html for the display of the Todo list should look like the following:
 
     ```html
-    <div class="row todo" *ngFor="let todoItem of todoList">
+    <div class="row" id="todo" *ngFor="let todoItem of todoList">
         <div class="col-1" (click)="completeTodo(todoItem)"><i [className]="todoItem.completed  ? 'fa fa-check-square-o' : 'fa fa-square-o'"></i></div>
         <div class="col-11 done-{{todoItem.completed}}">{{todoItem.item}} <br /><small>created: {{todoItem.createdAt | date:'short'}}</small></div>
     </div>

@@ -54,7 +54,7 @@ If you have not completed the previous chapter you can get the completed code by
 1. Open terminal and generate the guard 
 
   ```bash
-  ng generate guard shared/guards/IsLoggedIn --module AppModule
+  ng generate guard shared/guards/IsLoggedIn --module App
   ```
 
   ![generate output](images/isloggedin-generate.png)
