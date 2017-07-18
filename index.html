@@ -1169,11 +1169,11 @@
      &lt;/div&gt;
      &lt;/div&gt;
 
-     &lt;span (mouseenter)=&quot;mouseoverLogin=true&quot; (mouseleave)=&quot;mouseoverLogin=false&quot;&gt;
+     &lt;span&gt;
          &lt;button type=&quot;submit&quot; [disabled]=&quot;signupForm.invalid&quot; class=&quot;btn btn-primary&quot;&gt;Sign Up&lt;/button&gt;
      &lt;/span&gt;
-     &lt;button type=&quot;button&quot; (click)=&quot;cancel()&quot; class=&quot;btn btn-default&quot;&gt;Cancel&lt;/button&gt;
-     &lt;span&gt;&lt;a [routerLink]=&quot;[&#39;/login&#39;]&quot;&gt;login to existing account&lt;/a&gt;&lt;/span&gt;
+     &lt;button type=&quot;button&quot; class=&quot;btn btn-default&quot;&gt;Cancel&lt;/button&gt;
+     &lt;span&gt;&lt;a routerLink=&quot;/login&quot;&gt;login to existing account&lt;/a&gt;&lt;/span&gt;
 
  &lt;/form&gt;
  &lt;br /&gt;
@@ -1228,7 +1228,7 @@
 </code></pre>
 </li>
 <li><p>Next to the cancel button add the following HTML to give a link to the create page</p>
-<pre><code class="lang-html">&lt;span&gt;&lt;a [routerLink]=&quot;[&#39;/signup&#39;]&quot;&gt;create account&lt;/a&gt;&lt;/span&gt;
+<pre><code class="lang-html">&lt;span&gt;&lt;a routerLink=&quot;/signup&quot;&gt;create account&lt;/a&gt;&lt;/span&gt;
 </code></pre>
 </li>
 <li><p>If you go to <a href="http://localhost:4200/signup">http://localhost:4200/signup</a> you should now to be able to signup and navigate between the signup and login pages.  Once signed up,  you will be redirected to the home page and shown the todo items.</p>
@@ -2522,6 +2522,34 @@ canActivate: [IsLoggedInGuard]
 </ol>
 <div class="exercise-end"></div>
 
+
+<h3 id="production-configuration">Production Configuration</h3>
+<p>The src\environments\environment.prod.ts file is the production configuration.  We need to add in the environmentName and apiBaseUrl that we added to the default configuration.  </p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Update Production Configuration
+</h4>
+
+<ol>
+<li><p>Open the src\environments\environment.prod.ts file</p>
+<pre><code class="lang-bash"> environment.prod.ts
+</code></pre>
+</li>
+<li><p>Add the environmentName and apiBaseUrl values to the environment object.  </p>
+<pre><code class="lang-TypeScript"> environmentName: &#39;Development&#39;,
+ apiBaseUrl: &#39;https://dj-sails-todo.azurewebsites.net&#39;
+</code></pre>
+</li>
+<li><p>The environment object should look like the following</p>
+<pre><code class="lang-TypeScript"> export const environment = {
+     production: true,
+     environmentName: &#39;Production&#39;,
+     apiBaseUrl: &#39;https://dj-sails-todo.azurewebsites.net&#39;
+ };
+</code></pre>
+</li>
+</ol>
+<div class="exercise-end"></div>
+
 <h3 id="local-development">Local Development</h3>
 <p>The other environment that is typically created is for local development on your machine.  For this tutorial the environment.ts and local.ts have the same values but once you go from development to production they will differ.   </p>
 <h4 class="exercise-start">
@@ -2785,20 +2813,20 @@ canActivate: [IsLoggedInGuard]
          aria-controls=&quot;navbarSupportedContent&quot; aria-expanded=&quot;false&quot; aria-label=&quot;Toggle navigation&quot;&gt;
          &lt;span class=&quot;navbar-toggler-icon&quot;&gt;&lt;/span&gt;
      &lt;/button&gt;
-         &lt;a class=&quot;navbar-brand&quot; [routerLink]=&quot;[&#39;/&#39;]&quot;&gt;&lt;img class=&quot;navbar-logo&quot; src=&quot;./assets/todo_logo.png&quot; alt=&quot;Logo&quot;&gt;&lt;/a&gt;
+         &lt;a class=&quot;navbar-brand&quot; routerLink=&quot;/&quot;&gt;&lt;img class=&quot;navbar-logo&quot; src=&quot;./assets/todo_logo.png&quot; alt=&quot;Logo&quot;&gt;&lt;/a&gt;
          &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;navbarSupportedContent&quot;&gt;
          &lt;ul class=&quot;nav navbar-nav mr-auto&quot;&gt;
              &lt;li class=&quot;nav-item active&quot;&gt;
-                 &lt;a class=&quot;nav-link&quot; [routerLink]=&quot;[&#39;/&#39;]&quot;&gt;All Items&lt;/a&gt;
+                 &lt;a class=&quot;nav-link&quot; routerLink=&quot;/&quot;&gt;All Items&lt;/a&gt;
              &lt;/li&gt;
              &lt;li class=&quot;nav-item active&quot;&gt;
-                 &lt;a class=&quot;nav-link&quot; [routerLink]=&quot;[&#39;/unknown&#39;]&quot;&gt;&quot;Unknown&quot;&lt;/a&gt;
+                 &lt;a class=&quot;nav-link&quot; routerLink=&quot;/unknown&quot;&gt;&quot;Unknown&quot;&lt;/a&gt;
              &lt;/li&gt;
              &lt;li class=&quot;nav-item active&quot;&gt;
-                 &lt;a class=&quot;nav-link&quot; [routerLink]=&quot;[&#39;/login&#39;]&quot;&gt;Login&lt;/a&gt;
+                 &lt;a class=&quot;nav-link&quot; routerLink=&quot;/login&quot;&gt;Login&lt;/a&gt;
              &lt;/li&gt;
              &lt;li class=&quot;nav-item active&quot;&gt;
-                 &lt;a class=&quot;nav-link&quot; [routerLink]=&quot;[&#39;/signup&#39;]&quot;&gt;Signup&lt;/a&gt;
+                 &lt;a class=&quot;nav-link&quot; routerLink=&quot;/signup&quot;&gt;Signup&lt;/a&gt;
              &lt;/li&gt;
          &lt;/ul&gt;
          &lt;/div&gt;
@@ -3486,8 +3514,8 @@ Note that this will remove the dist directory before build.
 <pre><code class="lang-TypeScript"> constructor(email: string, id?: string, createdAt?: Date, updatedAt?: Date){
      this.email = email;
      this.id = id;
-     if (createdAt) this.createdAt = createdAt;
-     if (updatedAt) this.updatedAt = updatedAt;
+     this.createdAt = createdAt ? createdAt: new Date();
+     this.updatedAt = updatedAt ? updatedAt: new Date();
  }
 </code></pre>
 </li>
