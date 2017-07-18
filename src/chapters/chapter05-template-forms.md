@@ -711,11 +711,11 @@ We are first going to create the signup function in the AuthService.
         </div>
         </div>
 
-        <span (mouseenter)="mouseoverLogin=true" (mouseleave)="mouseoverLogin=false">
+        <span>
             <button type="submit" [disabled]="signupForm.invalid" class="btn btn-primary">Sign Up</button>
         </span>
-        <button type="button" (click)="cancel()" class="btn btn-default">Cancel</button>
-        <span><a [routerLink]="['/login']">login to existing account</a></span>
+        <button type="button" class="btn btn-default">Cancel</button>
+        <span><a routerLink="/login">login to existing account</a></span>
 
     </form>
     <br />
@@ -776,7 +776,7 @@ We are first going to create the signup function in the AuthService.
 1. Next to the cancel button add the following HTML to give a link to the create page
 
   ```html
-  <span><a [routerLink]="['/signup']">create account</a></span>
+  <span><a routerLink="/signup">create account</a></span>
   ```
 
 1. If you go to [http://localhost:4200/signup](http://localhost:4200/signup) you should now to be able to signup and navigate between the signup and login pages.  Once signed up,  you will be redirected to the home page and shown the todo items.

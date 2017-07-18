@@ -73,6 +73,39 @@ In the environment.ts we need to add the environmentName and apiBaseUrl values. 
 
 <div class="exercise-end"></div>
 
+
+### Production Configuration
+
+The src\environments\environment.prod.ts file is the production configuration.  We need to add in the environmentName and apiBaseUrl that we added to the default configuration.  
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Update Production Configuration
+</h4>
+
+1. Open the src\environments\environment.prod.ts file
+
+    ```bash
+    environment.prod.ts
+    ```
+
+1. Add the environmentName and apiBaseUrl values to the environment object.  
+
+    ```TypeScript
+    environmentName: 'Development',
+    apiBaseUrl: 'https://dj-sails-todo.azurewebsites.net'
+    ```
+1. The environment object should look like the following
+
+    ```TypeScript
+    export const environment = {
+        production: true,
+        environmentName: 'Production',
+        apiBaseUrl: 'https://dj-sails-todo.azurewebsites.net'
+    };
+    ```
+
+<div class="exercise-end"></div>
+
 ### Local Development
 
 The other environment that is typically created is for local development on your machine.  For this tutorial the environment.ts and local.ts have the same values but once you go from development to production they will differ.   

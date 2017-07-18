@@ -83,20 +83,20 @@ We can leave ng serve running while we make these changes and open up another In
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-            <a class="navbar-brand" [routerLink]="['/']"><img class="navbar-logo" src="./assets/todo_logo.png" alt="Logo"></a>
+            <a class="navbar-brand" routerLink="/"><img class="navbar-logo" src="./assets/todo_logo.png" alt="Logo"></a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="nav navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" [routerLink]="['/']">All Items</a>
+                    <a class="nav-link" routerLink="/">All Items</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" [routerLink]="['/unknown']">"Unknown"</a>
+                    <a class="nav-link" routerLink="/unknown">"Unknown"</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" [routerLink]="['/login']">Login</a>
+                    <a class="nav-link" routerLink="/login">Login</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" [routerLink]="['/signup']">Signup</a>
+                    <a class="nav-link" routerLink="/signup">Signup</a>
                 </li>
             </ul>
             </div>
