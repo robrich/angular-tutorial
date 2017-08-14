@@ -364,7 +364,7 @@ The first thing we are going to do is create our login function
     }
     ```
 
-    * This code setups the call to the login API and and returns back an Observable.  
+    * This code sets up the call to the login API and and returns back an Observable.  
     * Note that this code is not called until someone subscribes to the login function which we will be doing next.
 
     <div class="alert alert-danger" role="alert">The API is setup for username/password validation.  Make sure you do not use your real passwords as this is just a test API and not production secured.</div>
