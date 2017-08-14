@@ -292,9 +292,9 @@ In order to submit the form we need to add an `(ngSubmit)=""`
 
 1. Open src\app\todo\todo.component.html file
 	
-	    ```bash
-	    todo.component.html
-	        ```
+    ```bash
+    todo.component.html
+    ```
 	        
 1. On the `<form>` tag add the `(ngSubmit)=""` attribute and have it call the save function 
 
