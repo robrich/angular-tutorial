@@ -195,7 +195,8 @@ Before we can interact with our form using Angular, we need to import the FormsM
     imports: [
         BrowserModule,
         FormsModule,
-        AppRoutingModule
+        AppRoutingModule,
+        NgbModule.forRoot()
     ],
 
     ```
